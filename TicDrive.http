@@ -1,0 +1,6 @@
+@TicDrive_HostAddress = http://localhost:5187
+
+GET {{TicDrive_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

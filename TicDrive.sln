@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35527.113
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicDrive", "TicDrive.csproj", "{2261EFAA-42BF-489C-A394-7082C77073AA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2261EFAA-42BF-489C-A394-7082C77073AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2261EFAA-42BF-489C-A394-7082C77073AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2261EFAA-42BF-489C-A394-7082C77073AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2261EFAA-42BF-489C-A394-7082C77073AA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
