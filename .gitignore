@@ -7,4 +7,5 @@
 # Ignore .bin directory or files
 .bin/
 
-.dll
+# Ignore all .dll files
+*.dll
