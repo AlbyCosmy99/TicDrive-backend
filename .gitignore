@@ -40,3 +40,10 @@ Thumbs.db          # Windows system files
 # Ignore environment files
 .env
 .env.*
+
+# Ignore .suo files (Visual Studio user settings)
+*.suo
+
+# Ignore .backup.json files
+*.backup.json
+
