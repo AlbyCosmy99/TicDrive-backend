@@ -1,2 +1,10 @@
-.cache
-.vsidx
+# Ignore .cache directory
+.cache/
+
+# Ignore all .vsidx files
+*.vsidx
+
+# Ignore .bin directory or files
+.bin/
+
+.dll

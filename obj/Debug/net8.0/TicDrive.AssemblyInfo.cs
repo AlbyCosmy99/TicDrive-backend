@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TicDrive")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+26b8455fa75da8653e61ccbf6956e6e7c9f470a7")]
 [assembly: System.Reflection.AssemblyProductAttribute("TicDrive")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TicDrive")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

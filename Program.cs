@@ -1,6 +1,8 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using TicDrive.AppConfig;
+using TicDrive.Context;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +26,22 @@ builder.Services.AddCors(options =>
                         .AllowAnyMethod()
                         .AllowAnyHeader());
 });
+
+var connection = string.Empty;
+if(builder.Environment.IsDevelopment())
+{
+    builder.Configuration.AddEnvironmentVariables().AddJsonFile("appsettings.Development.json");
+    connection = builder.Configuration.GetConnectionString("TICDRIVE_SQL_CONNECTIONSTRING");
+} else
+{
+    connection = Environment.GetEnvironmentVariable("TICDRIVE_SQL_CONNECTIONSTRING");
+}
+
+builder.Services.AddDbContext<TicDriveDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("TICDRIVE_SQL_CONNECTIONSTRING")));
+
+
+builder.Services.AddAutoMapper(typeof(AutomapperConfig));
 
 var app = builder.Build();
 
