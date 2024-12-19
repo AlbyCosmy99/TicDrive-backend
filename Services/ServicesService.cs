@@ -16,8 +16,6 @@ namespace TicDrive.Services
         }
         public List<Service> GetServices()
         {
-            _dbContext.Services.Add(new Service { Id = 1, Title = "TEST" });
-            _dbContext.SaveChanges();
             return _dbContext.Services.ToList();
         }
     }
