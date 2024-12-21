@@ -21,7 +21,7 @@ namespace TicDrive.Controllers
         [HttpGet]
         public IActionResult GetServices()
         {
-            return Ok(_mapper.Map<List<FullServiceDto>>(_servicesService.GetServices()));
+            return Ok("test");
         }
     }
 }
