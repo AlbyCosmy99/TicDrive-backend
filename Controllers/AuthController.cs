@@ -58,7 +58,8 @@ namespace TicDrive.Controllers
             {
                 Name = payload.Name,
                 Email = payload.Email,
-                EmailConfirmed = false
+                UserName = payload.Email,
+                EmailConfirmed = false,
             };
 
             var result = await _userManager.CreateAsync(user, payload.Password);
