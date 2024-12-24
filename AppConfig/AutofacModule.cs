@@ -8,6 +8,8 @@ namespace TicDrive.AppConfig
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<ServicesService>().As<IServicesService>();
+            builder.RegisterType<AuthService>().As<IAuthService>();
+            builder.RegisterType<EmailService>().As<IEmailService>();
         }
     }
 }

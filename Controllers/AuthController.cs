@@ -1,11 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
+using System.Net;
 using TicDrive.Models;
+using TicDrive.Services;
 
 namespace TicDrive.Controllers
 {
@@ -15,13 +14,19 @@ namespace TicDrive.Controllers
     {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
-        private readonly IConfiguration _configuration;
+        private readonly IAuthService _authService;
+        private readonly IEmailService _emailService;
 
-        public AuthController(UserManager<User> userManager, SignInManager<User> signInManager, IConfiguration configuration)
+        public AuthController(
+            UserManager<User> userManager, 
+            SignInManager<User> signInManager, 
+            IAuthService authService,
+            IEmailService emailService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _configuration = configuration;
+            _authService = authService;
+            _emailService = emailService;
         }
 
         public class RegisterBody
@@ -64,35 +69,115 @@ namespace TicDrive.Controllers
 
             var result = await _userManager.CreateAsync(user, payload.Password);
 
-            if (result.Succeeded)
+            var emailConfirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            var confirmationLink = Url.Action(
+                "ConfirmEmail",
+                "Auth",
+                new { userId = user.Id, token = WebUtility.UrlEncode(emailConfirmationToken) },
+                Request.Scheme
+            );
+
+            if (string.IsNullOrEmpty(confirmationLink))
             {
-                var authClaims = new[]
-                {
-                    new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-                    new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                    new Claim("name", user.Name),
-                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-                };
-
-                var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtSettings:SecretKey"]));
-
-                var token = new JwtSecurityToken(
-                    issuer: _configuration["JwtSettings:Issuer"],
-                    audience: _configuration["JwtSettings:Audience"],
-                    expires: DateTime.UtcNow.AddHours(2),
-                    claims: authClaims,
-                    signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
-                );
-
-                return Ok(new
-                {
-                    Token = new JwtSecurityTokenHandler().WriteToken(token),
-                    Expiration = token.ValidTo
-                });
+                throw new Exception("Confirmation link is null or empty.");
             }
 
+            if (!result.Succeeded)
+            {
+                return BadRequest(result.Errors);
+            }
 
-            return BadRequest(result.Errors);
+            string body = @"
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <style>
+                        body {{
+                            font-family: Arial, sans-serif;
+                            background-color: #f4f4f4;
+                            margin: 0;
+                            padding: 0;
+                        }}
+                        .email-container {{
+                            max-width: 600px;
+                            margin: 30px auto;
+                            background: #ffffff;
+                            border-radius: 8px;
+                            overflow: hidden;
+                            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                        }}
+                        .email-header {{
+                            background: #00BF63;
+                            color: #ffffff;
+                            text-align: center;
+                            padding: 20px;
+                        }}
+                        .email-header h1 {{
+                            margin: 0;
+                            font-size: 24px;
+                        }}
+                        .email-body {{
+                            padding: 20px;
+                            color: #333333;
+                        }}
+                        .email-body p {{
+                            font-size: 16px;
+                            line-height: 1.5;
+                            margin: 0 0 15px;
+                        }}
+                        .email-footer {{
+                            text-align: center;
+                            font-size: 12px;
+                            color: #777777;
+                            padding: 10px;
+                            background: #f4f4f4;
+                        }}
+                        .confirm-button {{
+                            display: inline-block;
+                            margin: 20px 0;
+                            padding: 12px 25px;
+                            font-size: 16px;
+                            color: #ffffff;
+                            background-color: #00BF63;
+                            text-decoration: none;
+                            border-radius: 5px;
+                            font-weight: bold;
+                        }}
+                        .confirm-button:hover {{
+                            background-color: #005bb5;
+                        }}
+                    </style>
+                </head>
+                <body>
+                    <div class=""email-container"">
+                        <div class=""email-header"">
+                            <h1>TicDrive</h1>
+                        </div>
+                        <div class=""email-body"">
+                            <p>Hello,</p>
+                            <p>Thank you for signing up with TicDrive. To confirm your email address, please click the button below:</p>
+                            <a class=""confirm-button"" href=""{0}"" target=""_blank"">Confirm Email</a>
+                            <p>If the button above does not work, you can copy and paste the following link into your browser:</p>
+                            <p><a href=""{0}"" target=""_blank"">{0}</a></p>
+                            <p>Thank you,</p>
+                            <p>The TicDrive Team</p>
+                        </div>
+                        <div class=""email-footer"">
+                            &copy; 2024 TicDrive. All rights reserved.
+                        </div>
+                    </div>
+                </body>
+                </html>
+            ";
+
+            string formattedBody = string.Format(body, confirmationLink);
+
+            await _emailService.SendEmailAsync("dinamo1999@icloud.com", "Welcome! Confirm your email.", formattedBody);
+
+            return Ok(new
+            {
+                emailConfirmationToken
+            });
         }
         public class LoginBody
         {
@@ -120,10 +205,10 @@ namespace TicDrive.Controllers
                 return Unauthorized(new { Message = "Invalid email or password." });
             }
 
-            //if (!user.EmailConfirmed)
-            //{
-            //    return Unauthorized(new { Message = "Please confirm your email before logging in." });
-            //}
+            if (!user.EmailConfirmed)
+            {
+                return Unauthorized(new { Message = "Please confirm your email before logging in." });
+            }
 
             var result = await _signInManager.CheckPasswordSignInAsync(user, payload.Password, lockoutOnFailure: false);
 
@@ -132,29 +217,37 @@ namespace TicDrive.Controllers
                 return Unauthorized(new { Message = "Invalid email or password." });
             }
 
-            var authClaims = new[]
-                {
-                    new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-                    new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                    new Claim("name", user.Name),
-                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-                };
-
-            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtSettings:SecretKey"]));
-
-            var token = new JwtSecurityToken(
-                issuer: _configuration["JwtSettings:Issuer"],
-                audience: _configuration["JwtSettings:Audience"],
-                expires: DateTime.UtcNow.AddHours(2),
-                claims: authClaims,
-                signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
-            );
+            var token = _authService.GenerateToken(user);
 
             return Ok(new
             {
                 Token = new JwtSecurityTokenHandler().WriteToken(token),
                 Expiration = token.ValidTo
             });
+        }
+
+        [HttpGet]
+        [Route("confirm-email")]
+        public async Task<IActionResult> ConfirmEmail(string userId, string token)
+        {
+            if (string.IsNullOrEmpty(userId))
+            {
+                return BadRequest("UserId is required.");
+            }
+
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return NotFound("User not found.");
+            }
+
+            var result = await _userManager.ConfirmEmailAsync(user, token);
+            if (result.Succeeded)
+            {
+                return Ok(new { Message = "Email confirmed successfully." });
+            }
+
+            return BadRequest(result.Errors);
         }
     }
 }
