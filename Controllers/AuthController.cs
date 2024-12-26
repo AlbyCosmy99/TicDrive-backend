@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
+using TicDrive.Enums;
 using TicDrive.Models;
 using TicDrive.Services;
 
@@ -45,6 +46,9 @@ namespace TicDrive.Controllers
 
             [Required]
             public string ConfirmPassword { get; set; } = string.Empty;
+            [Required]
+            [Range(1, int.MaxValue, ErrorMessage = "UserType must be set to a valid value.")]
+            public UserType UserType { get; set; }
         }
 
         [HttpPost]
@@ -65,6 +69,7 @@ namespace TicDrive.Controllers
                 Email = payload.Email,
                 UserName = payload.Email,
                 EmailConfirmed = false,
+                UserType = payload.UserType
             };
 
             var result = await _userManager.CreateAsync(user, payload.Password);
@@ -73,7 +78,7 @@ namespace TicDrive.Controllers
             var confirmationLink = Url.Action(
                 "ConfirmEmail",
                 "Auth",
-                new { userId = user.Id, token = WebUtility.UrlEncode(emailConfirmationToken) },
+                new { userId = user.Id, token = emailConfirmationToken },
                 Request.Scheme
             );
 
@@ -172,11 +177,14 @@ namespace TicDrive.Controllers
 
             string formattedBody = string.Format(body, confirmationLink);
 
-            await _emailService.SendEmailAsync("dinamo1999@icloud.com", "Welcome! Confirm your email.", formattedBody);
+            await _emailService.SendEmailAsync(user.Email, "Welcome! Confirm your email.", formattedBody);
+
+            var token = _authService.GenerateToken(user);
 
             return Ok(new
             {
-                emailConfirmationToken
+                Token = new JwtSecurityTokenHandler().WriteToken(token),
+                Expiration = token.ValidTo
             });
         }
         public class LoginBody
@@ -244,7 +252,7 @@ namespace TicDrive.Controllers
             var result = await _userManager.ConfirmEmailAsync(user, token);
             if (result.Succeeded)
             {
-                return Ok(new { Message = "Email confirmed successfully." });
+                return PhysicalFile(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "EmailVerificationSuccess.html"), "text/html");
             }
 
             return BadRequest(result.Errors);
