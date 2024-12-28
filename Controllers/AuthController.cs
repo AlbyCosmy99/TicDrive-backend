@@ -215,11 +215,6 @@ namespace TicDrive.Controllers
                 return Unauthorized(new { Message = "Invalid email or password." });
             }
 
-            if (!user.EmailConfirmed)
-            {
-                return Unauthorized(new { Message = "Please confirm your email before logging in." });
-            }
-
             var result = await _signInManager.CheckPasswordSignInAsync(user, payload.Password, lockoutOnFailure: false);
 
             if (!result.Succeeded)
@@ -232,7 +227,8 @@ namespace TicDrive.Controllers
             return Ok(new
             {
                 Token = new JwtSecurityTokenHandler().WriteToken(token),
-                Expiration = token.ValidTo
+                Expiration = token.ValidTo,
+                user.EmailConfirmed
             });
         }
 
@@ -276,6 +272,7 @@ namespace TicDrive.Controllers
             {
                 return Ok(new
                 {
+                    emailConfirmed = true,
                     userId = User.Claims.Where(claim => claim.Type == "userId").FirstOrDefault().Value,
                     email,
                     name = User.Claims.Where(claim => claim.Type == "name").FirstOrDefault().Value
