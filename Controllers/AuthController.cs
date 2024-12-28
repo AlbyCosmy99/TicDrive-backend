@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
+using System.Security.Claims;
 using TicDrive.Enums;
 using TicDrive.Models;
 using TicDrive.Services;
@@ -256,6 +258,32 @@ namespace TicDrive.Controllers
             }
 
             return BadRequest(result.Errors);
+        }
+
+        [HttpGet]
+        [Authorize]
+        [Route("check-email-confirmation")]
+        public IActionResult CheckEmailConfirmation()
+        {
+            var email = User.Claims.Where(claim => claim.Type == "email").FirstOrDefault().Value;
+
+            if(email == null)
+            {
+                return BadRequest("User email not found.");
+            }
+            
+            if(_emailService.IsEmailConfirmed(email))
+            {
+                return Ok(new
+                {
+                    userId = User.Claims.Where(claim => claim.Type == "userId").FirstOrDefault().Value,
+                    email,
+                    name = User.Claims.Where(claim => claim.Type == "name").FirstOrDefault().Value
+
+                });
+            }
+
+            return BadRequest("Email is not confirmed.");
         }
     }
 }

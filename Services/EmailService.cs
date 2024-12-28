@@ -1,5 +1,6 @@
 ﻿using MailKit.Net.Smtp;
 using MimeKit;
+using TicDrive.Context;
 
 
 namespace TicDrive.Services
@@ -7,15 +8,18 @@ namespace TicDrive.Services
     public interface IEmailService
     {
         Task SendEmailAsync(string to, string subject, string body);
+        bool IsEmailConfirmed(string email);
     }
 
     public class EmailService : IEmailService
     {
         private readonly IConfiguration _configuration;
+        private readonly TicDriveDbContext _dbContext;
 
-        public EmailService(IConfiguration configuration)
+        public EmailService(IConfiguration configuration, TicDriveDbContext dbContext)
         {
             _configuration = configuration;
+            _dbContext = dbContext;
         }
 
         public async Task SendEmailAsync(string to, string subject, string body)
@@ -34,6 +38,17 @@ namespace TicDrive.Services
             await smtp.AuthenticateAsync(_configuration["Email:Username"], _configuration["Email:Password"]);
             await smtp.SendAsync(email);
             await smtp.DisconnectAsync(true);
+        }
+
+        public bool IsEmailConfirmed(string email)
+        {
+            var user = _dbContext.Users.Where(user => user.Email == email).FirstOrDefault();
+
+            if (user == null) return false;
+
+            if (user.EmailConfirmed) return true;
+
+            return false;
         }
     }
 
