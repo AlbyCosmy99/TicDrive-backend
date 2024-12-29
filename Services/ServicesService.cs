@@ -16,7 +16,7 @@ namespace TicDrive.Services
         }
         public List<Service> GetServices()
         {
-            return _dbContext.Services.ToList();
+            return _dbContext.Services.OrderBy(service => service.Id).ToList();
         }
     }
 }
