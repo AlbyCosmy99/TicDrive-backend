@@ -261,26 +261,56 @@ namespace TicDrive.Controllers
         [Route("check-email-confirmation")]
         public IActionResult CheckEmailConfirmation()
         {
-            var email = User.Claims.Where(claim => claim.Type == "email").FirstOrDefault().Value;
+            try
+            {
+                var userClaims = _authService.GetUserInfo(this);
 
-            if(email == null)
+                if (!userClaims.TryGetValue("email", out var email))
+                {
+                    return BadRequest("User email not found.");
+                }
+
+                if (_emailService.IsEmailConfirmed(email))
+                {
+                    return Ok(new
+                    {
+                        emailConfirmed = true,
+                        userId = userClaims.TryGetValue("userId", out var userId) ? userId : null,
+                        email,
+                        name = userClaims.TryGetValue("name", out var name) ? name : null
+                    });
+                }
+
+                return BadRequest("Email is not confirmed.");
+            } catch(ArgumentNullException ex)
             {
-                return BadRequest("User email not found.");
+                return BadRequest(ex.Message);
             }
-            
-            if(_emailService.IsEmailConfirmed(email))
+        }
+
+        [HttpGet]
+        [Authorize]
+        [Route("get-payload")]
+        public IActionResult GetPayload()
+        {
+            try
             {
+                var userClaims = _authService.GetUserInfo(this);
+
+                userClaims.TryGetValue("email", out var email);
+
                 return Ok(new
                 {
-                    emailConfirmed = true,
-                    userId = User.Claims.Where(claim => claim.Type == "userId").FirstOrDefault().Value,
+                    emailConfirmed = email != null ? _emailService.IsEmailConfirmed(email) : false,
+                    userId = userClaims.TryGetValue("userId", out var userId) ? userId : null,
                     email,
-                    name = User.Claims.Where(claim => claim.Type == "name").FirstOrDefault().Value
-
+                    name = userClaims.TryGetValue("name", out var name) ? name : null
                 });
             }
-
-            return BadRequest("Email is not confirmed.");
+            catch (ArgumentNullException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

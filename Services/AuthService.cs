@@ -1,4 +1,5 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -9,6 +10,7 @@ namespace TicDrive.Services
     public interface IAuthService
     {
         JwtSecurityToken GenerateToken(User user);
+        Dictionary<string, string> GetUserInfo(ControllerBase controllerBase);
     }
     public class AuthService : IAuthService
     {
@@ -39,5 +41,25 @@ namespace TicDrive.Services
 
             return token;
         }
+
+        public Dictionary<string, string> GetUserInfo(ControllerBase controllerBase)
+        {
+            if (controllerBase == null)
+            {
+                throw new ArgumentNullException(nameof(controllerBase), "ControllerBase cannot be null.");
+            }
+
+            if (controllerBase.User == null || controllerBase.User.Claims == null)
+            {
+                throw new ArgumentNullException("User is not authenticated or claims are unavailable.");
+            }
+
+            var userClaims = controllerBase.User.Claims
+                .Where(claim => claim.Type != null && claim.Value != null)
+                .ToDictionary(claim => claim.Type, claim => claim.Value);
+
+            return userClaims;
+        }
+
     }
 }
