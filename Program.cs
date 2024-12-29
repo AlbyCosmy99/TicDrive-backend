@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using TicDrive.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -52,6 +53,8 @@ builder.Services.AddAuthentication(options =>
         IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:SecretKey"]))
     };
 });
+
+builder.Services.AddScoped<IClaimsTransformation, UserClaimsMapper>();
 
 var connection = string.Empty;
 if (builder.Environment.IsDevelopment())
