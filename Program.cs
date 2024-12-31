@@ -68,7 +68,7 @@ else
 }
 
 builder.Services.AddDbContext<TicDriveDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("TICDRIVE_SQL_CONNECTIONSTRING")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("TICDRIVE_SQL_CONNECTIONSTRING")));
 
 
 builder.Services.AddAutoMapper(typeof(AutomapperConfig));
