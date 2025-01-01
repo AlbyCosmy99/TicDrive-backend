@@ -68,7 +68,12 @@ else
 }
 
 builder.Services.AddDbContext<TicDriveDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("TICDRIVE_SQL_CONNECTIONSTRING")));
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("TICDRIVE_SQL_CONNECTIONSTRING"),
+        sqlOptions =>
+        {
+            sqlOptions.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
+        }));
 
 
 builder.Services.AddAutoMapper(typeof(AutomapperConfig));
