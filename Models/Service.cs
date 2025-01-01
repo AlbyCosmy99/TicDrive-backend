@@ -4,7 +4,7 @@
     {
         public int Id { get; set; }
         public required string Title { get; set; }
-        public string Description { get; set; } = string.Empty;
-        public string Icon { get; set; } = string.Empty;
+        public required string Description { get; set; } = string.Empty;
+        public string? Icon { get; set; }
     }
 }

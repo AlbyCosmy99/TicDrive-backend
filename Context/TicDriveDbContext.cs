@@ -17,5 +17,8 @@ namespace TicDrive.Context
 
         public DbSet<Service> Services { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<CarMake> CarMakes { get; set; }
+        public DbSet<CarModel> CarModels { get; set; }
+        public DbSet<Car> Cars { get; set; }
     }
 }
