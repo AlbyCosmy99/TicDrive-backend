@@ -10,6 +10,7 @@ namespace TicDrive.AppConfig
             builder.RegisterType<ServicesService>().As<IServicesService>();
             builder.RegisterType<AuthService>().As<IAuthService>();
             builder.RegisterType<EmailService>().As<IEmailService>();
+            builder.RegisterType<CarsService>().As<ICarsService>();
         }
     }
 }
