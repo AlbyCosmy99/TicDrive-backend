@@ -13,7 +13,13 @@ namespace TicDrive.Context
             modelBuilder.Entity<User>()
                 .HasIndex(u => u.Email)
                 .IsUnique();
-        }
+
+            modelBuilder.Entity<CarModel>()
+                .HasOne(model => model.CarMake)
+                .WithMany()
+                .HasForeignKey(model => model.CarMakeId)
+                .IsRequired();
+            }
 
         public DbSet<Service> Services { get; set; }
         public DbSet<User> Users { get; set; }

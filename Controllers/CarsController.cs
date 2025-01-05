@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using TicDrive.Dto.CarDto.CarMakeDto;
+using TicDrive.Dto.CarDto.CarModelDto;
 using TicDrive.Services;
 
 namespace TicDrive.Controllers
@@ -23,6 +24,13 @@ namespace TicDrive.Controllers
         public IActionResult GetMakes()
         {
             return Ok(_mapper.Map<List<FullCarMakeDto>>(_carsService.GetMakes()));
+        }
+
+        [HttpGet]
+        [Route("models/{id}")]
+        public IActionResult GetMakes(int id)
+        {
+            return Ok(_mapper.Map<List<FullCarModelDto>>(_carsService.GetCarModelsByMakeId(id)));
         }
     }
 }
