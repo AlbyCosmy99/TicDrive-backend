@@ -32,9 +32,18 @@ builder.Services.AddCors(options =>
                         .AllowAnyHeader());
 });
 
-builder.Services.AddIdentity<User, IdentityRole>()
-    .AddEntityFrameworkStores<TicDriveDbContext>()
-    .AddDefaultTokenProviders();
+builder.Services.AddIdentity<User, IdentityRole>(options =>
+{
+    //password validation
+    options.Password.RequireDigit = true;
+    options.Password.RequireLowercase = true;
+    options.Password.RequireUppercase = true;
+    options.Password.RequireNonAlphanumeric = true;
+    options.Password.RequiredLength = 8;
+    options.Password.RequiredUniqueChars = 1;
+})
+.AddEntityFrameworkStores<TicDriveDbContext>()
+.AddDefaultTokenProviders();
 
 builder.Services.AddAuthentication(options =>
 {

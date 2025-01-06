@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
+using TicDrive.Attributes;
 using TicDrive.Enums;
 using TicDrive.Models;
 using TicDrive.Services;
@@ -46,10 +47,21 @@ namespace TicDrive.Controllers
 
             [Required]
             public string ConfirmPassword { get; set; } = string.Empty;
+
             [Required]
             [Range(1, int.MaxValue, ErrorMessage = "UserType must be set to a valid value.")]
             public UserType UserType { get; set; }
+
+            [RequiredIfUserType(2, ErrorMessage = "Address is required when UserType is 2 (workshop).")]
+            public string? Address { get; set; }
+
+            [RequiredIfUserType(2, ErrorMessage = "Latitude is required when UserType is 2 (workshop).")]
+            public decimal? Latitudine { get; set; }
+
+            [RequiredIfUserType(2, ErrorMessage = "Longitude is required when UserType is 2 (workshop).")]
+            public decimal? Longitude { get; set; }
         }
+
 
         [HttpPost]
         [Route("register")]
