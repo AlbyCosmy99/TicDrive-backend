@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TicDrive.Context;
 
@@ -11,9 +12,11 @@ using TicDrive.Context;
 namespace TicDrive.Migrations
 {
     [DbContext(typeof(TicDriveDbContext))]
-    partial class TicDriveDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250118180406_add_models_Review_and_OfferedServices")]
+    partial class add_models_Review_and_OfferedServices
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -173,8 +176,7 @@ namespace TicDrive.Migrations
                         .HasColumnType("bit");
 
                     b.Property<decimal?>("Latitude")
-                        .HasPrecision(18, 6)
-                        .HasColumnType("decimal(18,6)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -183,8 +185,7 @@ namespace TicDrive.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.Property<decimal?>("Longitude")
-                        .HasPrecision(18, 6)
-                        .HasColumnType("decimal(18,6)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Name")
                         .IsRequired()
