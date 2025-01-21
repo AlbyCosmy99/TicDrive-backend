@@ -8,7 +8,7 @@ namespace TicDrive.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class CarsController : Controller
+    public class CarsController : ControllerBase
     {
         private readonly ICarsService _carsService;
         private readonly IMapper _mapper;
