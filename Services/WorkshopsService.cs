@@ -31,8 +31,9 @@ namespace TicDrive.Services
                  Address = group.Workshop.Address,
                  Latitude = group.Workshop.Latitude,
                  Longitude = group.Workshop.Longitude,
+                 ProfileImageUrl = group.Workshop.ProfileImageUrl,
                  MeanStars = group.Reviews.Any() ? group.Reviews.Average(review => review.Stars) : 0,
-                 NumberOfReviews = group.Reviews.Count() 
+                 NumberOfReviews = group.Reviews.Count()
              })
              .Skip(skip)
              .Take(take)
