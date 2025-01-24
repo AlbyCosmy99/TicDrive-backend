@@ -17,6 +17,7 @@
             }
         }
         public required decimal Price { get; set; }
+        public required char Currency { get; set; } = '€';
         public decimal? Discount { get; set; } = 0;
     } 
 }

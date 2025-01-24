@@ -1,11 +1,12 @@
-﻿using TicDrive.Context;
+﻿using Microsoft.EntityFrameworkCore;
+using TicDrive.Context;
 using TicDrive.Models;
 
 namespace TicDrive.Services
 {
     public interface IServicesService
     {
-        List<Service> GetServices();
+        Task<List<Service>> GetServices();
     }
     public class ServicesService : IServicesService
     {
@@ -14,9 +15,9 @@ namespace TicDrive.Services
         {
             _dbContext = dbContext;
         }
-        public List<Service> GetServices()
+        public async Task<List<Service>> GetServices()
         {
-            return _dbContext.Services.OrderBy(service => service.Id).ToList();
+            return await _dbContext.Services.OrderBy(service => service.Id).ToListAsync();
         }
     }
 }

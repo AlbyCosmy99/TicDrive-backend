@@ -8,31 +8,36 @@ namespace TicDrive.Controllers
     public class WorkshopsController : ControllerBase
     {
         private readonly IWorkshopsService _workshopsService;
-        public WorkshopsController(IWorkshopsService workshopsService) { 
+
+        public WorkshopsController(IWorkshopsService workshopsService)
+        {
             _workshopsService = workshopsService;
         }
+
         public class GetWorkshopsQueries
         {
-            public int Skip { get; set; }
-            public int Take { get; set; }
+            public int Skip { get; set; } = 0;
+            public int Take { get; set; } = 10;
+            public int serviceId { get; set; } = 0;
         }
 
         [HttpGet]
-        [Route("")]
-        public IActionResult GetWorkshops([FromQuery] GetWorkshopsQueries query)
+        public async Task<IActionResult> GetWorkshops([FromQuery] GetWorkshopsQueries query)
         {
-            int skip = 0;
-            int take = 10;
-            if (query != null && query.Skip > 0)
-            {
-                skip = query.Skip;
-            }
-            if (query != null && query.Take > 0)
-            {
-                take = query.Take;
-            }
+            int skip = query.Skip;
+            int take = query.Take;
+            int serviceId = query.serviceId;
 
-            return Ok(_workshopsService.GetWorkshops(skip, take));
+            try
+            {
+                var workshops = await _workshopsService.GetWorkshops(skip, take, serviceId);
+
+                return Ok(workshops);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
         }
     }
 }

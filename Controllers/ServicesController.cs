@@ -7,21 +7,23 @@ namespace TicDrive.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class ServicesController : ControllerBase
+    public class ServicesController(IServicesService servicesService, IMapper mapper) : ControllerBase
     {
-        private readonly IServicesService _servicesService;
-        private readonly IMapper _mapper;
-
-        public ServicesController(IServicesService servicesService, IMapper mapper)
-        {
-            _servicesService = servicesService;
-            _mapper = mapper;
-        }
+        private readonly IServicesService _servicesService = servicesService;
+        private readonly IMapper _mapper = mapper;
 
         [HttpGet]
-        public IActionResult GetServices()
+        public async Task<IActionResult> GetServices()
         {
-            return Ok(_mapper.Map<List<FullServiceDto>>(_servicesService.GetServices()));
+            try
+            {
+                var services = await _servicesService.GetServices();
+                return Ok(_mapper.Map<List<FullServiceDto>>(services));
+            }
+            catch (Exception ex) when (ex is ArgumentNullException || ex is OperationCanceledException)
+            {
+                return BadRequest(new { Message = "An error occurred.", Details = ex.Message });
+            }
         }
     }
 }
