@@ -18,7 +18,7 @@ namespace TicDrive.Controllers
         {
             public int Skip { get; set; } = 0;
             public int Take { get; set; } = 10;
-            public int serviceId { get; set; } = 0;
+            public int ServiceId { get; set; } = 0;
         }
 
         [HttpGet]
@@ -26,7 +26,7 @@ namespace TicDrive.Controllers
         {
             int skip = query.Skip;
             int take = query.Take;
-            int serviceId = query.serviceId;
+            int serviceId = query.ServiceId;
 
             try
             {

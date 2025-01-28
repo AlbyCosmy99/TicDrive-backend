@@ -84,7 +84,6 @@ builder.Services.AddDbContext<TicDriveDbContext>(options =>
             sqlOptions.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
         }));
 
-
 builder.Services.AddAutoMapper(typeof(AutomapperConfig));
 
 var app = builder.Build();

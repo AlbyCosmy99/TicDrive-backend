@@ -6,18 +6,33 @@ namespace TicDrive.Services
 {
     public interface IServicesService
     {
-        Task<List<Service>> GetServices();
+        Task<List<Service>> GetServices(string workshopId);
     }
+
     public class ServicesService : IServicesService
     {
         private readonly TicDriveDbContext _dbContext;
+
         public ServicesService(TicDriveDbContext dbContext)
         {
             _dbContext = dbContext;
         }
-        public async Task<List<Service>> GetServices()
+
+        public async Task<List<Service>> GetServices(string workshopId)
         {
-            return await _dbContext.Services.OrderBy(service => service.Id).ToListAsync();
+            var query = _dbContext.Services.AsQueryable();
+
+            if (workshopId != null)
+            {
+                query = query.Join(
+                    _dbContext.OfferedServices.Where(os => os.Workshop.Id == workshopId),
+                    service => service.Id,
+                    offeredService => offeredService.Service.Id,
+                    (service, offeredService) => service
+                );
+            }
+
+            return await query.OrderBy(service => service.Id).ToListAsync();
         }
     }
 }

@@ -13,11 +13,12 @@ namespace TicDrive.Controllers
         private readonly IMapper _mapper = mapper;
 
         [HttpGet]
-        public async Task<IActionResult> GetServices()
+        [Route("")]
+        public async Task<IActionResult> GetServices(string? workshopId)
         {
             try
             {
-                var services = await _servicesService.GetServices();
+                var services = await _servicesService.GetServices(workshopId);
                 return Ok(_mapper.Map<List<FullServiceDto>>(services));
             }
             catch (Exception ex) when (ex is ArgumentNullException || ex is OperationCanceledException)
