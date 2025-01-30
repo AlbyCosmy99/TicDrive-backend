@@ -10,7 +10,10 @@ namespace TicDrive.Services
     public interface IAuthService
     {
         JwtSecurityToken GenerateToken(User user);
-        Dictionary<string, string> GetUserInfo(ControllerBase controllerBase);
+        Dictionary<string, string> GetUserClaims(ControllerBase controllerBase);
+        string? GetUserEmail(Dictionary<string, string> userClaims);
+        string? GetUserId(Dictionary<string, string> userClaims);
+        string? GetUserName(Dictionary<string, string> userClaims);
     }
     public class AuthService : IAuthService
     {
@@ -42,7 +45,7 @@ namespace TicDrive.Services
             return token;
         }
 
-        public Dictionary<string, string> GetUserInfo(ControllerBase controllerBase)
+        public Dictionary<string, string> GetUserClaims(ControllerBase controllerBase)
         {
             if (controllerBase == null)
             {
@@ -61,5 +64,13 @@ namespace TicDrive.Services
             return userClaims;
         }
 
+        public string? GetUserEmail(Dictionary<string, string> userClaims) =>
+            userClaims.TryGetValue("email", out var email) ? email : null;
+
+        public string? GetUserId(Dictionary<string, string> userClaims) =>
+            userClaims.TryGetValue("userId", out var userId) ? userId : null;
+
+        public string? GetUserName(Dictionary<string, string> userClaims) => 
+            userClaims.TryGetValue("name", out var name) ? name : null;
     }
 }
