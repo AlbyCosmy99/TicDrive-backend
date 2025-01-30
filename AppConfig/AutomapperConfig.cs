@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using TicDrive.Dto.CarDto.CarMakeDto;
 using TicDrive.Dto.CarDto.CarModelDto;
+using TicDrive.Dto.FavoriteWorkshopDto;
 using TicDrive.Dto.ReviewDto;
 using TicDrive.Dto.ServiceDto;
 using TicDrive.Models;
@@ -34,6 +35,11 @@ namespace TicDrive.AppConfig
                .ForMember(dest => dest.WhenPublished, opt => opt.MapFrom(src => src.WhenPublished))
                .ForMember(dest => dest.Text, opt => opt.MapFrom(src => src.Text))
                .ForMember(dest => dest.Stars, opt => opt.MapFrom(src => src.Stars));
+
+            CreateMap<FavoriteWorkshop, FullFavoriteWorkshopDto>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.CustomerId, opt => opt.MapFrom(src => src.Customer.Id))
+                .ForMember(dest => dest.WorkshopId, opt => opt.MapFrom(src => src.Workshop.Id));
         }
     }
 }
