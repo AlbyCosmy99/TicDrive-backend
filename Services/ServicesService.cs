@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using TicDrive.Context;
 using TicDrive.Models;
 
@@ -22,7 +23,7 @@ namespace TicDrive.Services
         {
             var query = _dbContext.Services.AsQueryable();
 
-            if (workshopId != null)
+            if (!workshopId.IsNullOrEmpty())
             {
                 query = query.Join(
                     _dbContext.OfferedServices.Where(os => os.Workshop.Id == workshopId),

@@ -15,7 +15,7 @@ namespace TicDrive.Services
 
         public async Task<List<Review>> GetAllReviewsByWorkshopId(string workshopId, int skip, int take)
         {
-            var a =  await _context.Reviews
+            var a = await _context.Reviews
                 .Where(review => review.Workshop.Id == workshopId)
                 .Include(review => review.Customer)
                 .Include(review => review.Workshop)

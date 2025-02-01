@@ -1,10 +1,18 @@
-﻿namespace TicDrive.Models
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace TicDrive.Models
 {
     public class FavoriteWorkshop
     {
+        [Key]
         public int Id { get; set; }
+
+        [Required]
+        public string CustomerId { get; set; }
         private User _customer;
-        public User Customer
+        [ForeignKey(nameof(CustomerId))]
+        public virtual User Customer
         {
             get => _customer;
             set
@@ -14,10 +22,15 @@
                     throw new ArgumentException("Customer must have UserType 1.", nameof(User));
                 }
                 _customer = value;
+                CustomerId = value.Id;
             }
         }
+
+        [Required]
+        public string WorkshopId { get; set; }
         private User _workshop;
-        public User Workshop
+        [ForeignKey(nameof(WorkshopId))]
+        public virtual User Workshop
         {
             get => _workshop;
             set
@@ -27,6 +40,7 @@
                     throw new ArgumentException("Workshop must have UserType 2.", nameof(User));
                 }
                 _workshop = value;
+                WorkshopId = value.Id;
             }
         }
     }

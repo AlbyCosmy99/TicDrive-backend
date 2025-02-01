@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TicDrive.Dto.FavoriteWorkshopDto;
-using TicDrive.Migrations;
 using TicDrive.Services;
 
 namespace TicDrive.Controllers
@@ -20,15 +19,15 @@ namespace TicDrive.Controllers
             _customerService = customerService;
             _mapper = mapper;
         }
-        [Route("workshops/favorite")]
-        [Authorize]
-        public async Task<IActionResult> GetFavoriteWorkshops()
-        {
-            var userClaims = _authService.GetUserClaims(this);
-            var userId = _authService.GetUserId(userClaims);
+        //[Route("workshops/favorite")]
+        //[Authorize]
+        //public async Task<IActionResult> GetFavoriteWorkshops()
+        //{
+        //    var userClaims = _authService.GetUserClaims(this);
+        //    var userId = _authService.GetUserId(userClaims);
 
-            var favoriteWorkshops = await _customerService.GetFavoriteWorkshops(userId);
-            return Ok(_mapper.Map<List<FullFavoriteWorkshopDto>>(favoriteWorkshops));
-        }
+        //    var favoriteWorkshops = await _customerService.GetFavoriteWorkshops(userId);
+        //    return Ok(_mapper.Map<List<FullFavoriteWorkshopDto>>(favoriteWorkshops));
+        //}
     }
 }

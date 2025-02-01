@@ -10,14 +10,39 @@ namespace TicDrive.Context
         {
             base.OnModelCreating(modelBuilder);
 
+            //Users
             modelBuilder.Entity<User>()
                 .HasIndex(u => u.Email)
                 .IsUnique();
 
-            modelBuilder.Entity<CarModel>()
-                .HasOne(model => model.CarMake)
+            //Reviews
+            modelBuilder.Entity<Review>()
+                .HasOne(model => model.Customer)
                 .WithMany()
-                .HasForeignKey(model => model.CarMakeId)
+                .HasForeignKey(model => model.CustomerId)
+                .OnDelete(DeleteBehavior.NoAction)
+                .IsRequired();
+
+            modelBuilder.Entity<Review>()
+             .HasOne(model => model.Workshop)
+             .WithMany()
+             .HasForeignKey(model => model.WorkshopId)
+             .OnDelete(DeleteBehavior.NoAction)
+             .IsRequired();
+
+            //FavoriteWorkshops
+            modelBuilder.Entity<FavoriteWorkshop>()
+                .HasOne(model => model.Workshop)
+                .WithMany()
+                .HasForeignKey(model => model.WorkshopId)
+                .OnDelete(DeleteBehavior.NoAction)
+                .IsRequired();
+
+            modelBuilder.Entity<FavoriteWorkshop>()
+                .HasOne(model => model.Customer)
+                .WithMany()
+                .HasForeignKey(model => model.CustomerId)
+                .OnDelete(DeleteBehavior.NoAction)
                 .IsRequired();
 
             modelBuilder.Entity<User>(entity =>

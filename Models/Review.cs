@@ -1,9 +1,15 @@
-﻿namespace TicDrive.Models
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace TicDrive.Models
 {
     public class Review
     {
         public int Id { get; set; }
+        [Required]
+        public string? CustomerId { get; set; }
         private User _customer;
+        [ForeignKey(nameof(CustomerId))]
         public required User Customer
         {
             get => _customer;
@@ -16,7 +22,10 @@
                 _customer = value;
             }
         }
+        [Required]
+        public string WorkshopId { get; set; }
         private User _workshop;
+        [ForeignKey(nameof(WorkshopId))]
         public required User Workshop {
             get => _workshop;
             set

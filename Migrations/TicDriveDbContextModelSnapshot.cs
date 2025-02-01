@@ -42,6 +42,7 @@ namespace TicDrive.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("OwnerId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
@@ -104,9 +105,11 @@ namespace TicDrive.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("CustomerId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("WorkshopId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
@@ -160,6 +163,7 @@ namespace TicDrive.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("CustomerId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<double>("Stars")
@@ -173,6 +177,7 @@ namespace TicDrive.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("WorkshopId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
@@ -295,7 +300,9 @@ namespace TicDrive.Migrations
 
                     b.HasOne("TicDrive.Models.User", "Owner")
                         .WithMany()
-                        .HasForeignKey("OwnerId");
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("CarModel");
 
@@ -317,11 +324,15 @@ namespace TicDrive.Migrations
                 {
                     b.HasOne("TicDrive.Models.User", "Customer")
                         .WithMany()
-                        .HasForeignKey("CustomerId");
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
 
                     b.HasOne("TicDrive.Models.User", "Workshop")
                         .WithMany()
-                        .HasForeignKey("WorkshopId");
+                        .HasForeignKey("WorkshopId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
 
                     b.Navigation("Customer");
 
@@ -349,11 +360,15 @@ namespace TicDrive.Migrations
                 {
                     b.HasOne("TicDrive.Models.User", "Customer")
                         .WithMany()
-                        .HasForeignKey("CustomerId");
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
 
                     b.HasOne("TicDrive.Models.User", "Workshop")
                         .WithMany()
-                        .HasForeignKey("WorkshopId");
+                        .HasForeignKey("WorkshopId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
 
                     b.Navigation("Customer");
 
