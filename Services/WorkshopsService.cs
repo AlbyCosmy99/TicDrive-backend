@@ -53,7 +53,8 @@ namespace TicDrive.Services
                     NumberOfReviews = joined.Reviews.Count(),
                     ServicePrice = serviceId != 0 && joined.OfferedService != null ? joined.OfferedService.Price : null,
                     Currency = serviceId != 0 && joined.OfferedService != null ? joined.OfferedService.Currency : null,
-                    Discount = serviceId != 0 && joined.OfferedService != null ? joined.OfferedService.Discount : null
+                    Discount = serviceId != 0 && joined.OfferedService != null ? joined.OfferedService.Discount : null,
+                    IsVerified = joined.Workshop.IsVerified
                 })
                 .Skip(skip)
                 .Take(take)

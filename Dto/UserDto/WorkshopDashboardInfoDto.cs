@@ -15,5 +15,6 @@ namespace TicDrive.Dto.UserDto
         public decimal? ServicePrice { get; set; }
         public char? Currency { get; set; } = '€';
         public decimal? Discount { get; set; }
+        public bool? IsVerified { get; set; }
     }
 }

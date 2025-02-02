@@ -13,5 +13,22 @@ namespace TicDrive.Models
         public decimal? Longitude { get; set; }
         public decimal? Latitude { get; set; }
         public string? ProfileImageUrl { get; set; }
+        private bool? _isVerified;
+        public bool? IsVerified
+        {
+            get => _isVerified;
+            set
+            {
+                if (UserType != UserType.Workshop)
+                {
+                    _isVerified = null;
+                }
+                else
+                {
+                    _isVerified = value ?? false;
+                }
+            }
+        }
+
     }
 }

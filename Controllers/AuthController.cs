@@ -60,6 +60,7 @@ namespace TicDrive.Controllers
 
             [RequiredIfUserType(2, ErrorMessage = "Longitude is required when UserType is 2 (workshop).")]
             public decimal? Longitude { get; set; }
+            public bool? IsVerified { get; set; }
         }
 
 
@@ -81,7 +82,8 @@ namespace TicDrive.Controllers
                 Email = payload.Email,
                 UserName = payload.Email,
                 EmailConfirmed = false,
-                UserType = payload.UserType
+                UserType = payload.UserType,
+                IsVerified = payload.IsVerified,
             };
 
             var result = await _userManager.CreateAsync(user, payload.Password);
