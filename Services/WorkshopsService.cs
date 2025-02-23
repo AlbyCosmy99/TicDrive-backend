@@ -6,14 +6,14 @@ namespace TicDrive.Services
 {
     public interface IWorkshopsService
     {
-        Task<List<WorkshopDashboardInfoDto>> GetWorkshops(int skip, int take, int serviceId);
+        Task<List<WorkshopDashboardInfoDto>> GetWorkshops(int skip, int take, int? serviceId = 0, string? customerId = null, bool? favorite = null);
     }
 
     public class WorkshopsService(TicDriveDbContext context) : IWorkshopsService
     {
         private readonly TicDriveDbContext _context = context;
 
-        public async Task<List<WorkshopDashboardInfoDto>> GetWorkshops(int skip, int take, int serviceId)
+        public async Task<List<WorkshopDashboardInfoDto>> GetWorkshops(int skip, int take, int? serviceId, string? customerId, bool? favorite = false)
         {
             var workshopsQuery = _context.Users
                 .Where(user => user.UserType == Enums.UserType.Workshop)
@@ -36,6 +36,15 @@ namespace TicDrive.Services
                     .Where(joined => joined.OfferedService != null && joined.OfferedService.Service.Id == serviceId);
             }
 
+            List<string> favoriteWorkshopIds = new List<string>();
+            if (!string.IsNullOrEmpty(customerId))
+            {
+                favoriteWorkshopIds = await _context.FavoriteWorkshops
+                    .Where(f => f.CustomerId == customerId)
+                    .Select(f => f.WorkshopId)
+                .ToListAsync();
+            }
+
             var workshopsData = await workshopsQuery.ToListAsync();
 
             var uniqueWorkshops = workshopsData
@@ -54,13 +63,19 @@ namespace TicDrive.Services
                     ServicePrice = serviceId != 0 && joined.OfferedService != null ? joined.OfferedService.Price : null,
                     Currency = serviceId != 0 && joined.OfferedService != null ? joined.OfferedService.Currency : null,
                     Discount = serviceId != 0 && joined.OfferedService != null ? joined.OfferedService.Discount : null,
-                    IsVerified = joined.Workshop.IsVerified
-                })
+                    IsVerified = joined.Workshop.IsVerified,
+                    IsFavorite = string.IsNullOrEmpty(customerId) ? null : favoriteWorkshopIds.Contains(joined.Workshop.Id)
+                });
+
+            if(favorite == true)
+            {
+                uniqueWorkshops = uniqueWorkshops.Where(workshop => workshop.IsFavorite == true);
+            }          
+
+            return uniqueWorkshops
                 .Skip(skip)
                 .Take(take)
                 .ToList();
-
-            return uniqueWorkshops;
         }
     }
 }

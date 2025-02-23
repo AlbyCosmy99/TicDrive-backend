@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TicDrive.Dto.FavoriteWorkshopDto;
 using TicDrive.Services;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace TicDrive.Controllers
 {
@@ -11,23 +12,33 @@ namespace TicDrive.Controllers
     public class CustomerController : ControllerBase
     {
         private readonly IAuthService _authService;
-        private readonly ICustomerService _customerService;
+        private readonly IWorkshopsService _workshopsService;
         private readonly IMapper _mapper;
-        public CustomerController(IAuthService authService, ICustomerService customerService, IMapper mapper)
+        public CustomerController(IAuthService authService, IWorkshopsService workshopsService, IMapper mapper)
         {
             _authService = authService;
-            _customerService = customerService;
+            _workshopsService = workshopsService;
             _mapper = mapper;
         }
-        //[Route("workshops/favorite")]
-        //[Authorize]
-        //public async Task<IActionResult> GetFavoriteWorkshops()
-        //{
-        //    var userClaims = _authService.GetUserClaims(this);
-        //    var userId = _authService.GetUserId(userClaims);
+        public class GetFavoriteWorkshopsQueries
+        {
+            public int Skip { get; set; } = 0;
+            public int Take { get; set; } = 10;
+        }
 
-        //    var favoriteWorkshops = await _customerService.GetFavoriteWorkshops(userId);
-        //    return Ok(_mapper.Map<List<FullFavoriteWorkshopDto>>(favoriteWorkshops));
-        //}
+        [Route("workshops/favorite")]
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> GetFavoriteWorkshops([FromQuery] GetFavoriteWorkshopsQueries query)
+        {
+            int skip = query.Skip;
+            int take = query.Take;
+
+            var userClaims = _authService.GetUserClaims(this);
+            var userId = _authService.GetUserId(userClaims);
+
+            var favoriteWorkshops = await _workshopsService.GetWorkshops(skip, take, customerId: userId, favorite: true);
+            return Ok(favoriteWorkshops);
+        }
     }
 }

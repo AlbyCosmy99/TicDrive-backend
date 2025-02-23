@@ -8,10 +8,12 @@ namespace TicDrive.Controllers
     public class WorkshopsController : ControllerBase
     {
         private readonly IWorkshopsService _workshopsService;
+        private readonly IAuthService _authService;
 
-        public WorkshopsController(IWorkshopsService workshopsService)
+        public WorkshopsController(IWorkshopsService workshopsService , IAuthService authService)
         {
             _workshopsService = workshopsService;
+            _authService = authService;
         }
 
         public class GetWorkshopsQueries
@@ -22,15 +24,19 @@ namespace TicDrive.Controllers
         }
 
         [HttpGet]
+        [Route("")]
         public async Task<IActionResult> GetWorkshops([FromQuery] GetWorkshopsQueries query)
         {
             int skip = query.Skip;
             int take = query.Take;
             int serviceId = query.ServiceId;
 
+            var userClaims = _authService.GetUserClaims(this);
+            var userId = _authService.GetUserId(userClaims);
+
             try
             {
-                var workshops = await _workshopsService.GetWorkshops(skip, take, serviceId);
+                var workshops = await _workshopsService.GetWorkshops(skip, take, serviceId, userId);
 
                 return Ok(workshops);
             }

@@ -38,8 +38,8 @@ namespace TicDrive.AppConfig
 
             CreateMap<FavoriteWorkshop, FullFavoriteWorkshopDto>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
-                .ForMember(dest => dest.CustomerId, opt => opt.MapFrom(src => src.Customer.Id))
-                .ForMember(dest => dest.WorkshopId, opt => opt.MapFrom(src => src.Workshop.Id));
+                .ForMember(dest => dest.CustomerId, opt => opt.MapFrom(src => src.CustomerId))
+                .ForMember(dest => dest.WorkshopId, opt => opt.MapFrom(src => src.WorkshopId));
         }
     }
 }
