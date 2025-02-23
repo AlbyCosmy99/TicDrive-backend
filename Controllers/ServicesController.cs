@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TicDrive.Dto.ServiceDto;
 using TicDrive.Services;
@@ -8,7 +7,6 @@ namespace TicDrive.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize]
     public class ServicesController(IServicesService servicesService, IMapper mapper) : ControllerBase
     {
         private readonly IServicesService _servicesService = servicesService;
