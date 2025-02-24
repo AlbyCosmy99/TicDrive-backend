@@ -38,7 +38,8 @@ namespace TicDrive.Controllers
             var userId = _authService.GetUserId(userClaims);
 
             var favoriteWorkshops = await _workshopsService.GetWorkshops(skip, take, customerId: userId, favorite: true);
-            return Ok(favoriteWorkshops);
+            return Ok(new { workshops = favoriteWorkshops, count = favoriteWorkshops.Count });
+
         }
     }
 }
