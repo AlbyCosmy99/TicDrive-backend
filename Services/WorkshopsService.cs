@@ -7,6 +7,7 @@ namespace TicDrive.Services
     public interface IWorkshopsService
     {
         Task<List<WorkshopDashboardInfoDto>> GetWorkshops(int skip, int take, int? serviceId = 0, string? customerId = null, bool? favorite = null);
+        Task LikeWorkshop(string userId, string workshopId);
     }
 
     public class WorkshopsService(TicDriveDbContext context) : IWorkshopsService
@@ -77,5 +78,26 @@ namespace TicDrive.Services
                 .Take(take)
                 .ToList();
         }
+        public async Task LikeWorkshop(string userId, string workshopId)
+        {
+            var favoriteWorkshop = await _context.FavoriteWorkshops
+                   .FirstOrDefaultAsync(f => f.CustomerId == userId && f.WorkshopId == workshopId);
+
+            if (favoriteWorkshop != null)
+            {
+                _context.FavoriteWorkshops.Remove(favoriteWorkshop);
+            } 
+            else
+            {
+                await _context.FavoriteWorkshops.AddAsync(new Models.FavoriteWorkshop
+                {
+                    CustomerId = userId,
+                    WorkshopId = workshopId
+                });
+            }
+
+            await _context.SaveChangesAsync();
+        }
+
     }
 }

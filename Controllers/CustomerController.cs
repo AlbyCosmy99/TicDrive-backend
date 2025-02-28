@@ -41,5 +41,18 @@ namespace TicDrive.Controllers
             return Ok(new { workshops = favoriteWorkshops, count = favoriteWorkshops.Count });
 
         }
+
+        [Route("workshops/favorite")]
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> LikeWorkshop([FromQuery] string workshopId)
+        {
+            var userClaims = _authService.GetUserClaims(this);
+            var userId = _authService.GetUserId(userClaims);
+            await _workshopsService.LikeWorkshop(userId, workshopId);
+
+            return NoContent();
+
+        }
     }
 }
