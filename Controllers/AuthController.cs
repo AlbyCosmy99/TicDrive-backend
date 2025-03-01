@@ -220,7 +220,7 @@ namespace TicDrive.Controllers
         [HttpGet]
         [Authorize]
         [Route("get-payload")]
-        public IActionResult GetPayload()
+        public async Task<IActionResult> GetPayload()
         {
             try
             {
@@ -229,12 +229,15 @@ namespace TicDrive.Controllers
                 var userId = _authService.GetUserId(userClaims);
                 var name = _authService.GetUserName(userClaims);
 
+                var userData = await _authService.GetUserData(userId);
+
                 return Ok(new
                 {
                     emailConfirmed = email != null && _emailService.IsEmailConfirmed(email),
                     userId,
                     email,
-                    name
+                    name,
+                    imageUrl = userData.ImageUrl
                 });
             }
             catch (ArgumentNullException ex)

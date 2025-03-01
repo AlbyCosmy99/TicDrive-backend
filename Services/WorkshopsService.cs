@@ -58,7 +58,7 @@ namespace TicDrive.Services
                     Address = joined.Workshop.Address,
                     Latitude = joined.Workshop.Latitude,
                     Longitude = joined.Workshop.Longitude,
-                    ProfileImageUrl = joined.Workshop.ProfileImageUrl,
+                    ProfileImageUrl = joined.Workshop.ImageUrl,
                     MeanStars = joined.Reviews.Any() ? joined.Reviews.Average(review => review.Stars) : 0,
                     NumberOfReviews = joined.Reviews.Count(),
                     ServicePrice = serviceId != 0 && joined.OfferedService != null ? joined.OfferedService.Price : null,

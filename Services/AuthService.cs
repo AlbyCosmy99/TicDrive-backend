@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using TicDrive.Context;
+using TicDrive.Dto.UserDto;
 using TicDrive.Models;
 
 namespace TicDrive.Services
@@ -14,13 +17,16 @@ namespace TicDrive.Services
         string? GetUserEmail(Dictionary<string, string> userClaims);
         string? GetUserId(Dictionary<string, string> userClaims);
         string? GetUserName(Dictionary<string, string> userClaims);
+        Task<User> GetUserData(string userId);
     }
     public class AuthService : IAuthService
     {
         private readonly IConfiguration _configuration;
-        public AuthService(IConfiguration configuration) 
+        private readonly TicDriveDbContext _context;
+        public AuthService(IConfiguration configuration, TicDriveDbContext context) 
         {
             _configuration = configuration;
+            _context = context;
         }
         public JwtSecurityToken GenerateToken(User user)
         {
@@ -72,5 +78,7 @@ namespace TicDrive.Services
 
         public string? GetUserName(Dictionary<string, string> userClaims) => 
             userClaims.TryGetValue("name", out var name) ? name : null;
+
+        public async Task<User> GetUserData(string userId) => await _context.Users.Where(user => user.UserType == Enums.UserType.Customer && user.Id == userId).FirstOrDefaultAsync();
     }
 }
