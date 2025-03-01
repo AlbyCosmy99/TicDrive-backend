@@ -237,7 +237,9 @@ namespace TicDrive.Controllers
                     userId,
                     email,
                     name,
-                    imageUrl = userData.ProfileImageUrl
+                    imageUrl = userData.ProfileImageUrl,
+                    phoneNumber = userData.PhoneNumber,
+                    address = userData.Address
                 });
             }
             catch (ArgumentNullException ex)
