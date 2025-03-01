@@ -3,6 +3,10 @@
   "WorkspaceRootPath": "C:\\Users\\dinam\\OneDrive\\Desktop\\Lavoro\\startups\\ticdrive\\appMobile\\backend\\TicDrive\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{2261EFAA-42BF-489C-A394-7082C77073AA}|TicDrive.csproj|c:\\users\\dinam\\onedrive\\desktop\\lavoro\\startups\\ticdrive\\appmobile\\backend\\ticdrive\\dto\\userdto\\workshopdashboardinfodto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2261EFAA-42BF-489C-A394-7082C77073AA}|TicDrive.csproj|solutionrelative:dto\\userdto\\workshopdashboardinfodto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{2261EFAA-42BF-489C-A394-7082C77073AA}|TicDrive.csproj|c:\\users\\dinam\\onedrive\\desktop\\lavoro\\startups\\ticdrive\\appmobile\\backend\\ticdrive\\services\\workshopsservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{2261EFAA-42BF-489C-A394-7082C77073AA}|TicDrive.csproj|solutionrelative:services\\workshopsservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -13,10 +17,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{2261EFAA-42BF-489C-A394-7082C77073AA}|TicDrive.csproj|c:\\users\\dinam\\onedrive\\desktop\\lavoro\\startups\\ticdrive\\appmobile\\backend\\ticdrive\\services\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{2261EFAA-42BF-489C-A394-7082C77073AA}|TicDrive.csproj|solutionrelative:services\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2261EFAA-42BF-489C-A394-7082C77073AA}|TicDrive.csproj|c:\\users\\dinam\\onedrive\\desktop\\lavoro\\startups\\ticdrive\\appmobile\\backend\\ticdrive\\dto\\userdto\\workshopdashboardinfodto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2261EFAA-42BF-489C-A394-7082C77073AA}|TicDrive.csproj|solutionrelative:dto\\userdto\\workshopdashboardinfodto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{2261EFAA-42BF-489C-A394-7082C77073AA}|TicDrive.csproj|c:\\users\\dinam\\onedrive\\desktop\\lavoro\\startups\\ticdrive\\appmobile\\backend\\ticdrive\\controllers\\customercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -78,24 +78,24 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 0,
               "Title": "WorkshopDashboardInfoDto.cs",
               "DocumentMoniker": "C:\\Users\\dinam\\OneDrive\\Desktop\\Lavoro\\startups\\ticdrive\\appMobile\\backend\\TicDrive\\Dto\\UserDto\\WorkshopDashboardInfoDto.cs",
               "RelativeDocumentMoniker": "Dto\\UserDto\\WorkshopDashboardInfoDto.cs",
               "ToolTip": "C:\\Users\\dinam\\OneDrive\\Desktop\\Lavoro\\startups\\ticdrive\\appMobile\\backend\\TicDrive\\Dto\\UserDto\\WorkshopDashboardInfoDto.cs",
               "RelativeToolTip": "Dto\\UserDto\\WorkshopDashboardInfoDto.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-03-01T19:51:47.186Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "AuthService.cs",
               "DocumentMoniker": "C:\\Users\\dinam\\OneDrive\\Desktop\\Lavoro\\startups\\ticdrive\\appMobile\\backend\\TicDrive\\Services\\AuthService.cs",
               "RelativeDocumentMoniker": "Services\\AuthService.cs",
@@ -103,12 +103,11 @@
               "RelativeToolTip": "Services\\AuthService.cs",
               "ViewState": "AgIAAEgAAAAAAAAAAAAAAFMAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-01T19:51:38.257Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-01T19:51:38.257Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "AuthController.cs",
               "DocumentMoniker": "C:\\Users\\dinam\\OneDrive\\Desktop\\Lavoro\\startups\\ticdrive\\appMobile\\backend\\TicDrive\\Controllers\\AuthController.cs",
               "RelativeDocumentMoniker": "Controllers\\AuthController.cs",
@@ -116,21 +115,19 @@
               "RelativeToolTip": "Controllers\\AuthController.cs",
               "ViewState": "AgIAANwAAAAAAAAAAAAnwOcAAABAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-01T19:50:17.989Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-01T19:50:17.989Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "WorkshopsService.cs",
               "DocumentMoniker": "C:\\Users\\dinam\\OneDrive\\Desktop\\Lavoro\\startups\\ticdrive\\appMobile\\backend\\TicDrive\\Services\\WorkshopsService.cs",
               "RelativeDocumentMoniker": "Services\\WorkshopsService.cs",
               "ToolTip": "C:\\Users\\dinam\\OneDrive\\Desktop\\Lavoro\\startups\\ticdrive\\appMobile\\backend\\TicDrive\\Services\\WorkshopsService.cs",
               "RelativeToolTip": "Services\\WorkshopsService.cs",
-              "ViewState": "AgIAAC8AAAAAAAAAAAAqwDwAAAA2AAAAAAAAAA==",
+              "ViewState": "AgIAACcAAAAAAAAAAAAkwDwAAAA2AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-22T23:57:50.056Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-02-22T23:57:50.056Z"
             },
             {
               "$type": "Document",
@@ -286,8 +283,7 @@
               "RelativeToolTip": "Controllers\\CustomerController.cs",
               "ViewState": "AgIAABwAAAAAAAAAAADwvzEAAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-31T16:29:42.497Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-01-31T16:29:42.497Z"
             }
           ]
         }
