@@ -6,7 +6,7 @@ namespace TicDrive.Services
 {
     public interface IWorkshopsService
     {
-        Task<List<WorkshopDashboardInfoDto>> GetWorkshops(int skip, int take, int? serviceId = 0, string? customerId = null, bool? favorite = null);
+        Task<IEnumerable<WorkshopDashboardInfoDto>> GetWorkshops(int skip, int take, int? serviceId = 0, string? customerId = null, bool? favorite = null);
         Task LikeWorkshop(string userId, string workshopId);
     }
 
@@ -14,7 +14,7 @@ namespace TicDrive.Services
     {
         private readonly TicDriveDbContext _context = context;
 
-        public async Task<List<WorkshopDashboardInfoDto>> GetWorkshops(int skip, int take, int? serviceId, string? customerId, bool? favorite = false)
+        public async Task<IEnumerable<WorkshopDashboardInfoDto>> GetWorkshops(int skip, int take, int? serviceId, string? customerId, bool? favorite = false)
         {
             var workshopsQuery = _context.Users
                 .Where(user => user.UserType == Enums.UserType.Workshop)
@@ -71,12 +71,9 @@ namespace TicDrive.Services
             if(favorite == true)
             {
                 uniqueWorkshops = uniqueWorkshops.Where(workshop => workshop.IsFavorite == true);
-            }          
+            }
 
-            return uniqueWorkshops
-                .Skip(skip)
-                .Take(take)
-                .ToList();
+            return uniqueWorkshops;
         }
         public async Task LikeWorkshop(string userId, string workshopId)
         {

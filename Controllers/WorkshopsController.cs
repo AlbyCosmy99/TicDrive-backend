@@ -38,7 +38,7 @@ namespace TicDrive.Controllers
             {
                 var workshops = await _workshopsService.GetWorkshops(skip, take, serviceId, userId);
 
-                return Ok(new { workshops, Count = workshops.Count() });
+                return Ok(new { workshops = workshops.Skip(skip).Take(take).ToList(), Count = workshops.Count() });
             }
             catch (Exception ex)
             {
