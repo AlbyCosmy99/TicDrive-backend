@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
 using TicDrive.Attributes;
+using TicDrive.Context;
 using TicDrive.Enums;
 using TicDrive.Models;
 using TicDrive.Services;
@@ -18,17 +19,20 @@ namespace TicDrive.Controllers
         private readonly SignInManager<User> _signInManager;
         private readonly IAuthService _authService;
         private readonly IEmailService _emailService;
+        private readonly TicDriveDbContext _context;
 
         public AuthController(
             UserManager<User> userManager, 
             SignInManager<User> signInManager, 
             IAuthService authService,
-            IEmailService emailService)
+            IEmailService emailService,
+            TicDriveDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _authService = authService;
             _emailService = emailService;
+            _context = context;
         }
 
         public class RegisterBody
@@ -76,49 +80,69 @@ namespace TicDrive.Controllers
             if (payload.Password != payload.ConfirmPassword)
                 return BadRequest(new { Message = "Passwords do not match." });
 
-            var user = new User
-            {
-                Name = payload.Name,
-                Email = payload.Email,
-                UserName = payload.Email,
-                EmailConfirmed = false,
-                UserType = payload.UserType,
-                IsVerified = payload.IsVerified,
-            };
+            var strategy = _context.Database.CreateExecutionStrategy();
 
-            var result = await _userManager.CreateAsync(user, payload.Password);
+            return await strategy.ExecuteAsync<object, IActionResult>(
+                state: null,
+                operation: async (dbContext, state, cancellationToken) =>
+                {
+                    using (var transaction = await _context.Database.BeginTransactionAsync())
+                    {
+                        try
+                        {
+                            var user = new User
+                            {
+                                Name = payload.Name,
+                                Email = payload.Email,
+                                UserName = payload.Email,
+                                EmailConfirmed = false,
+                                UserType = payload.UserType,
+                                IsVerified = payload.IsVerified,
+                            };
 
-            var emailConfirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-            var confirmationLink = Url.Action(
-                "ConfirmEmail",
-                "Auth",
-                new { userId = user.Id, token = emailConfirmationToken },
-                Request.Scheme
+                            var result = await _userManager.CreateAsync(user, payload.Password);
+
+                            var emailConfirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                            var confirmationLink = Url.Action(
+                                "ConfirmEmail",
+                                "Auth",
+                                new { userId = user.Id, token = emailConfirmationToken },
+                                Request.Scheme
+                            );
+
+                            if (string.IsNullOrEmpty(confirmationLink))
+                            {
+                                throw new Exception("Confirmation link is null or empty.");
+                            }
+
+                            if (!result.Succeeded)
+                            {
+                                return BadRequest(result.Errors);
+                            }
+
+                            var body = _emailService.GetRegistrationMailConfirmation();
+
+                            string formattedBody = string.Format(body, confirmationLink);
+
+                            await _emailService.SendEmailAsync(user.Email, "Welcome! Confirm your email.", formattedBody);
+
+                            var token = _authService.GenerateToken(user);
+                            await _context.Database.CommitTransactionAsync();
+                            return Ok(new
+                            {
+                                Token = new JwtSecurityTokenHandler().WriteToken(token),
+                                Expiration = token.ValidTo
+                            });
+                        }
+                        catch (Exception ex)
+                        {
+                            await _context.Database.RollbackTransactionAsync();
+                            return StatusCode(500, new { Message = "Registration failed", Details = ex.Message });
+                        }
+                    }
+                },
+                verifySucceeded: null
             );
-
-            if (string.IsNullOrEmpty(confirmationLink))
-            {
-                throw new Exception("Confirmation link is null or empty.");
-            }
-
-            if (!result.Succeeded)
-            {
-                return BadRequest(result.Errors);
-            }
-
-            var body = _emailService.GetRegistrationMailConfirmation();
-
-            string formattedBody = string.Format(body, confirmationLink);
-
-            await _emailService.SendEmailAsync(user.Email, "Welcome! Confirm your email.", formattedBody);
-
-            var token = _authService.GenerateToken(user);
-
-            return Ok(new
-            {
-                Token = new JwtSecurityTokenHandler().WriteToken(token),
-                Expiration = token.ValidTo
-            });
         }
         public class LoginBody
         {
