@@ -34,7 +34,7 @@ namespace TicDrive.Controllers
             }
 
             var reviews = await _reviewsService.GetAllReviewsByWorkshopId(workshopId, query.Skip, query.Take);
-            return Ok(_mapper.Map<List<FullReviewDto>>(reviews));
+            return Ok(reviews);
         }
     }
 }
