@@ -21,6 +21,7 @@ namespace TicDrive.Controllers
             public int Skip { get; set; } = 0;
             public int Take { get; set; } = 10;
             public int ServiceId { get; set; } = 0;
+            public string? Filter { get; set; } = string.Empty;
         }
 
         [HttpGet]
@@ -36,7 +37,7 @@ namespace TicDrive.Controllers
 
             try
             {
-                var workshops = await _workshopsService.GetWorkshops(skip, take, serviceId, userId);
+                var workshops = await _workshopsService.GetWorkshops(skip, take, serviceId, userId, filter: query.Filter);
 
                 return Ok(new { workshops = workshops.Skip(skip).Take(take).ToList(), Count = workshops.Count() });
             }

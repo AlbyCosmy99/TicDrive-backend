@@ -1,13 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using TicDrive.Context;
+﻿using TicDrive.Context;
 using TicDrive.Models;
 
 namespace TicDrive.Services
 {
     public interface IServicesService
     {
-        Task<List<Service>> GetServices(string workshopId);
+        IQueryable<Service> GetServices(string workshopId, string? filter = null);
     }
 
     public class ServicesService : IServicesService
@@ -19,11 +17,11 @@ namespace TicDrive.Services
             _dbContext = dbContext;
         }
 
-        public async Task<List<Service>> GetServices(string workshopId)
+        public IQueryable<Service> GetServices(string workshopId, string? filter = null)
         {
             var query = _dbContext.Services.AsQueryable();
 
-            if (!workshopId.IsNullOrEmpty())
+            if (!string.IsNullOrEmpty(workshopId))
             {
                 query = query.Join(
                     _dbContext.OfferedServices.Where(os => os.Workshop.Id == workshopId),
@@ -33,7 +31,12 @@ namespace TicDrive.Services
                 );
             }
 
-            return await query.OrderBy(service => service.Id).ToListAsync();
+            if (!string.IsNullOrEmpty(filter))
+            {
+                query = query.Where(service => service.Title.Contains(filter));
+            }
+
+            return query.OrderBy(service => service.Id);
         }
     }
 }
