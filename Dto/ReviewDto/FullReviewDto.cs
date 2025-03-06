@@ -6,6 +6,7 @@ namespace TicDrive.Dto.ReviewDto
     {
         public int Id { get; set; }
         public required string CustomerId { get; set; }
+        public required string CustomerName { get; set; }
         public string CustomerImageUrl { get; set; } = string.Empty;
         public required string WorkshopId { get; set; }
         public required string Text { get; set; }

@@ -25,6 +25,7 @@ namespace TicDrive.Services
                 .Select(review => new FullReviewDto 
                 { 
                     CustomerId = review.CustomerId!,
+                    CustomerName = review.Customer.Name,
                     CustomerImageUrl = review.Customer.ProfileImageUrl ?? string.Empty,
                     WorkshopId = review.WorkshopId,
                     Text = review.Text,
