@@ -74,7 +74,7 @@ namespace TicDrive.Services
             }
 
             return uniqueWorkshops
-                .Where(workshop => workshop.Name.Contains(filter ?? string.Empty));
+                .Where(workshop => workshop.Name.ToLower().Contains(filter?.ToLower() ?? string.Empty));
         }
         public async Task LikeWorkshop(string userId, string workshopId)
         {
