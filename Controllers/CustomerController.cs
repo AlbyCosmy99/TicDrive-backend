@@ -24,6 +24,8 @@ namespace TicDrive.Controllers
         {
             public int Skip { get; set; } = 0;
             public int Take { get; set; } = 10;
+            public string? Filter { get; set; } = string.Empty;
+            public string Order { get; set; } = "asc";
         }
 
         [Route("workshops/favorite")]
@@ -37,7 +39,18 @@ namespace TicDrive.Controllers
             var userClaims = _authService.GetUserClaims(this);
             var userId = _authService.GetUserId(userClaims);
 
-            var favoriteWorkshops = await _workshopsService.GetWorkshops(skip, take, customerId: userId, favorite: true);
+            var favoriteWorkshops = await _workshopsService.GetWorkshops(skip, take, customerId: userId, favorite: true, filter: query.Filter);
+
+            switch (query.Order?.ToLower())
+            {
+                case "desc":
+                    favoriteWorkshops = favoriteWorkshops.OrderByDescending(w => w.Name);
+                    break;
+                case "asc":
+                default:
+                    favoriteWorkshops = favoriteWorkshops.OrderBy(w => w.Name);
+                    break;
+            }
             return Ok(new { workshops = favoriteWorkshops, count = favoriteWorkshops.Count() });
 
         }
