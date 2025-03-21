@@ -29,5 +29,7 @@ namespace TicDrive.Models
                 }
             }
         }
+        public string ResetPasswordCode { get; set; } = string.Empty;
+        public DateTime ResetPasswordExpiry { get; set; } = DateTime.UtcNow.AddMinutes(10);
     }
 }

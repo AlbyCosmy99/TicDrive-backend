@@ -271,8 +271,6 @@ namespace TicDrive.Controllers
             }
         }
 
-        // ----- Forgot Password API Endpoints -----
-
         public class ForgotPasswordRequest
         {
             [Required]
@@ -295,19 +293,18 @@ namespace TicDrive.Controllers
                 return Ok(new { Message = "If an account with that email exists, you will receive instructions to reset your password." });
             }
 
-            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var resetCode = new Random().Next(100000, 999999).ToString();
 
-            var resetLink = Url.Action("ResetPassword", "Auth", new { email = user.Email, token }, Request.Scheme);
-            if (string.IsNullOrEmpty(resetLink))
-            {
-                return StatusCode(500, new { Message = "Could not generate password reset link." });
-            }
+            user.ResetPasswordCode = resetCode;
+            user.ResetPasswordExpiry = DateTime.UtcNow.AddMinutes(10);
+            await _userManager.UpdateAsync(user);
 
-            var emailBody = $"Please reset your password by clicking the following link: {resetLink}";
-            await _emailService.SendEmailAsync(user.Email, "Password Reset Request", emailBody);
+            var emailBody = $"Your password reset code is: <b>{resetCode}</b>. This code is valid for 10 minutes.";
+            await _emailService.SendEmailAsync(user.Email, "Password Reset Code", emailBody);
 
             return Ok(new { Message = "If an account with that email exists, you will receive instructions to reset your password." });
         }
+
 
         public class ResetPasswordRequest
         {
@@ -442,6 +439,34 @@ namespace TicDrive.Controllers
             </html>";
 
             return Content(html, "text/html");
+        }
+
+        public class SendCodePasswordForgotQuery
+        {
+            public string Email { get; set; } = string.Empty;
+            public string Code { get; set; } = string.Empty;
+        }
+
+        [HttpPost]
+        [Route("send-code-password-forgot")]
+        public async Task<IActionResult> SendCodePasswordForgot([FromBody] SendCodePasswordForgotQuery query)
+        {
+            if(string.IsNullOrEmpty(query.Code))
+            {
+                return BadRequest("Code is required");
+            }
+
+            var user = await _userManager.FindByEmailAsync(query.Email);
+            if (user == null)
+            {
+                return NotFound(new { Message = "Invalid request. User not found." });
+            }
+
+            if(user.ResetPasswordCode == query.Code)
+            {
+                return NoContent();
+            }
+            return Unauthorized("Invalid reset code");
         }
     }
 }
