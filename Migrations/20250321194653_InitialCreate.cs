@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace TicDrive.Migrations
 {
     /// <inheritdoc />
-    public partial class initialMigration : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -51,6 +51,9 @@ namespace TicDrive.Migrations
                     Longitude = table.Column<decimal>(type: "decimal(18,6)", precision: 18, scale: 6, nullable: true),
                     Latitude = table.Column<decimal>(type: "decimal(18,6)", precision: 18, scale: 6, nullable: true),
                     ProfileImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsVerified = table.Column<bool>(type: "bit", nullable: true),
+                    ResetPasswordCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ResetPasswordExpiry = table.Column<DateTime>(type: "datetime2", nullable: false),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Email = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     NormalizedEmail = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -176,10 +179,12 @@ namespace TicDrive.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LicencePlate = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CarModelId = table.Column<int>(type: "int", nullable: false),
-                    OwnerId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    Year = table.Column<int>(type: "int", nullable: true),
+                    FuelType = table.Column<int>(type: "int", nullable: true),
+                    TransmissionType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    EngineDisplacement = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -188,12 +193,6 @@ namespace TicDrive.Migrations
                         name: "FK_Cars_CarModels_CarModelId",
                         column: x => x.CarModelId,
                         principalTable: "CarModels",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Cars_Users_OwnerId",
-                        column: x => x.OwnerId,
-                        principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -207,11 +206,6 @@ namespace TicDrive.Migrations
                 name: "IX_Cars_CarModelId",
                 table: "Cars",
                 column: "CarModelId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Cars_OwnerId",
-                table: "Cars",
-                column: "OwnerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_FavoriteWorkshops_CustomerId",

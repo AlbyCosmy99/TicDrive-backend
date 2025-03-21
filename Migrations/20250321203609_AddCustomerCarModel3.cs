@@ -5,15 +5,15 @@
 namespace TicDrive.Migrations
 {
     /// <inheritdoc />
-    public partial class addIsVerifiedToUser : Migration
+    public partial class AddCustomerCarModel3 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<bool>(
-                name: "IsVerified",
-                table: "Users",
-                type: "bit",
+            migrationBuilder.AddColumn<string>(
+                name: "Name",
+                table: "CustomerCar",
+                type: "nvarchar(max)",
                 nullable: true);
         }
 
@@ -21,8 +21,8 @@ namespace TicDrive.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "IsVerified",
-                table: "Users");
+                name: "Name",
+                table: "CustomerCar");
         }
     }
 }

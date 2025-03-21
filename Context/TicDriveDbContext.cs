@@ -56,6 +56,16 @@ namespace TicDrive.Context
                 entity.Property(e => e.Latitude)
                     .HasPrecision(18, 6);
             });
+
+            modelBuilder
+            .Entity<Car>() 
+            .Property(e => e.TransmissionType)
+            .HasConversion<string>();
+
+            modelBuilder
+           .Entity<Car>()
+           .Property(e => e.FuelType)
+           .HasConversion<string>();
         }
 
         public DbSet<Service> Services { get; set; }
@@ -66,5 +76,6 @@ namespace TicDrive.Context
         public DbSet<Review> Reviews { get; set; }
         public DbSet<OfferedServices> OfferedServices { get; set;}
         public DbSet<FavoriteWorkshop> FavoriteWorkshops { get; set ; }
+        public DbSet<CustomerCar> CustomerCar { get; set; }
     }
 }
