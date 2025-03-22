@@ -3,16 +3,16 @@
   "WorkspaceRootPath": "C:\\Users\\dinam\\OneDrive\\Desktop\\Lavoro\\startups\\ticdrive\\appMobile\\backend\\TicDrive\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{2261EFAA-42BF-489C-A394-7082C77073AA}|TicDrive.csproj|c:\\users\\dinam\\onedrive\\desktop\\lavoro\\startups\\ticdrive\\appmobile\\backend\\ticdrive\\services\\carsservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2261EFAA-42BF-489C-A394-7082C77073AA}|TicDrive.csproj|solutionrelative:services\\carsservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{2261EFAA-42BF-489C-A394-7082C77073AA}|TicDrive.csproj|c:\\users\\dinam\\onedrive\\desktop\\lavoro\\startups\\ticdrive\\appmobile\\backend\\ticdrive\\controllers\\carscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{2261EFAA-42BF-489C-A394-7082C77073AA}|TicDrive.csproj|solutionrelative:controllers\\carscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{2261EFAA-42BF-489C-A394-7082C77073AA}|TicDrive.csproj|c:\\users\\dinam\\onedrive\\desktop\\lavoro\\startups\\ticdrive\\appmobile\\backend\\ticdrive\\controllers\\workshopscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{2261EFAA-42BF-489C-A394-7082C77073AA}|TicDrive.csproj|solutionrelative:controllers\\workshopscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2261EFAA-42BF-489C-A394-7082C77073AA}|TicDrive.csproj|c:\\users\\dinam\\onedrive\\desktop\\lavoro\\startups\\ticdrive\\appmobile\\backend\\ticdrive\\services\\carsservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2261EFAA-42BF-489C-A394-7082C77073AA}|TicDrive.csproj|solutionrelative:services\\carsservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{2261EFAA-42BF-489C-A394-7082C77073AA}|TicDrive.csproj|c:\\users\\dinam\\onedrive\\desktop\\lavoro\\startups\\ticdrive\\appmobile\\backend\\ticdrive\\services\\offeredservicesservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -58,24 +58,23 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 4,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
               "Title": "CarsService.cs",
               "DocumentMoniker": "C:\\Users\\dinam\\OneDrive\\Desktop\\Lavoro\\startups\\ticdrive\\appMobile\\backend\\TicDrive\\Services\\CarsService.cs",
               "RelativeDocumentMoniker": "Services\\CarsService.cs",
               "ToolTip": "C:\\Users\\dinam\\OneDrive\\Desktop\\Lavoro\\startups\\ticdrive\\appMobile\\backend\\TicDrive\\Services\\CarsService.cs",
               "RelativeToolTip": "Services\\CarsService.cs",
-              "ViewState": "AgIAADQAAAAAAAAAAAAlwEQAAAANAAAAAAAAAA==",
+              "ViewState": "AgIAAEAAAAAAAAAAAAAAAFkAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-21T21:18:28.399Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-21T21:18:28.399Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 1,
               "Title": "WorkshopsController.cs",
               "DocumentMoniker": "C:\\Users\\dinam\\OneDrive\\Desktop\\Lavoro\\startups\\ticdrive\\appMobile\\backend\\TicDrive\\Controllers\\WorkshopsController.cs",
               "RelativeDocumentMoniker": "Controllers\\WorkshopsController.cs",
@@ -83,8 +82,7 @@
               "RelativeToolTip": "Controllers\\WorkshopsController.cs",
               "ViewState": "AgIAABgAAAAAAAAAAAAAwB8AAAATAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-21T21:12:00.409Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-21T21:12:00.409Z"
             },
             {
               "$type": "Document",
@@ -96,8 +94,7 @@
               "RelativeToolTip": "Controllers\\OfferedServicesController.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-21T21:11:56.09Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-21T21:11:56.09Z"
             },
             {
               "$type": "Document",
@@ -109,18 +106,17 @@
               "RelativeToolTip": "Services\\OfferedServicesService.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-21T21:11:44.138Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-21T21:11:44.138Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "CarsController.cs",
               "DocumentMoniker": "C:\\Users\\dinam\\OneDrive\\Desktop\\Lavoro\\startups\\ticdrive\\appMobile\\backend\\TicDrive\\Controllers\\CarsController.cs",
               "RelativeDocumentMoniker": "Controllers\\CarsController.cs",
               "ToolTip": "C:\\Users\\dinam\\OneDrive\\Desktop\\Lavoro\\startups\\ticdrive\\appMobile\\backend\\TicDrive\\Controllers\\CarsController.cs",
               "RelativeToolTip": "Controllers\\CarsController.cs",
-              "ViewState": "AgIAADsAAAAAAAAAAAAUwEkAAABAAAAAAAAAAA==",
+              "ViewState": "AgIAAD0AAAAAAAAAAAAAAFAAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-03-21T20:36:38.32Z",
               "EditorCaption": ""
@@ -135,8 +131,7 @@
               "RelativeToolTip": "Models\\CustomerCar.cs",
               "ViewState": "AgIAAA4AAAAAAAAAAAAAAB8AAAAWAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-21T20:28:02.133Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-21T20:28:02.133Z"
             },
             {
               "$type": "Document",
@@ -148,8 +143,7 @@
               "RelativeToolTip": "Controllers\\ServicesController.cs",
               "ViewState": "AgIAAA4AAAAAAAAAAAAAwBoAAAAPAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-06T19:55:04.04Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-06T19:55:04.04Z"
             },
             {
               "$type": "Document",
@@ -161,8 +155,7 @@
               "RelativeToolTip": "Context\\TicDriveDbContext.cs",
               "ViewState": "AgIAAEIAAAAAAAAAAAAAAE4AAAAgAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-21T20:21:53.045Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-21T20:21:53.045Z"
             },
             {
               "$type": "Document",
@@ -174,8 +167,7 @@
               "RelativeToolTip": "Controllers\\AuthController.cs",
               "ViewState": "AgIAAL4BAAAAAAAAAAA1wNQBAAA2AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-02T09:50:28.754Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-02T09:50:28.754Z"
             },
             {
               "$type": "Document",
@@ -187,8 +179,7 @@
               "RelativeToolTip": "Models\\User.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAXAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-21T20:27:43.68Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-21T20:27:43.68Z"
             },
             {
               "$type": "Document",

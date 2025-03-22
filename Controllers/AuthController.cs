@@ -294,9 +294,11 @@ namespace TicDrive.Controllers
             }
 
             var resetCode = new Random().Next(100000, 999999).ToString();
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
 
             user.ResetPasswordCode = resetCode;
             user.ResetPasswordExpiry = DateTime.UtcNow.AddMinutes(10);
+            user.ResetPasswordToken = token;
             await _userManager.UpdateAsync(user);
 
             var emailBody = $"Your password reset code is: <b>{resetCode}</b>. This code is valid for 10 minutes.";
@@ -311,9 +313,6 @@ namespace TicDrive.Controllers
             [Required]
             [EmailAddress]
             public string Email { get; set; } = string.Empty;
-
-            [Required]
-            public string Token { get; set; } = string.Empty;
 
             [Required]
             [MinLength(6, ErrorMessage = "Password must be at least 6 characters long.")]
@@ -340,7 +339,7 @@ namespace TicDrive.Controllers
                 return BadRequest(new { Message = "Invalid request." });
             }
 
-            var result = await _userManager.ResetPasswordAsync(user, payload.Token, payload.NewPassword);
+            var result = await _userManager.ResetPasswordAsync(user, user.ResetPasswordToken, payload.NewPassword);
             if (result.Succeeded)
             {
                 return Ok(new { Message = "Password reset successfully." });
@@ -349,96 +348,6 @@ namespace TicDrive.Controllers
             {
                 return BadRequest(result.Errors);
             }
-        }
-
-        [HttpGet]
-        [Route("reset-password")]
-        public IActionResult ResetPasswordForm([FromQuery] string email, [FromQuery] string token)
-        {
-            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(token))
-            {
-                return BadRequest("Email and token are required.");
-            }
-
-            var html = $@"
-            <html>
-            <head>
-                <meta charset='UTF-8'>
-                <title>Reset Password</title>
-                <style>
-                    body {{
-                        font-family: Arial, sans-serif;
-                        background-color: #f2f2f2;
-                        margin: 0;
-                        height: 100vh;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                    }}
-                    .modal {{
-                        background-color: #fff;
-                        padding: 30px;
-                        border-radius: 8px;
-                        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-                        max-width: 400px;
-                        width: 90%;
-                    }}
-                    .modal h2 {{
-                        text-align: center;
-                        color: green;
-                        margin-bottom: 20px;
-                    }}
-                    .modal form div {{
-                        margin-bottom: 15px;
-                    }}
-                    .modal label {{
-                        display: block;
-                        margin-bottom: 5px;
-                        font-weight: bold;
-                    }}
-                    .modal input[type='password'] {{
-                        width: 100%;
-                        padding: 10px;
-                        border: 1px solid #ccc;
-                        border-radius: 4px;
-                        box-sizing: border-box;
-                    }}
-                    .modal button {{
-                        width: 100%;
-                        padding: 12px;
-                        background-color: green;
-                        color: #fff;
-                        border: none;
-                        border-radius: 4px;
-                        cursor: pointer;
-                        font-size: 16px;
-                    }}
-                    .modal button:hover {{
-                        background-color: #006400;
-                    }}
-                </style>
-            </head>
-            <body>
-                <div class='modal'>
-                    <h2>Reset Your Password</h2>
-                    <form method='post' action='/api/auth/reset-password'>
-                        <input type='hidden' name='Email' value='{email}' />
-                        <input type='hidden' name='Token' value='{token}' />
-                        <div>
-                            <label for='NewPassword'>New Password:</label>
-                            <input type='password' id='NewPassword' name='NewPassword' required />
-                        </div>
-                        <div>
-                            <label for='ConfirmPassword'>Confirm Password:</label>
-                            <input type='password' id='ConfirmPassword' name='ConfirmPassword' required />
-                        </div>
-                        <button type='submit'>Reset Password</button>
-                    </form>
-                </div>
-            </body>
-            </html>";
-
-            return Content(html, "text/html");
         }
 
         public class SendCodePasswordForgotQuery
