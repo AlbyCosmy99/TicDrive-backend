@@ -165,14 +165,14 @@ namespace TicDrive.Controllers
             var user = await _userManager.FindByEmailAsync(payload.Email);
             if (user == null)
             {
-                return Unauthorized(new { Message = "Invalid email or password." });
+                return Unauthorized("Invalid email or password.");
             }
 
             var result = await _signInManager.CheckPasswordSignInAsync(user, payload.Password, lockoutOnFailure: false);
 
             if (!result.Succeeded)
             {
-                return Unauthorized(new { Message = "Invalid email or password." });
+                return Unauthorized("Invalid email or password.");
             }
 
             var token = _authService.GenerateToken(user);
@@ -326,7 +326,7 @@ namespace TicDrive.Controllers
 
         [HttpPost]
         [Route("reset-password")]
-        public async Task<IActionResult> ResetPassword([FromForm] ResetPasswordRequest payload)
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest payload)
         {
             if (!ModelState.IsValid)
             {
