@@ -2,6 +2,7 @@
 using TicDrive.Dto.CarDto.CarMakeDto;
 using TicDrive.Dto.CarDto.CarModelDto;
 using TicDrive.Dto.FavoriteWorkshopDto;
+using TicDrive.Dto.OfferedServicesDto;
 using TicDrive.Dto.ReviewDto;
 using TicDrive.Dto.ServiceDto;
 using TicDrive.Models;
@@ -32,6 +33,15 @@ namespace TicDrive.AppConfig
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.CustomerId, opt => opt.MapFrom(src => src.CustomerId))
                 .ForMember(dest => dest.WorkshopId, opt => opt.MapFrom(src => src.WorkshopId));
+
+
+            CreateMap<OfferedServices, FullOfferedServicesDto>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.ServiceId, opt => opt.MapFrom(src => src.ServiceId))
+                .ForMember(dest => dest.WorkshopId, opt => opt.MapFrom(src => src.WorkshopId))
+                .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Price))
+                .ForMember(dest => dest.Discount, opt => opt.MapFrom(src => src.Discount))
+                .ForMember(dest => dest.Currency, opt => opt.MapFrom(src => src.Currency));
         }
     }
 }
