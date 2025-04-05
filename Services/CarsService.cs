@@ -51,7 +51,6 @@ namespace TicDrive.Services
                 {
                     LicencePlate = query.Plate,
                     CarModelId = carModel.Id,
-                    Year = query.Year,
                     FuelType = query.FuelType,
                     TransmissionType = query.TransmissionType,
                     EngineDisplacement = query.EngineDisplacement,
@@ -68,7 +67,7 @@ namespace TicDrive.Services
                 return false;
             }
 
-            var customerCar = _dbContext.CustomerCar.Where(c => c.CustomerId == customerId && c.CarId == car.Id).FirstOrDefault();
+            var customerCar = _dbContext.CustomerCars.Where(c => c.CustomerId == customerId && c.CarId == car.Id).FirstOrDefault();
 
             if(customerCar != null) //car already registered for this user
             {
@@ -83,7 +82,7 @@ namespace TicDrive.Services
                 Km = query.Km
             };
 
-            _dbContext.CustomerCar.Add(newCustomerCar);
+            _dbContext.CustomerCars.Add(newCustomerCar);
             await _dbContext.SaveChangesAsync();
 
             return true;

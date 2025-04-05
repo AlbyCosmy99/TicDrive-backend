@@ -4,23 +4,8 @@ using TicDrive.Enums;
 
 namespace TicDrive.Models
 {
-    public class Car : IValidatableObject
+    public class Car
     {
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-        {
-            if (Year is not null)
-            {
-                int currentYear = DateTime.Now.Year;
-                if (Year < 1700 || Year > currentYear)
-                {
-                    yield return new ValidationResult(
-                        $"Year must be between 1700 and {currentYear}.",
-                        [nameof(Year)]
-                    );
-                }
-            }
-        }
-
         public int Id { get; set; }
 
         [Required]
@@ -32,7 +17,6 @@ namespace TicDrive.Models
 
         [ForeignKey(nameof(CarModelId))]
         public CarModel? CarModel { get; set; }
-        public int? Year { get; set; }
         public FuelType? FuelType { get; set; }
         public TransmissionType? TransmissionType { get; set; }
        public string? EngineDisplacement { get; set; }

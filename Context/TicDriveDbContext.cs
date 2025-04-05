@@ -76,6 +76,6 @@ namespace TicDrive.Context
         public DbSet<Review> Reviews { get; set; }
         public DbSet<OfferedServices> OfferedServices { get; set;}
         public DbSet<FavoriteWorkshop> FavoriteWorkshops { get; set ; }
-        public DbSet<CustomerCar> CustomerCar { get; set; }
+        public DbSet<CustomerCar> CustomerCars { get; set; }
     }
 }
