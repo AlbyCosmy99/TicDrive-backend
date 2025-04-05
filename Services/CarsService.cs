@@ -9,7 +9,7 @@ namespace TicDrive.Services
     {
         List<CarMake> GetMakes();
         List<CarModel> GetCarModelsByMakeId(int makeId);
-        Task<bool> PostCar(AddCarQuery query, string customerId);
+        Task PostCar(AddCarQuery query, string customerId);
     }
     public class CarsService : ICarsService
     {
@@ -27,7 +27,7 @@ namespace TicDrive.Services
             return [.. _dbContext.CarModels.Where(model => model.CarMakeId == makeId)];
         }
 
-        public async Task<bool> PostCar(AddCarQuery query, string customerId)
+        public async Task PostCar(AddCarQuery query, string customerId)
         {
             var car = _dbContext.Cars.Where(car => car.LicencePlate == query.Plate).FirstOrDefault();
 
@@ -37,14 +37,14 @@ namespace TicDrive.Services
 
                 if (carMake == null)
                 {
-                    return false;
+                    throw new Exception("Car make is null.");
                 }
 
                 var carModel = _dbContext.CarModels.Where(car => car.CarMakeId == carMake.Id && car.Name == query.Model && car.Year == query.Year).FirstOrDefault();
 
                 if (carModel == null)
                 {
-                    return false;
+                    throw new Exception("Car model is null.");
                 }
 
                 var newCar = new Car
@@ -64,14 +64,14 @@ namespace TicDrive.Services
 
             if(car == null)
             {
-                return false;
+                throw new Exception("Error while registering the car.");
             }
 
             var customerCar = _dbContext.CustomerCars.Where(c => c.CustomerId == customerId && c.CarId == car.Id).FirstOrDefault();
 
             if(customerCar != null) //car already registered for this user
             {
-                return false;
+                throw new Exception("Car already registered for this user.");
             }
 
             var newCustomerCar = new CustomerCar
@@ -84,8 +84,6 @@ namespace TicDrive.Services
 
             _dbContext.CustomerCars.Add(newCustomerCar);
             await _dbContext.SaveChangesAsync();
-
-            return true;
         }
     }
 }

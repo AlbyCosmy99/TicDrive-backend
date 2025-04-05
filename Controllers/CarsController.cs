@@ -71,13 +71,16 @@ namespace TicDrive.Controllers
                 return Unauthorized("User is not authorize to register a car.");
             }
 
-            var customerCarInserted = await _carsService.PostCar(query, userId);
-
-            if(customerCarInserted)
+            try
             {
+                await _carsService.PostCar(query, userId);
                 return NoContent();
+            } catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
-            return BadRequest("Error: car can't be registered.");
+
+            
         }
     }
 }
