@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json.Serialization;
 using TicDrive.Dto.CarDto.CarMakeDto;
@@ -73,8 +74,14 @@ namespace TicDrive.Controllers
 
             try
             {
-                await _carsService.PostCar(query, userId);
-                return NoContent();
+                var carHasBeenRegistered = await _carsService.PostCar(query, userId);
+                
+                if(carHasBeenRegistered == true)
+                {
+                    return Created();
+                }
+
+                return NoContent(); //car already registered for this user
             } catch(Exception ex)
             {
                 return BadRequest(ex.Message);

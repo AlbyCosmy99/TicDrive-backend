@@ -9,7 +9,7 @@ namespace TicDrive.Services
     {
         List<CarMake> GetMakes();
         List<CarModel> GetCarModelsByMakeId(int makeId);
-        Task PostCar(AddCarQuery query, string customerId);
+        Task<bool> PostCar(AddCarQuery query, string customerId);
     }
     public class CarsService : ICarsService
     {
@@ -27,7 +27,7 @@ namespace TicDrive.Services
             return [.. _dbContext.CarModels.Where(model => model.CarMakeId == makeId)];
         }
 
-        public async Task PostCar(AddCarQuery query, string customerId)
+        public async Task<bool> PostCar(AddCarQuery query, string customerId)
         {
             var car = _dbContext.Cars.Where(car => car.LicencePlate == query.Plate).FirstOrDefault();
 
@@ -69,9 +69,9 @@ namespace TicDrive.Services
 
             var customerCar = _dbContext.CustomerCars.Where(c => c.CustomerId == customerId && c.CarId == car.Id).FirstOrDefault();
 
-            if(customerCar != null) //car already registered for this user
+            if(customerCar != null)
             {
-                throw new Exception("Car already registered for this user.");
+                return false; //car already registered for this user
             }
 
             var newCustomerCar = new CustomerCar
@@ -84,6 +84,8 @@ namespace TicDrive.Services
 
             _dbContext.CustomerCars.Add(newCustomerCar);
             await _dbContext.SaveChangesAsync();
+
+            return true;
         }
     }
 }
