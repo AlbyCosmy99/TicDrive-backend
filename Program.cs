@@ -104,4 +104,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+app.MapGet("/health", () => Results.Ok("Healthy"));
+
 app.Run();
