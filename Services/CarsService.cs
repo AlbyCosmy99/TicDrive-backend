@@ -13,6 +13,7 @@ namespace TicDrive.Services
         Task<bool> PostCustomerCar(AddCarQuery query, string customerId);
         Task UpdateCustomerCar(AddCarQuery query, string customerId);
         List<FullCustomerCarDto> GetCustomerCars(string customerId);
+        Task DeleteCustomerCar(int carId);
     }
     public class CarsService : ICarsService
     {
@@ -167,5 +168,20 @@ namespace TicDrive.Services
 
             await _dbContext.SaveChangesAsync();
         }
+
+        public async Task DeleteCustomerCar(int carId)
+        {
+            var car = await _dbContext.CustomerCars
+                .FirstOrDefaultAsync(c => c.Id == carId);
+
+            if (car == null)
+            {
+                throw new InvalidOperationException($"Car with ID {carId} not found.");
+            }
+
+            _dbContext.CustomerCars.Remove(car);
+            await _dbContext.SaveChangesAsync();
+        }
+
     }
 }

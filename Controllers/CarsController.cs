@@ -121,7 +121,7 @@ namespace TicDrive.Controllers
         }
 
         [HttpGet]
-        [Route("customer-cars")]
+        [Route("customer")]
         [Authorize]
         public IActionResult GetCustomerCars()
         {
@@ -132,5 +132,15 @@ namespace TicDrive.Controllers
 
             return Ok(_carsService.GetCustomerCars(userId));
         }
+
+        [HttpDelete]
+        [Route("customer/{id}")]
+        [Authorize]
+        public async Task<IActionResult> DeleteCustomerCar([FromRoute] int id)
+        {
+            await _carsService.DeleteCustomerCar(id);
+            return NoContent();
+        }
+
     }
 }
