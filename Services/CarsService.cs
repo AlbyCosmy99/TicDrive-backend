@@ -1,4 +1,4 @@
-﻿using System.Data.Entity;
+﻿using Microsoft.EntityFrameworkCore;
 using TicDrive.Context;
 using TicDrive.Dto.CarDto.CustomerCarDto;
 using TicDrive.Models;
@@ -10,7 +10,8 @@ namespace TicDrive.Services
     {
         List<CarMake> GetMakes();
         List<CarModel> GetCarModelsByMakeId(int makeId);
-        Task<bool> PostCar(AddCarQuery query, string customerId);
+        Task<bool> PostCustomerCar(AddCarQuery query, string customerId);
+        Task UpdateCustomerCar(AddCarQuery query, string customerId);
         List<FullCustomerCarDto> GetCustomerCars(string customerId);
     }
     public class CarsService : ICarsService
@@ -29,7 +30,7 @@ namespace TicDrive.Services
             return [.. _dbContext.CarModels.Where(model => model.CarMakeId == makeId)];
         }
 
-        public async Task<bool> PostCar(AddCarQuery query, string customerId)
+        public async Task<bool> PostCustomerCar(AddCarQuery query, string customerId)
         {
             var car = _dbContext.Cars.Where(car => car.LicencePlate == query.Plate).FirstOrDefault();
 
@@ -82,7 +83,7 @@ namespace TicDrive.Services
                 CarId = car.Id,
                 CustomerId = customerId,
                 Name = query.Name != null ? query.Name : "My Car",
-                Km = query.Km
+                Km = query.Mileage
             };
 
             _dbContext.CustomerCars.Add(newCustomerCar);
@@ -121,6 +122,50 @@ namespace TicDrive.Services
                     CustomerId = cccm.ccc.customerCar.CustomerId
                 })
                 .ToList();
+        }
+
+        public async Task UpdateCustomerCar(AddCarQuery query, string customerId)
+        {
+            var customerCar = await _dbContext.CustomerCars
+                .FirstOrDefaultAsync(cc => cc.CustomerId == customerId && cc.CarId == query.Id)
+                ?? throw new Exception("Car not found.");
+
+            if (query.Mileage != null)
+                customerCar.Km = query.Mileage;
+
+            if (!string.IsNullOrWhiteSpace(query.Name))
+                customerCar.Name = query.Name;
+
+            var car = await _dbContext.Cars
+                .FirstOrDefaultAsync(c => c.Id == customerCar.CarId)
+                ?? throw new Exception("Associated car not found.");
+
+            if (!string.IsNullOrWhiteSpace(query.Plate))
+                car.LicencePlate = query.Plate;
+
+            if (query.FuelType != null)
+                car.FuelType = query.FuelType;
+
+            if (query.TransmissionType != null)
+                car.TransmissionType = query.TransmissionType;
+
+            if (query.EngineDisplacement != null)
+                car.EngineDisplacement = query.EngineDisplacement;
+
+            if (!string.IsNullOrWhiteSpace(query.Make) && !string.IsNullOrWhiteSpace(query.Model))
+            {
+                var carMake = await _dbContext.CarMakes
+                    .FirstOrDefaultAsync(m => m.Name == query.Make)
+                    ?? throw new Exception("Car make not found.");
+
+                var carModel = await _dbContext.CarModels
+                    .FirstOrDefaultAsync(m => m.Name == query.Model && m.CarMakeId == carMake.Id)
+                    ?? throw new Exception("Car model not found.");
+
+                car.CarModelId = carModel.Id;
+            }
+
+            await _dbContext.SaveChangesAsync();
         }
     }
 }

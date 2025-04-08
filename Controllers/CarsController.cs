@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json.Serialization;
 using TicDrive.Dto.CarDto.CarMakeDto;
@@ -41,24 +40,25 @@ namespace TicDrive.Controllers
 
         public class AddCarQuery
         {
+            public int Id { get; set; }
             public string? Name { get; set; }
             public string? Plate { get; set; }
-            public required string Make { get; set; }
-            public required string Model { get; set; }
+            public string? Make { get; set; }
+            public string? Model { get; set; }
             public int? Year { get; set; }
             [JsonConverter(typeof(JsonStringEnumConverter))]
             public FuelType? FuelType { get; set; }
             [JsonConverter(typeof(JsonStringEnumConverter))]
             public TransmissionType? TransmissionType { get; set; }
             public string? EngineDisplacement { get; set; }
-            public int? Km { get; set; }
+            public int? Mileage { get; set; }
             public int? CV { get; set; }
         }
             
-        [HttpPost]
+        [HttpPut]
         [Route("")]
         [Authorize]
-        public async Task<IActionResult> PostCar([FromBody] AddCarQuery query)
+        public async Task<IActionResult> UpdateCustomerCar([FromBody] AddCarQuery query)
         {
             if (query == null)
             {
@@ -75,15 +75,46 @@ namespace TicDrive.Controllers
 
             try
             {
-                var carHasBeenRegistered = await _carsService.PostCar(query, userId);
-                
-                if(carHasBeenRegistered == true)
+                await _carsService.UpdateCustomerCar(query, userId);
+  
+                return NoContent();
+            } catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+        [HttpPost]
+        [Route("")]
+        [Authorize]
+        public async Task<IActionResult> PostCustomerCar([FromBody] AddCarQuery query)
+        {
+            if (query == null)
+            {
+                return BadRequest("query params are required.");
+            }
+
+            var userClaims = _authService.GetUserClaims(this);
+            var userId = _authService.GetUserId(userClaims);
+
+            if (userId == null)
+            {
+                return Unauthorized("User is not authorize to register a car.");
+            }
+
+            try
+            {
+                var carHasBeenRegistered = await _carsService.PostCustomerCar(query, userId);
+
+                if (carHasBeenRegistered == true)
                 {
                     return Created();
                 }
 
                 return NoContent(); //car already registered for this user
-            } catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
