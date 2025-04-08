@@ -20,5 +20,6 @@ namespace TicDrive.Models
         public FuelType? FuelType { get; set; }
         public TransmissionType? TransmissionType { get; set; }
        public string? EngineDisplacement { get; set; }
+        public int? CV { get; set; }
     }
 }

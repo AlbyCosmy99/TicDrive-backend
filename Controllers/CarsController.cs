@@ -52,6 +52,7 @@ namespace TicDrive.Controllers
             public TransmissionType? TransmissionType { get; set; }
             public string? EngineDisplacement { get; set; }
             public int? Km { get; set; }
+            public int? CV { get; set; }
         }
             
         [HttpPost]
@@ -86,8 +87,19 @@ namespace TicDrive.Controllers
             {
                 return BadRequest(ex.Message);
             }
+        }
 
-            
+        [HttpGet]
+        [Route("customer-cars")]
+        [Authorize]
+        public IActionResult GetCustomerCars()
+        {
+            var userClaims = _authService.GetUserClaims(this);
+            var userId = _authService.GetUserId(userClaims);
+
+            if (userId == null) return Unauthorized("User id is null.");
+
+            return Ok(_carsService.GetCustomerCars(userId));
         }
     }
 }

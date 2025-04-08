@@ -1,5 +1,6 @@
 ﻿using System.Data.Entity;
 using TicDrive.Context;
+using TicDrive.Dto.CarDto.CustomerCarDto;
 using TicDrive.Models;
 using static TicDrive.Controllers.CarsController;
 
@@ -10,6 +11,7 @@ namespace TicDrive.Services
         List<CarMake> GetMakes();
         List<CarModel> GetCarModelsByMakeId(int makeId);
         Task<bool> PostCar(AddCarQuery query, string customerId);
+        List<FullCustomerCarDto> GetCustomerCars(string customerId);
     }
     public class CarsService : ICarsService
     {
@@ -54,6 +56,7 @@ namespace TicDrive.Services
                     FuelType = query.FuelType,
                     TransmissionType = query.TransmissionType,
                     EngineDisplacement = query.EngineDisplacement,
+                    CV = query.CV
                 };
 
                 _dbContext.Cars.Add(newCar);
@@ -86,6 +89,38 @@ namespace TicDrive.Services
             await _dbContext.SaveChangesAsync();
 
             return true;
+        }
+
+        public List<FullCustomerCarDto> GetCustomerCars(string customerId)
+        {
+            return _dbContext.CustomerCars
+                .Where(customerCar => customerCar.CustomerId == customerId)
+                .Join(_dbContext.Cars,
+                customerCar => customerCar.CarId,
+                car => car.Id,
+                (customerCar, car) => new { customerCar, car })
+                .Join(_dbContext.CarModels,
+                ccc => ccc.car.CarModelId,
+                model => model.Id,
+                (ccc,model) => new {ccc, model})
+                .Join(_dbContext.CarMakes,
+                cccm => cccm.model.CarMakeId,
+                make => make.Id,
+                (cccm, make) => new FullCustomerCarDto
+                {
+                    Id = cccm.ccc.customerCar.Id,
+                    Make = make.Name,
+                    Model = cccm.model.Name,
+                    PlateNumber = cccm.ccc.car.LicencePlate!,
+                    Year = cccm.model.Year,
+                    EngineDisplacement = cccm.ccc.car.EngineDisplacement,
+                    FuelType = cccm.ccc.car.FuelType,
+                    Mileage = cccm.ccc.customerCar.Km,
+                    CarName = cccm.ccc.customerCar.Name,
+                    CV = cccm.ccc.customerCar.Car.CV,
+                    CustomerId = cccm.ccc.customerCar.CustomerId
+                })
+                .ToList();
         }
     }
 }
