@@ -86,9 +86,6 @@ builder.Services.AddDbContext<TicDriveDbContext>(options =>
 
 builder.Services.AddAutoMapper(typeof(AutomapperConfig));
 
-var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
-builder.WebHost.UseUrls($"http://*:{port}");
-
 var app = builder.Build();
 
 app.UseCors("AllowAll");
