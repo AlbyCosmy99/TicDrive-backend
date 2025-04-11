@@ -142,5 +142,12 @@ namespace TicDrive.Controllers
             return NoContent();
         }
 
+        [HttpGet]
+        [Route("health")]
+        public IActionResult GetHealth()
+        {
+            return Ok("OK");
+        }
+
     }
 }
