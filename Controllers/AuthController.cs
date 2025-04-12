@@ -151,6 +151,7 @@ namespace TicDrive.Controllers
             [Required]
             [MinLength(6, ErrorMessage = "Password must be at least 6 characters long.")]
             public string Password { get; set; } = string.Empty;
+            public UserType UserType { get; set; }
         }
 
         [HttpPost]
@@ -166,6 +167,11 @@ namespace TicDrive.Controllers
             if (user == null)
             {
                 return Unauthorized("Invalid email or password.");
+            }
+
+            if(user.UserType != payload.UserType)
+            {
+                return Unauthorized("User is not authorized to login.");
             }
 
             var result = await _signInManager.CheckPasswordSignInAsync(user, payload.Password, lockoutOnFailure: false);
