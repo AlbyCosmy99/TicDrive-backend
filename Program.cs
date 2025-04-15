@@ -7,15 +7,42 @@ using TicDrive.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "TicDrive API", Version = "v1" });
+
+    var jwtSecurityScheme = new OpenApiSecurityScheme
+    {
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.Http,
+        Description = "Inserisci il token JWT",
+
+        Reference = new OpenApiReference
+        {
+            Id = "Bearer",
+            Type = ReferenceType.SecurityScheme
+        }
+    };
+
+    c.AddSecurityDefinition("Bearer", jwtSecurityScheme);
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        { jwtSecurityScheme, Array.Empty<string>() }
+    });
+});
+
 builder.Services.AddAWSLambdaHosting(LambdaEventSource.HttpApi);
 
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory())
@@ -26,15 +53,14 @@ builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory())
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll",
-        policy => policy.AllowAnyOrigin()
-                        .AllowAnyMethod()
-                        .AllowAnyHeader());
+    options.AddPolicy("AllowAll", policy => policy
+        .AllowAnyOrigin()
+        .AllowAnyMethod()
+        .AllowAnyHeader());
 });
 
 builder.Services.AddIdentity<User, IdentityRole>(options =>
 {
-    //password validation
     options.Password.RequireDigit = true;
     options.Password.RequireLowercase = true;
     options.Password.RequireUppercase = true;
@@ -59,7 +85,8 @@ builder.Services.AddAuthentication(options =>
         ValidateIssuerSigningKey = true,
         ValidIssuer = builder.Configuration["JwtSettings:Issuer"],
         ValidAudience = builder.Configuration["JwtSettings:Audience"],
-        IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:SecretKey"]))
+        IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(
+            System.Text.Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:SecretKey"]))
     };
 });
 
@@ -77,12 +104,10 @@ else
 }
 
 builder.Services.AddDbContext<TicDriveDbContext>(options =>
-    options.UseSqlServer(
-        builder.Configuration.GetConnectionString("TICDRIVE_SQL_CONNECTIONSTRING"),
-        sqlOptions =>
-        {
-            sqlOptions.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
-        }));
+    options.UseSqlServer(connection, sqlOptions =>
+    {
+        sqlOptions.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
+    }));
 
 builder.Services.AddAutoMapper(typeof(AutomapperConfig));
 
@@ -92,6 +117,41 @@ app.UseCors("AllowAll");
 
 app.UseSwagger();
 app.UseSwaggerUI();
+
+//if (app.Environment.IsDevelopment())
+//{
+//    app.UseSwagger();
+//    app.UseSwaggerUI();
+//} else {
+//    app.Use(async (context, next) =>
+//    {
+//        if (context.Request.Path.StartsWithSegments("/swagger"))
+//        {
+//            if (!context.User.Identity?.IsAuthenticated ?? true)
+//            {
+//                context.Response.StatusCode = 401;
+//                await context.Response.WriteAsync("Non autorizzato");
+//                return;
+//            }
+
+//            if (!context.User.IsInRole("Admin"))
+//            {
+//                context.Response.StatusCode = 403;
+//                await context.Response.WriteAsync("Accesso riservato agli amministratori");
+//                return;
+//            }
+//        }
+
+//        await next.Invoke();
+//    });
+
+//    app.UseSwagger();
+//    app.UseSwaggerUI(c =>
+//    {
+//        c.SwaggerEndpoint("/swagger/v1/swagger.json", "TicDrive API V1");
+//        c.RoutePrefix = "swagger";
+//    });
+//}
 
 app.UseHttpsRedirection();
 
