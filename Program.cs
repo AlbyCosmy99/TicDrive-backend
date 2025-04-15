@@ -12,7 +12,6 @@ using Microsoft.OpenApi.Models;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
@@ -28,7 +27,6 @@ builder.Services.AddSwaggerGen(c =>
         In = ParameterLocation.Header,
         Type = SecuritySchemeType.Http,
         Description = "Inserisci il token JWT",
-
         Reference = new OpenApiReference
         {
             Id = "Bearer",
@@ -96,18 +94,16 @@ var connection = string.Empty;
 if (builder.Environment.IsDevelopment())
 {
     builder.Configuration.AddEnvironmentVariables().AddJsonFile("appsettings.Development.json");
-    connection = builder.Configuration.GetConnectionString("TICDRIVE_SQL_CONNECTIONSTRING");
+    connection = builder.Configuration.GetConnectionString("TICDRIVE_RAILWAY_POSTGRESQL_CONNECTIONSTRING");
 }
 else
 {
-    connection = Environment.GetEnvironmentVariable("TICDRIVE_SQL_CONNECTIONSTRING");
+    connection = Environment.GetEnvironmentVariable("TICDRIVE_RAILWAY_POSTGRESQL_CONNECTIONSTRING");
 }
 
 builder.Services.AddDbContext<TicDriveDbContext>(options =>
-    options.UseSqlServer(connection, sqlOptions =>
-    {
-        sqlOptions.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
-    }));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("TICDRIVE_RAILWAY_POSTGRESQL_CONNECTIONSTRING"))
+);
 
 builder.Services.AddAutoMapper(typeof(AutomapperConfig));
 
@@ -117,41 +113,6 @@ app.UseCors("AllowAll");
 
 app.UseSwagger();
 app.UseSwaggerUI();
-
-//if (app.Environment.IsDevelopment())
-//{
-//    app.UseSwagger();
-//    app.UseSwaggerUI();
-//} else {
-//    app.Use(async (context, next) =>
-//    {
-//        if (context.Request.Path.StartsWithSegments("/swagger"))
-//        {
-//            if (!context.User.Identity?.IsAuthenticated ?? true)
-//            {
-//                context.Response.StatusCode = 401;
-//                await context.Response.WriteAsync("Non autorizzato");
-//                return;
-//            }
-
-//            if (!context.User.IsInRole("Admin"))
-//            {
-//                context.Response.StatusCode = 403;
-//                await context.Response.WriteAsync("Accesso riservato agli amministratori");
-//                return;
-//            }
-//        }
-
-//        await next.Invoke();
-//    });
-
-//    app.UseSwagger();
-//    app.UseSwaggerUI(c =>
-//    {
-//        c.SwaggerEndpoint("/swagger/v1/swagger.json", "TicDrive API V1");
-//        c.RoutePrefix = "swagger";
-//    });
-//}
 
 app.UseHttpsRedirection();
 
