@@ -142,6 +142,76 @@ namespace TicDrive.Controllers
             );
         }
 
+        public class ConfirmationEmail
+        {
+            public required string Email { get; set; }
+        }
+
+        [HttpPost]
+        [Route("send-confirmation-email")]
+        public async Task<IActionResult> SendConfirmationEmail([FromQuery] string email)
+        {
+            if (string.IsNullOrWhiteSpace(email))
+            {
+                return BadRequest(new { Message = "Email is required." });
+            }
+
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                return NotFound(new { Message = "User not found." });
+            }
+
+            if (user.EmailConfirmed)
+            {
+                return BadRequest(new { Message = "Email is already confirmed." });
+            }
+
+            var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            var confirmationLink = Url.Action(
+                "ConfirmEmail",
+                "Auth",
+                new { userId = user.Id, token },
+                Request.Scheme
+            );
+
+            if (string.IsNullOrEmpty(confirmationLink))
+            {
+                return StatusCode(500, new { Message = "Unable to generate confirmation link." });
+            }
+
+            var bodyTemplate = _emailService.GetRegistrationMailConfirmation();
+            var body = string.Format(bodyTemplate, confirmationLink);
+
+            await _emailService.SendEmailAsync(user.Email, "Welcome! Confirm your email.", body);
+
+            return Ok(new { Message = "Confirmation email has been resent." });
+        }
+
+        [HttpGet]
+        [Route("check-email-is-confirmed")]
+        public async Task<IActionResult> CheckEmailIsConfirmed([FromQuery] string email)
+        {
+            if (string.IsNullOrWhiteSpace(email))
+            {
+                return BadRequest(new { Message = "Email is required." });
+            }
+
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                return NotFound(new { Message = "User not found." });
+            }
+
+            if (user.EmailConfirmed)
+            {
+                return NoContent();
+            }
+
+            return BadRequest(new { Message = "Email is not confirmed." });
+        }
+
+
         public class LoginBody
         {
             [Required]

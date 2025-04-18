@@ -13,10 +13,10 @@ namespace TicDrive.Models
         public string? LicencePlate { get; set; }
 
         [Required]
-        public int CarModelId { get; set; }
+        public int CarModelVersionId { get; set; }
 
-        [ForeignKey(nameof(CarModelId))]
-        public CarModel? CarModel { get; set; }
+        [ForeignKey(nameof(CarModelVersionId))]
+        public CarModelVersion? CarModelVersion { get; set; }
         public FuelType? FuelType { get; set; }
         public TransmissionType? TransmissionType { get; set; }
        public string? EngineDisplacement { get; set; }

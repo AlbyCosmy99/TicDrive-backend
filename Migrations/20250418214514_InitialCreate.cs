@@ -82,7 +82,6 @@ namespace TicDrive.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(type: "text", nullable: false),
-                    Year = table.Column<int>(type: "integer", nullable: false),
                     CarMakeId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
@@ -177,13 +176,33 @@ namespace TicDrive.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "CarModelVersions",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    CarModelId = table.Column<int>(type: "integer", nullable: false),
+                    Year = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CarModelVersions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CarModelVersions_CarModels_CarModelId",
+                        column: x => x.CarModelId,
+                        principalTable: "CarModels",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Cars",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     LicencePlate = table.Column<string>(type: "text", nullable: false),
-                    CarModelId = table.Column<int>(type: "integer", nullable: false),
+                    CarModelVersionId = table.Column<int>(type: "integer", nullable: false),
                     FuelType = table.Column<string>(type: "text", nullable: true),
                     TransmissionType = table.Column<string>(type: "text", nullable: true),
                     EngineDisplacement = table.Column<string>(type: "text", nullable: true),
@@ -193,9 +212,9 @@ namespace TicDrive.Migrations
                 {
                     table.PrimaryKey("PK_Cars", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Cars_CarModels_CarModelId",
-                        column: x => x.CarModelId,
-                        principalTable: "CarModels",
+                        name: "FK_Cars_CarModelVersions_CarModelVersionId",
+                        column: x => x.CarModelVersionId,
+                        principalTable: "CarModelVersions",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -234,9 +253,14 @@ namespace TicDrive.Migrations
                 column: "CarMakeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Cars_CarModelId",
-                table: "Cars",
+                name: "IX_CarModelVersions_CarModelId",
+                table: "CarModelVersions",
                 column: "CarModelId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Cars_CarModelVersionId",
+                table: "Cars",
+                column: "CarModelVersionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CustomerCars_CarId",
@@ -308,6 +332,9 @@ namespace TicDrive.Migrations
 
             migrationBuilder.DropTable(
                 name: "Users");
+
+            migrationBuilder.DropTable(
+                name: "CarModelVersions");
 
             migrationBuilder.DropTable(
                 name: "CarModels");

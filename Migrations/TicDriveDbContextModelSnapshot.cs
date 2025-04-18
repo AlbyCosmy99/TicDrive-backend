@@ -33,7 +33,7 @@ namespace TicDrive.Migrations
                     b.Property<int?>("CV")
                         .HasColumnType("integer");
 
-                    b.Property<int>("CarModelId")
+                    b.Property<int>("CarModelVersionId")
                         .HasColumnType("integer");
 
                     b.Property<string>("EngineDisplacement")
@@ -51,7 +51,7 @@ namespace TicDrive.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CarModelId");
+                    b.HasIndex("CarModelVersionId");
 
                     b.ToTable("Cars");
                 });
@@ -88,14 +88,32 @@ namespace TicDrive.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("Year")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CarMakeId");
 
                     b.ToTable("CarModels");
+                });
+
+            modelBuilder.Entity("TicDrive.Models.CarModelVersion", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CarModelId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Year")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CarModelId");
+
+                    b.ToTable("CarModelVersions");
                 });
 
             modelBuilder.Entity("TicDrive.Models.CustomerCar", b =>
@@ -337,13 +355,13 @@ namespace TicDrive.Migrations
 
             modelBuilder.Entity("TicDrive.Models.Car", b =>
                 {
-                    b.HasOne("TicDrive.Models.CarModel", "CarModel")
+                    b.HasOne("TicDrive.Models.CarModelVersion", "CarModelVersion")
                         .WithMany()
-                        .HasForeignKey("CarModelId")
+                        .HasForeignKey("CarModelVersionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("CarModel");
+                    b.Navigation("CarModelVersion");
                 });
 
             modelBuilder.Entity("TicDrive.Models.CarModel", b =>
@@ -355,6 +373,17 @@ namespace TicDrive.Migrations
                         .IsRequired();
 
                     b.Navigation("CarMake");
+                });
+
+            modelBuilder.Entity("TicDrive.Models.CarModelVersion", b =>
+                {
+                    b.HasOne("TicDrive.Models.CarModel", "CarModel")
+                        .WithMany()
+                        .HasForeignKey("CarModelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CarModel");
                 });
 
             modelBuilder.Entity("TicDrive.Models.CustomerCar", b =>

@@ -44,17 +44,27 @@ namespace TicDrive.Services
                     throw new Exception("Car make is null.");
                 }
 
-                var carModel = _dbContext.CarModels.Where(car => car.CarMakeId == carMake.Id && car.Name == query.Model && car.Year == query.Year).FirstOrDefault();
+                var carModel = _dbContext.CarModels.Where(car => car.CarMakeId == carMake.Id && car.Name == query.Model).FirstOrDefault();
 
                 if (carModel == null)
                 {
                     throw new Exception("Car model is null.");
                 }
 
+
+                var carVersion = _dbContext.CarModelVersions
+                    .Where(carVersion => carVersion.Year == query.Year && carVersion.CarModel == carModel)
+                    .FirstOrDefault();
+
+                if (carVersion == null)
+                {
+                    throw new Exception("Car version is null.");
+                }
+
                 var newCar = new Car
                 {
                     LicencePlate = query.Plate,
-                    CarModelId = carModel.Id,
+                    CarModelVersionId = carVersion.Id,
                     FuelType = query.FuelType,
                     TransmissionType = query.TransmissionType,
                     EngineDisplacement = query.EngineDisplacement,
@@ -101,26 +111,30 @@ namespace TicDrive.Services
                 customerCar => customerCar.CarId,
                 car => car.Id,
                 (customerCar, car) => new { customerCar, car })
+                .Join(_dbContext.CarModelVersions,
+                ccc => ccc.car.CarModelVersionId,
+                modelVersion => modelVersion.Id,
+                (ccc, modelVersion) => new { ccc, modelVersion })
                 .Join(_dbContext.CarModels,
-                ccc => ccc.car.CarModelId,
+                cccv => cccv.modelVersion.CarModelId,
                 model => model.Id,
-                (ccc,model) => new {ccc, model})
+                (cccv, model) => new { cccv, model})
                 .Join(_dbContext.CarMakes,
-                cccm => cccm.model.CarMakeId,
+                cccvm => cccvm.model.CarMakeId,
                 make => make.Id,
-                (cccm, make) => new FullCustomerCarDto
+                (cccvm, make) => new FullCustomerCarDto
                 {
-                    Id = cccm.ccc.customerCar.Id,
+                    Id = cccvm.cccv.ccc.customerCar.Id,
                     Make = make.Name,
-                    Model = cccm.model.Name,
-                    PlateNumber = cccm.ccc.car.LicencePlate!,
-                    Year = cccm.model.Year,
-                    EngineDisplacement = cccm.ccc.car.EngineDisplacement,
-                    FuelType = cccm.ccc.car.FuelType,
-                    Mileage = cccm.ccc.customerCar.Km,
-                    CarName = cccm.ccc.customerCar.Name,
-                    CV = cccm.ccc.customerCar.Car.CV,
-                    CustomerId = cccm.ccc.customerCar.CustomerId
+                    Model = cccvm.model.Name,
+                    PlateNumber = cccvm.cccv.ccc.car.LicencePlate!,
+                    Year = cccvm.cccv.modelVersion.Year,
+                    EngineDisplacement = cccvm.cccv.ccc.car.EngineDisplacement,
+                    FuelType = cccvm.cccv.ccc.car.FuelType,
+                    Mileage = cccvm.cccv.ccc.customerCar.Km,
+                    CarName = cccvm.cccv.ccc.customerCar.Name,
+                    CV = cccvm.cccv.ccc.car.CV,
+                    CustomerId = cccvm.cccv.ccc.customerCar.CustomerId
                 })
                 .ToList();
         }
@@ -153,7 +167,7 @@ namespace TicDrive.Services
             if (query.EngineDisplacement != null)
                 car.EngineDisplacement = query.EngineDisplacement;
 
-            if (!string.IsNullOrWhiteSpace(query.Make) && !string.IsNullOrWhiteSpace(query.Model))
+            if (!string.IsNullOrWhiteSpace(query.Make) && !string.IsNullOrWhiteSpace(query.Model) && query.Year != null)
             {
                 var carMake = await _dbContext.CarMakes
                     .FirstOrDefaultAsync(m => m.Name == query.Make)
@@ -163,7 +177,11 @@ namespace TicDrive.Services
                     .FirstOrDefaultAsync(m => m.Name == query.Model && m.CarMakeId == carMake.Id)
                     ?? throw new Exception("Car model not found.");
 
-                car.CarModelId = carModel.Id;
+                var carVersion = await _dbContext.CarModelVersions
+                  .FirstOrDefaultAsync(car => car.CarModelId == carModel.Id && car.Year == query.Year)
+                  ?? throw new Exception("Car model not found.");
+
+                car.CarModelVersionId = carVersion.Id;
             }
 
             await _dbContext.SaveChangesAsync();
