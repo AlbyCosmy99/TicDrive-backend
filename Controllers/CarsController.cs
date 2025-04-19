@@ -33,7 +33,7 @@ namespace TicDrive.Controllers
 
         [HttpGet]
         [Route("models/{id}")]
-        public IActionResult GetMakes(int id)
+        public IActionResult GetModels(int id)
         {
             return Ok(_mapper.Map<List<FullCarModelDto>>(_carsService.GetCarModelsByMakeId(id)));
         }
