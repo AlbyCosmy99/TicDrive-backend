@@ -11,8 +11,8 @@ namespace TicDrive.Models
         public override string? UserName { get; set; }
         public UserType UserType { get; set; }
         public string? Address { get; set; }
-        public decimal? Longitude { get; set; }
         public decimal? Latitude { get; set; }
+        public decimal? Longitude { get; set; }
         public string? ProfileImageUrl { get; set; }
         private bool? _isVerified;
         public bool? IsVerified
