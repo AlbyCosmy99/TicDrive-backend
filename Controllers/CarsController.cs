@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Text.Json.Serialization;
 using TicDrive.Dto.CarDto.CarMakeDto;
 using TicDrive.Dto.CarDto.CarModelDto;
+using TicDrive.Dto.CarDto.CarModelVersionDto;
 using TicDrive.Enums;
 using TicDrive.Services;
 
@@ -36,6 +37,14 @@ namespace TicDrive.Controllers
         public IActionResult GetModels(int id)
         {
             return Ok(_mapper.Map<List<FullCarModelDto>>(_carsService.GetCarModelsByMakeId(id)));
+        }
+
+
+        [HttpGet]
+        [Route("model-versions/{modelId}")]
+        public IActionResult GetModelYears(int modelId)
+        {
+            return Ok(_mapper.Map<List<FullCarModelVersionDto>>(_carsService.GetModelVersions(modelId)));
         }
 
         public class AddCarQuery

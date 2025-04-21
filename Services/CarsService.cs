@@ -10,6 +10,7 @@ namespace TicDrive.Services
     {
         List<CarMake> GetMakes();
         List<CarModel> GetCarModelsByMakeId(int makeId);
+        List<CarModelVersion> GetModelVersions(int modelId);
         Task<bool> PostCustomerCar(AddCarQuery query, string customerId);
         Task UpdateCustomerCar(AddCarQuery query, string customerId);
         List<FullCustomerCarDto> GetCustomerCars(string customerId);
@@ -29,6 +30,11 @@ namespace TicDrive.Services
         public List<CarModel> GetCarModelsByMakeId(int makeId)
         {
             return [.. _dbContext.CarModels.Where(model => model.CarMakeId == makeId)];
+        }
+
+        public List<CarModelVersion> GetModelVersions(int modelId)
+        {
+            return [.. _dbContext.CarModelVersions.Where(version => version.CarModelId == modelId)];
         }
 
         public async Task<bool> PostCustomerCar(AddCarQuery query, string customerId)
