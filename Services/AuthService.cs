@@ -18,7 +18,7 @@ namespace TicDrive.Services
         string? GetUserId(Dictionary<string, string> userClaims);
         string? GetUserName(Dictionary<string, string> userClaims);
         Task<User> GetUserData(string userId);
-        Task UpdateUser(string userId, UpdateUserQuery updateUserQuery);
+        Task UpdateUser(string userId, UpdatedUser updateUserQuery);
     }
     public class AuthService : IAuthService
     {
@@ -82,7 +82,7 @@ namespace TicDrive.Services
 
         public async Task<User> GetUserData(string userId) => await _context.Users.Where(user => user.UserType == Enums.UserType.Customer && user.Id == userId).FirstOrDefaultAsync();
 
-        public async Task UpdateUser(string userId, UpdateUserQuery updateUserQuery)
+        public async Task UpdateUser(string userId, UpdatedUser updateUserQuery)
         {
             if (string.IsNullOrEmpty(userId))
                 throw new ArgumentException("User ID is required.", nameof(userId));

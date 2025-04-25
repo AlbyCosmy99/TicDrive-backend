@@ -455,7 +455,7 @@ namespace TicDrive.Controllers
             return Unauthorized("Invalid reset code");
         }
 
-        public class UpdateUserQuery
+        public class UpdatedUser
         {
             public string? Name { get; set; }
             public string? Address { get; set; }
@@ -470,15 +470,15 @@ namespace TicDrive.Controllers
         [Route("update-user")]
         [Authorize]
         [HttpPut]
-        public async Task<IActionResult> UpdateUser([FromQuery] UpdateUserQuery query)
+        public async Task<IActionResult> UpdateUser([FromBody] UpdatedUser newUser)
         {
-            if(query == null)
+            if(newUser == null)
             {
-                return BadRequest("Query params are required.");
+                return BadRequest("Params are required.");
             }
             var userClaims = _authService.GetUserClaims(this);
             var userId = _authService.GetUserId(userClaims);
-            await _authService.UpdateUser(userId,query);
+            await _authService.UpdateUser(userId, newUser);
 
             return NoContent();
         }
