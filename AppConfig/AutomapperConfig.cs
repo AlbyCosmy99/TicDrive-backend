@@ -6,6 +6,7 @@ using TicDrive.Dto.FavoriteWorkshopDto;
 using TicDrive.Dto.OfferedServicesDto;
 using TicDrive.Dto.ReviewDto;
 using TicDrive.Dto.ServiceDto;
+using TicDrive.Dto.UserDto;
 using TicDrive.Models;
 
 namespace TicDrive.AppConfig
@@ -47,6 +48,16 @@ namespace TicDrive.AppConfig
                   .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
                   .ForMember(dest => dest.CarModelId, opt => opt.MapFrom(src => src.CarModelId))
                   .ForMember(dest => dest.Year, opt => opt.MapFrom(src => src.Year));
+
+            CreateMap<User, FullUserDto>()
+              .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+              .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+              .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
+              .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Address))
+              .ForMember(dest => dest.Latitude, opt => opt.MapFrom(src => src.Latitude))
+              .ForMember(dest => dest.Longitude, opt => opt.MapFrom(src => src.Longitude))
+              .ForMember(dest => dest.ProfileImageUrl, opt => opt.MapFrom(src => src.ProfileImageUrl))
+              .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.PhoneNumber));
         }
     }
 }

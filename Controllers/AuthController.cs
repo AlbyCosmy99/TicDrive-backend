@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
 using TicDrive.Attributes;
 using TicDrive.Context;
+using TicDrive.Dto.UserDto;
 using TicDrive.Enums;
 using TicDrive.Models;
 using TicDrive.Services;
@@ -20,19 +22,22 @@ namespace TicDrive.Controllers
         private readonly IAuthService _authService;
         private readonly IEmailService _emailService;
         private readonly TicDriveDbContext _context;
+        private readonly IMapper _mapper;
 
         public AuthController(
             UserManager<User> userManager,
             SignInManager<User> signInManager,
             IAuthService authService,
             IEmailService emailService,
-            TicDriveDbContext context)
+            TicDriveDbContext context,
+            IMapper mapper)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _authService = authService;
             _emailService = emailService;
             _context = context;
+            _mapper = mapper;
         }
 
         public class RegisterBody
@@ -341,6 +346,26 @@ namespace TicDrive.Controllers
                     phoneNumber = userData.PhoneNumber,
                     address = userData.Address
                 });
+            }
+            catch (ArgumentNullException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [Authorize]
+        [Route("get-user-data")]
+        public async Task<IActionResult> GetUserData()
+        {
+            try
+            {
+                var userClaims = _authService.GetUserClaims(this);
+                var userId = _authService.GetUserId(userClaims);
+
+                var userData = await _authService.GetUserData(userId);
+
+                return Ok(_mapper.Map<FullUserDto>(userData));
             }
             catch (ArgumentNullException ex)
             {
