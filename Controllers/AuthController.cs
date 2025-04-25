@@ -454,5 +454,33 @@ namespace TicDrive.Controllers
             }
             return Unauthorized("Invalid reset code");
         }
+
+        public class UpdateUserQuery
+        {
+            public string? Name { get; set; }
+            public string? Address { get; set; }
+            public decimal? Latitude { get; set; }
+            public decimal? Longitude { get; set; }
+            public string? ProfileImageUrl { get; set; }
+            public string? PhoneNumber { get; set; }
+            public string? Email { get; set; }
+
+        }
+
+        [Route("update-user")]
+        [Authorize]
+        [HttpPut]
+        public async Task<IActionResult> UpdateUser([FromQuery] UpdateUserQuery query)
+        {
+            if(query == null)
+            {
+                return BadRequest("Query params are required.");
+            }
+            var userClaims = _authService.GetUserClaims(this);
+            var userId = _authService.GetUserId(userClaims);
+            await _authService.UpdateUser(userId,query);
+
+            return NoContent();
+        }
     }
 }

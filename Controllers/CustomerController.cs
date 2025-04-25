@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using TicDrive.Dto.FavoriteWorkshopDto;
 using TicDrive.Services;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace TicDrive.Controllers
 {
@@ -20,7 +18,7 @@ namespace TicDrive.Controllers
             _workshopsService = workshopsService;
             _mapper = mapper;
         }
-        public class GetFavoriteWorkshopsQueries
+        public class GetFavoriteWorkshopsQuery
         {
             public int Skip { get; set; } = 0;
             public int Take { get; set; } = 10;
@@ -31,7 +29,7 @@ namespace TicDrive.Controllers
         [Route("workshops/favorite")]
         [Authorize]
         [HttpGet]
-        public async Task<IActionResult> GetFavoriteWorkshops([FromQuery] GetFavoriteWorkshopsQueries query)
+        public async Task<IActionResult> GetFavoriteWorkshops([FromQuery] GetFavoriteWorkshopsQuery query)
         {
             int skip = query.Skip;
             int take = query.Take;

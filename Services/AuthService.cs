@@ -5,8 +5,8 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using TicDrive.Context;
-using TicDrive.Dto.UserDto;
 using TicDrive.Models;
+using static TicDrive.Controllers.AuthController;
 
 namespace TicDrive.Services
 {
@@ -18,6 +18,7 @@ namespace TicDrive.Services
         string? GetUserId(Dictionary<string, string> userClaims);
         string? GetUserName(Dictionary<string, string> userClaims);
         Task<User> GetUserData(string userId);
+        Task UpdateUser(string userId, UpdateUserQuery updateUserQuery);
     }
     public class AuthService : IAuthService
     {
@@ -80,5 +81,37 @@ namespace TicDrive.Services
             userClaims.TryGetValue("name", out var name) ? name : null;
 
         public async Task<User> GetUserData(string userId) => await _context.Users.Where(user => user.UserType == Enums.UserType.Customer && user.Id == userId).FirstOrDefaultAsync();
+
+        public async Task UpdateUser(string userId, UpdateUserQuery updateUserQuery)
+        {
+            if (string.IsNullOrEmpty(userId))
+                throw new ArgumentException("User ID is required.", nameof(userId));
+
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            if (user == null)
+                throw new Exception("User not found.");
+
+            if (!string.IsNullOrEmpty(updateUserQuery.Name))
+                user.Name = updateUserQuery.Name;
+
+            if (!string.IsNullOrEmpty(updateUserQuery.Address))
+                user.Address = updateUserQuery.Address;
+
+            if (updateUserQuery.Latitude.HasValue)
+                user.Latitude = updateUserQuery.Latitude;
+
+            if (updateUserQuery.Longitude.HasValue)
+                user.Longitude = updateUserQuery.Longitude;
+
+            if (!string.IsNullOrEmpty(updateUserQuery.ProfileImageUrl))
+                user.ProfileImageUrl = updateUserQuery.ProfileImageUrl;
+
+            if (!string.IsNullOrEmpty(updateUserQuery.PhoneNumber))
+                user.PhoneNumber = updateUserQuery.PhoneNumber;
+
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
+        }
+
     }
 }
