@@ -80,7 +80,7 @@ namespace TicDrive.Services
         public string? GetUserName(Dictionary<string, string> userClaims) => 
             userClaims.TryGetValue("name", out var name) ? name : null;
 
-        public async Task<User> GetUserData(string userId) => await _context.Users.Where(user => user.UserType == Enums.UserType.Customer && user.Id == userId).FirstOrDefaultAsync();
+        public async Task<User> GetUserData(string userId) => await _context.Users.Where(user => user.Id == userId).FirstOrDefaultAsync();
 
         public async Task UpdateUser(string userId, UpdatedUser updateUserQuery)
         {
