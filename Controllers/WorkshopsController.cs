@@ -73,6 +73,7 @@ namespace TicDrive.Controllers
             public decimal? Latitude { get; set; }
             public decimal? Longitude { get; set; }
             public int? KmRange { get; set; }
+            public int? ServiceId { get; set; }
         }
 
         [HttpGet]
@@ -87,12 +88,11 @@ namespace TicDrive.Controllers
             var nearbyWorkshops = await _workshopsService.GetNearbyWorkshops(
                 (decimal)query.Latitude,
                 (decimal)query.Longitude,
-                (int)query.KmRange
+                query.ServiceId,
+                query.KmRange
             );
 
-            var mappedNearbyWorkshops = _mapper.Map<List<FullUserDto>>(nearbyWorkshops);
-
-            return Ok(mappedNearbyWorkshops);
+            return Ok(nearbyWorkshops);
         }
     }
 }
