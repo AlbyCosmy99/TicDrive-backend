@@ -1,6 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TicDrive.Context;
 using TicDrive.Dto.UserDto;
+using TicDrive.Dto.UserDto.WorkshopDto;
+using TicDrive.Enums;
+using TicDrive.Models;
+using TicDrive.Utils.Location;
 
 namespace TicDrive.Services
 {
@@ -8,6 +12,7 @@ namespace TicDrive.Services
     {
         Task<IEnumerable<WorkshopDashboardInfoDto>> GetWorkshops(int skip, int take, int? serviceId = 0, string? customerId = null, bool? favorite = null, string? filter = null);
         Task LikeWorkshop(string userId, string workshopId);
+        Task<List<NearbyWorkshopDto>> GetNearbyWorkshops(decimal latitude, decimal longitude, int? serviceId, int? kmRange = 20);
     }
 
     public class WorkshopsService(TicDriveDbContext context) : IWorkshopsService
@@ -43,7 +48,7 @@ namespace TicDrive.Services
                 favoriteWorkshopIds = await _context.FavoriteWorkshops
                     .Where(f => f.CustomerId == customerId)
                     .Select(f => f.WorkshopId)
-                .ToListAsync();
+                    .ToListAsync();
             }
 
             var workshopsData = await workshopsQuery.ToListAsync();
@@ -68,7 +73,7 @@ namespace TicDrive.Services
                     IsFavorite = string.IsNullOrEmpty(customerId) ? null : favoriteWorkshopIds.Contains(joined.Workshop.Id)
                 });
 
-            if(favorite == true)
+            if (favorite == true)
             {
                 uniqueWorkshops = uniqueWorkshops.Where(workshop => workshop.IsFavorite == true);
             }
@@ -76,15 +81,16 @@ namespace TicDrive.Services
             return uniqueWorkshops
                 .Where(workshop => workshop.Name.ToLower().Contains(filter?.ToLower() ?? string.Empty));
         }
+
         public async Task LikeWorkshop(string userId, string workshopId)
         {
             var favoriteWorkshop = await _context.FavoriteWorkshops
-                   .FirstOrDefaultAsync(f => f.CustomerId == userId && f.WorkshopId == workshopId);
+                .FirstOrDefaultAsync(f => f.CustomerId == userId && f.WorkshopId == workshopId);
 
             if (favoriteWorkshop != null)
             {
                 _context.FavoriteWorkshops.Remove(favoriteWorkshop);
-            } 
+            }
             else
             {
                 await _context.FavoriteWorkshops.AddAsync(new Models.FavoriteWorkshop
@@ -97,5 +103,81 @@ namespace TicDrive.Services
             await _context.SaveChangesAsync();
         }
 
+        public async Task<List<NearbyWorkshopDto>> GetNearbyWorkshops(decimal latitude, decimal longitude, int? serviceId, int? kmRange = 20)
+        {
+            if (serviceId != null)
+            {
+                var workshopsWithService = await _context.Users
+                    .Where(user => user.UserType == UserType.Workshop && user.Latitude != null && user.Longitude != null)
+                    .Join(
+                        _context.OfferedServices,
+                        workshop => workshop.Id,
+                        service => service.WorkshopId,
+                        (workshop, service) => new { Workshop = workshop, Service = service }
+                    )
+                    .Where(joined => joined.Service.ServiceId == serviceId)
+                    .ToListAsync();
+
+                var nearbyWorkshops = workshopsWithService
+                    .Where(joined =>
+                    {
+                        double distanceInMeters = DistanceCalculator.CalculateDistanceInMeters(
+                            (double)latitude,
+                            (double)longitude,
+                            (double)joined.Workshop.Latitude!,
+                            (double)joined.Workshop.Longitude!
+                        );
+                        return distanceInMeters <= (kmRange ?? 20) * 1000;
+                    })
+                    .Select(joined => new NearbyWorkshopDto
+                    {
+                        Id = joined.Workshop.Id,
+                        Name = joined.Workshop.Name!,
+                        Address = joined.Workshop.Address,
+                        Latitude = joined.Workshop.Latitude,
+                        Longitude = joined.Workshop.Longitude,
+                        ProfileImageUrl = joined.Workshop.ProfileImageUrl,
+                        ServicePrice = joined.Service.Price,
+                        Currency = joined.Service.Currency,
+                        Discount = joined.Service.Discount
+                    })
+                    .ToList();
+
+                return nearbyWorkshops;
+            }
+            else
+            {
+                var allWorkshops = await _context.Users
+                    .Where(user => user.UserType == UserType.Workshop && user.Latitude != null && user.Longitude != null)
+                    .ToListAsync();
+
+                var nearbyWorkshops = allWorkshops
+                    .Where(workshop =>
+                    {
+                        double distanceInMeters = DistanceCalculator.CalculateDistanceInMeters(
+                            (double)latitude,
+                            (double)longitude,
+                            (double)workshop.Latitude!,
+                            (double)workshop.Longitude!
+                        );
+                        return distanceInMeters <= (kmRange ?? 20) * 1000;
+                    })
+                    .Select(workshop => new NearbyWorkshopDto
+                    {
+                        Id = workshop.Id,
+                        Name = workshop.Name!,
+                        Address = workshop.Address,
+                        Latitude = workshop.Latitude,
+                        Longitude = workshop.Longitude,
+                        ProfileImageUrl = workshop.ProfileImageUrl,
+                        ServicePrice = null,
+                        Currency = null,
+                        Discount = null
+                    })
+                    .ToList();
+
+                return nearbyWorkshops;
+            }
+        }
     }
 }

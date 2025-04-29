@@ -3,6 +3,8 @@ using TicDrive.Services;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using TicDrive.Dto.UserDto;
 
 namespace TicDrive.Controllers
 {
@@ -12,11 +14,13 @@ namespace TicDrive.Controllers
     {
         private readonly IWorkshopsService _workshopsService;
         private readonly IAuthService _authService;
+        private readonly IMapper _mapper;
 
-        public WorkshopsController(IWorkshopsService workshopsService, IAuthService authService)
+        public WorkshopsController(IWorkshopsService workshopsService, IAuthService authService, IMapper mapper)
         {
             _workshopsService = workshopsService;
             _authService = authService;
+            _mapper = mapper;
         }
 
         public class GetWorkshopsQueries
@@ -62,6 +66,33 @@ namespace TicDrive.Controllers
             {
                 return BadRequest(new { error = ex.Message });
             }
+        }
+
+        public class GetNearbyWorkshopsQuery
+        {
+            public decimal? Latitude { get; set; }
+            public decimal? Longitude { get; set; }
+            public int? KmRange { get; set; }
+            public int? ServiceId { get; set; }
+        }
+
+        [HttpGet]
+        [Route("nearby")]
+        public async Task<IActionResult> GetNearbyWorkshops([FromQuery] GetNearbyWorkshopsQuery query)
+        {
+            if (query == null || query.Latitude == null || query.Longitude == null)
+            {
+                return BadRequest("Latitude and longitude are required.");
+            }
+
+            var nearbyWorkshops = await _workshopsService.GetNearbyWorkshops(
+                (decimal)query.Latitude,
+                (decimal)query.Longitude,
+                query.ServiceId,
+                query.KmRange
+            );
+
+            return Ok(nearbyWorkshops);
         }
     }
 }

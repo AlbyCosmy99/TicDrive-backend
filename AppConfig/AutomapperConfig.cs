@@ -23,7 +23,8 @@ namespace TicDrive.AppConfig
 
             CreateMap<CarMake, FullCarMakeDto>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
-                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name));
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+                .ForMember(dest => dest.LogoUrl, opt => opt.MapFrom(src => src.LogoUrl));
 
             CreateMap<CarModel, FullCarModelDto>()
                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
