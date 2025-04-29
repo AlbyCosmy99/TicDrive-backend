@@ -57,7 +57,8 @@ namespace TicDrive.AppConfig
               .ForMember(dest => dest.Latitude, opt => opt.MapFrom(src => src.Latitude))
               .ForMember(dest => dest.Longitude, opt => opt.MapFrom(src => src.Longitude))
               .ForMember(dest => dest.ProfileImageUrl, opt => opt.MapFrom(src => src.ProfileImageUrl))
-              .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.PhoneNumber));
+              .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.PhoneNumber))
+              .ForMember(dest => dest.EmailConfirmed, opt => opt.MapFrom(src => src.EmailConfirmed));
         }
     }
 }
