@@ -1,11 +1,12 @@
 ﻿using TicDrive.Context;
+using TicDrive.Dto.ServiceDto;
 using TicDrive.Models;
 
 namespace TicDrive.Services
 {
     public interface IServicesService
     {
-        IQueryable<Service> GetServices(string workshopId, string? filter = null);
+        IQueryable<FullServiceDto> GetServices(string workshopId, string? filter = null, string? languageCode = "en");
     }
 
     public class ServicesService : IServicesService
@@ -17,15 +18,26 @@ namespace TicDrive.Services
             _dbContext = dbContext;
         }
 
-        public IQueryable<Service> GetServices(string workshopId, string? filter = null)
+        public IQueryable<FullServiceDto> GetServices(string workshopId, string? filter = null, string? languageCode = "en")
         {
-            var query = _dbContext.Services.AsQueryable();
+            var query = _dbContext.Services
+                .Join(_dbContext.ServicesTranslations,
+                    service => service.Id,
+                    serviceTranslation => serviceTranslation.ServiceId,
+                    (service, serviceTranslation) => new { service, serviceTranslation })
+                .Join(_dbContext.Languages
+                    .Where(language => language.Code == languageCode),
+                    sst => sst.serviceTranslation.LanguageId,
+                    language => language.Id,
+                    (sst, language) => new { sst.service, sst.serviceTranslation, language })
+                .AsQueryable();
+
 
             if (!string.IsNullOrEmpty(workshopId))
             {
                 query = query.Join(
                     _dbContext.OfferedServices.Where(os => os.Workshop.Id == workshopId),
-                    service => service.Id,
+                    sstl => sstl.service.Id,
                     offeredService => offeredService.Service.Id,
                     (service, offeredService) => service
                 );
@@ -33,10 +45,17 @@ namespace TicDrive.Services
 
             if (!string.IsNullOrEmpty(filter))
             {
-                query = query.Where(service => service.Title.Contains(filter));
+                query = query.Where(sstl => sstl.serviceTranslation.Title.Contains(filter));
             }
 
-            return query.OrderBy(service => service.Id);
+            return query.OrderBy(sstl => sstl.service.Id)
+                .Select(sstl => new FullServiceDto
+                {
+                    Id = sstl.service.Id,
+                    Title = sstl.serviceTranslation.Title,
+                    Description = sstl.serviceTranslation.Description,
+                    Icon = sstl.service.Icon
+                });
         }
     }
 }

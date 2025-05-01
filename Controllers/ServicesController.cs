@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Data.Entity;
 using TicDrive.Dto.ServiceDto;
+using TicDrive.Enums;
 using TicDrive.Services;
 
 namespace TicDrive.Controllers
@@ -18,6 +19,7 @@ namespace TicDrive.Controllers
             public int? Skip { get; set; } = 0;
             public int? Take { get; set; } = 10;
             public string? Filter { get; set; } = string.Empty;
+            public string? LanguageCode { get; set; }
         }
 
         [HttpGet]
@@ -26,10 +28,10 @@ namespace TicDrive.Controllers
         {
             try
             {
-                var services = _servicesService.GetServices(workshopId, query.Filter);
+                var services = _servicesService.GetServices(workshopId, query.Filter, query.LanguageCode);
                 var paginatedServices = services.Skip(query.Skip ?? 0).Take(query.Take ?? 10).ToList();
 
-                return Ok(_mapper.Map<List<FullServiceDto>>(paginatedServices));
+                return Ok(paginatedServices);
             }
             catch (Exception ex) when (ex is ArgumentNullException || ex is OperationCanceledException)
             {

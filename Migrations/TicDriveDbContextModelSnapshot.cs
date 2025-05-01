@@ -174,6 +174,27 @@ namespace TicDrive.Migrations
                     b.ToTable("FavoriteWorkshops");
                 });
 
+            modelBuilder.Entity("TicDrive.Models.Language", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Languages");
+                });
+
             modelBuilder.Entity("TicDrive.Models.OfferedServices", b =>
                 {
                     b.Property<int>("Id")
@@ -250,12 +271,35 @@ namespace TicDrive.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Icon")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Key")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Services");
+                });
+
+            modelBuilder.Entity("TicDrive.Models.ServiceTranslation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Icon")
-                        .HasColumnType("text");
+                    b.Property<int>("LanguageId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("ServiceId")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -263,7 +307,11 @@ namespace TicDrive.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Services");
+                    b.HasIndex("LanguageId");
+
+                    b.HasIndex("ServiceId");
+
+                    b.ToTable("ServicesTranslations");
                 });
 
             modelBuilder.Entity("TicDrive.Models.User", b =>
@@ -463,6 +511,25 @@ namespace TicDrive.Migrations
                     b.Navigation("Customer");
 
                     b.Navigation("Workshop");
+                });
+
+            modelBuilder.Entity("TicDrive.Models.ServiceTranslation", b =>
+                {
+                    b.HasOne("TicDrive.Models.Language", "Language")
+                        .WithMany()
+                        .HasForeignKey("LanguageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TicDrive.Models.Service", "Service")
+                        .WithMany()
+                        .HasForeignKey("ServiceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Language");
+
+                    b.Navigation("Service");
                 });
 #pragma warning restore 612, 618
         }

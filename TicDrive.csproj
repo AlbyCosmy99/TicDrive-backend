@@ -11,6 +11,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Dto\NewFolder\**" />
+    <Content Remove="Dto\NewFolder\**" />
+    <EmbeddedResource Remove="Dto\NewFolder\**" />
+    <None Remove="Dto\NewFolder\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Amazon.Lambda.AspNetCoreServer" Version="9.0.3" />
     <PackageReference Include="Amazon.Lambda.AspNetCoreServer.Hosting" Version="1.7.3" />
     <PackageReference Include="Autofac" Version="8.1.1" />
@@ -30,10 +37,6 @@
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="7.2.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Dto\NewFolder\" />
   </ItemGroup>
 
 </Project>
