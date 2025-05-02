@@ -12,7 +12,7 @@ namespace TicDrive.Services
     {
         Task<IEnumerable<WorkshopDashboardInfoDto>> GetWorkshops(int skip, int take, int? serviceId = 0, string? customerId = null, bool? favorite = null, string? filter = null);
         Task LikeWorkshop(string userId, string workshopId);
-        Task<List<NearbyWorkshopDto>> GetNearbyWorkshops(decimal latitude, decimal longitude, int? serviceId, int? kmRange = 20);
+        Task<List<NearbyWorkshopDto>> GetNearbyWorkshops(int skip, int take, decimal latitude, decimal longitude, int? serviceId, int? kmRange = 20, string? filter = null);
     }
 
     public class WorkshopsService(TicDriveDbContext context) : IWorkshopsService
@@ -103,12 +103,16 @@ namespace TicDrive.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<List<NearbyWorkshopDto>> GetNearbyWorkshops(decimal latitude, decimal longitude, int? serviceId, int? kmRange = 20)
+        public async Task<List<NearbyWorkshopDto>> GetNearbyWorkshops(int skip, int take, decimal latitude, decimal longitude, int? serviceId, int? kmRange = 20, string? filter = null)
         {
             if (serviceId != null)
             {
                 var workshopsWithService = await _context.Users
-                    .Where(user => user.UserType == UserType.Workshop && user.Latitude != null && user.Longitude != null)
+                    .Where(user => 
+                        user.UserType == UserType.Workshop 
+                        && user.Latitude != null 
+                        && user.Longitude != null
+                        && (filter == null || (user.Name.Contains(filter))))
                     .Join(
                         _context.OfferedServices,
                         workshop => workshop.Id,
@@ -141,6 +145,8 @@ namespace TicDrive.Services
                         Currency = joined.Service.Currency,
                         Discount = joined.Service.Discount
                     })
+                    .Skip(skip)
+                    .Take(take)
                     .ToList();
 
                 return nearbyWorkshops;
@@ -148,7 +154,11 @@ namespace TicDrive.Services
             else
             {
                 var allWorkshops = await _context.Users
-                    .Where(user => user.UserType == UserType.Workshop && user.Latitude != null && user.Longitude != null)
+                     .Where(user =>
+                        user.UserType == UserType.Workshop
+                        && user.Latitude != null
+                        && user.Longitude != null
+                        && (filter == null || (user.Name.Contains(filter))))
                     .ToListAsync();
 
                 var nearbyWorkshops = allWorkshops
@@ -174,6 +184,8 @@ namespace TicDrive.Services
                         Currency = null,
                         Discount = null
                     })
+                    .Skip(skip)
+                    .Take(take)
                     .ToList();
 
                 return nearbyWorkshops;

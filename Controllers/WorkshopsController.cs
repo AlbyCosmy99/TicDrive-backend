@@ -74,6 +74,9 @@ namespace TicDrive.Controllers
             public decimal? Longitude { get; set; }
             public int? KmRange { get; set; }
             public int? ServiceId { get; set; }
+            public int Skip { get; set; } = 0;
+            public int Take { get; set; } = 10;
+            public string? Filter { get; set; } = string.Empty;
         }
 
         [HttpGet]
@@ -86,10 +89,13 @@ namespace TicDrive.Controllers
             }
 
             var nearbyWorkshops = await _workshopsService.GetNearbyWorkshops(
+                query.Skip,
+                query.Take,
                 (decimal)query.Latitude,
                 (decimal)query.Longitude,
                 query.ServiceId,
-                query.KmRange
+                query.KmRange,
+                query.Filter
             );
 
             return Ok(nearbyWorkshops);
