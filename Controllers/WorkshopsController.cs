@@ -45,7 +45,7 @@ namespace TicDrive.Controllers
 
             try
             {
-                var workshops = await _workshopsService.GetWorkshops(skip, take, serviceId, userId, filter: query.Filter);
+                var workshops = await _workshopsService.GetWorkshops(serviceId, userId, filter: query.Filter);
 
                 switch (query.Order?.ToLower())
                 {
@@ -90,8 +90,6 @@ namespace TicDrive.Controllers
             }
 
             var nearbyWorkshops = await _workshopsService.GetNearbyWorkshops(
-                query.Skip,
-                query.Take,
                 (decimal)query.Latitude,
                 (decimal)query.Longitude,
                 query.ServiceId,
@@ -110,7 +108,9 @@ namespace TicDrive.Controllers
                     break;
             }
 
-            return Ok(nearbyWorkshops);
+            var pagedNearbyWorkshops = nearbyWorkshops.Skip(query.Skip).Take(query.Take).ToList();
+
+            return Ok(new { nearbyWorkshops = pagedNearbyWorkshops, Count = nearbyWorkshops.Count() });
         }
     }
 }

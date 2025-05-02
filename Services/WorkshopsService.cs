@@ -10,16 +10,16 @@ namespace TicDrive.Services
 {
     public interface IWorkshopsService
     {
-        Task<IEnumerable<WorkshopDashboardInfoDto>> GetWorkshops(int skip, int take, int? serviceId = 0, string? customerId = null, bool? favorite = null, string? filter = null);
+        Task<IEnumerable<WorkshopDashboardInfoDto>> GetWorkshops(int? serviceId = 0, string? customerId = null, bool? favorite = null, string? filter = null);
         Task LikeWorkshop(string userId, string workshopId);
-        Task<IEnumerable<NearbyWorkshopDto>> GetNearbyWorkshops(int skip, int take, decimal latitude, decimal longitude, int? serviceId, int? kmRange = 20, string? filter = null);
+        Task<IEnumerable<NearbyWorkshopDto>> GetNearbyWorkshops(decimal latitude, decimal longitude, int? serviceId, int? kmRange = 20, string? filter = null);
     }
 
     public class WorkshopsService(TicDriveDbContext context) : IWorkshopsService
     {
         private readonly TicDriveDbContext _context = context;
 
-        public async Task<IEnumerable<WorkshopDashboardInfoDto>> GetWorkshops(int skip, int take, int? serviceId, string? customerId, bool? favorite = false, string? filter = null)
+        public async Task<IEnumerable<WorkshopDashboardInfoDto>> GetWorkshops(int? serviceId, string? customerId, bool? favorite = false, string? filter = null)
         {
             var workshopsQuery = _context.Users
                 .Where(user => user.UserType == Enums.UserType.Workshop)
@@ -103,7 +103,7 @@ namespace TicDrive.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<NearbyWorkshopDto>> GetNearbyWorkshops(int skip, int take, decimal latitude, decimal longitude, int? serviceId, int? kmRange = 20, string? filter = null)
+        public async Task<IEnumerable<NearbyWorkshopDto>> GetNearbyWorkshops(decimal latitude, decimal longitude, int? serviceId, int? kmRange = 20, string? filter = null)
         {
             if (serviceId != null)
             {
@@ -144,9 +144,7 @@ namespace TicDrive.Services
                         ServicePrice = joined.Service.Price,
                         Currency = joined.Service.Currency,
                         Discount = joined.Service.Discount
-                    })
-                    .Skip(skip)
-                    .Take(take);
+                    });
 
                 return nearbyWorkshops;
             }
