@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TicDrive.Models;
+using TicDrive.Models.Log;
 
 namespace TicDrive.Context
 {
@@ -80,5 +81,8 @@ namespace TicDrive.Context
         public DbSet<FavoriteWorkshop> FavoriteWorkshops { get; set ; }
         public DbSet<CustomerCar> CustomerCars { get; set; }
         public DbSet<Language> Languages { get; set; }
+
+        //logs
+     
     }
 }

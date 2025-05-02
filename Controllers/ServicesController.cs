@@ -26,9 +26,15 @@ namespace TicDrive.Controllers
         [Route("")]
         public IActionResult GetServices(string? workshopId, [FromQuery] GetServicesQueries query)
         {
+            var languageCode = "en";
+            if(query != null && query.LanguageCode != null)
+            {
+                languageCode = query.LanguageCode;
+            }
+
             try
             {
-                var services = _servicesService.GetServices(workshopId, query.Filter, query.LanguageCode);
+                var services = _servicesService.GetServices(workshopId, query.Filter, languageCode);
                 var paginatedServices = services.Skip(query.Skip ?? 0).Take(query.Take ?? 10).ToList();
 
                 return Ok(paginatedServices);
