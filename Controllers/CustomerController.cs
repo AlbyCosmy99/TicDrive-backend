@@ -37,7 +37,7 @@ namespace TicDrive.Controllers
             var userClaims = _authService.GetUserClaims(this);
             var userId = _authService.GetUserId(userClaims);
 
-            var favoriteWorkshops = await _workshopsService.GetWorkshops(skip, take, customerId: userId, favorite: true, filter: query.Filter);
+            var favoriteWorkshops = await _workshopsService.GetWorkshops(customerId: userId, favorite: true, filter: query.Filter);
 
             switch (query.Order?.ToLower())
             {
@@ -49,7 +49,7 @@ namespace TicDrive.Controllers
                     favoriteWorkshops = favoriteWorkshops.OrderBy(w => w.Name);
                     break;
             }
-            return Ok(new { workshops = favoriteWorkshops, count = favoriteWorkshops.Count() });
+            return Ok(new { workshops = favoriteWorkshops.Skip(skip).Take(take).ToList(), count = favoriteWorkshops.Count() });
 
         }
 

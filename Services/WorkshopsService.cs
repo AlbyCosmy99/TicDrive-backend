@@ -180,9 +180,7 @@ namespace TicDrive.Services
                         ServicePrice = null,
                         Currency = null,
                         Discount = null
-                    })
-                    .Skip(skip)
-                    .Take(take);
+                    });
 
                 return nearbyWorkshops;
             }
