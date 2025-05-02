@@ -121,13 +121,13 @@ namespace TicDrive.Services
                             <h1>TicDrive</h1>
                         </div>
                         <div class=""email-body"">
-                            <p>Hello,</p>
-                            <p>Thank you for signing up with TicDrive. To confirm your email address, please click the button below:</p>
-                            <a class=""confirm-button"" href=""{0}"" target=""_blank"">Confirm Email</a>
-                            <p>If the button above does not work, you can copy and paste the following link into your browser:</p>
-                            <p><a href=""{0}"" target=""_blank"">{0}</a></p>
-                            <p>Thank you,</p>
-                            <p>The TicDrive Team</p>
+                          <p>Ciao,</p>
+                          <p>Grazie per esserti registrato su TicDrive. Per confermare il tuo indirizzo email, clicca sul pulsante qui sotto:</p>
+                          <a class=""confirm-button"" href=""{0}"" target=""_blank"">Conferma Email</a>
+                          <p>Se il pulsante sopra non funziona, puoi copiare e incollare il seguente link nel tuo browser:</p>
+                          <p><a href=""{0}"" target=""_blank"">{0}</a></p>
+                          <p>Grazie,</p>
+                          <p>Il Team di TicDrive</p>
                         </div>
                         <div class=""email-footer"">
                             &copy; 2024 TicDrive. All rights reserved.

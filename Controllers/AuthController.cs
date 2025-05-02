@@ -146,7 +146,7 @@ namespace TicDrive.Controllers
 
                             var body = _emailService.GetRegistrationMailConfirmation();
                             string formattedBody = string.Format(body, confirmationLink);
-                            await _emailService.SendEmailAsync(user.Email, "Welcome! Confirm your email.", formattedBody);
+                            await _emailService.SendEmailAsync(user.Email, "Benvenuto! Conferma la tua mail.", formattedBody);
 
                             var token = _authService.GenerateToken(user);
                             await _context.Database.CommitTransactionAsync();
