@@ -60,6 +60,7 @@ namespace TicDrive.Migrations
                 {
                     Id = table.Column<string>(type: "text", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false),
+                    Surname = table.Column<string>(type: "text", nullable: true),
                     UserName = table.Column<string>(type: "text", nullable: true),
                     UserType = table.Column<int>(type: "integer", nullable: false),
                     Address = table.Column<string>(type: "text", nullable: true),
@@ -70,6 +71,7 @@ namespace TicDrive.Migrations
                     ResetPasswordCode = table.Column<string>(type: "text", nullable: false),
                     ResetPasswordExpiry = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     ResetPasswordToken = table.Column<string>(type: "text", nullable: false),
+                    RegistrationDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     NormalizedUserName = table.Column<string>(type: "text", nullable: true),
                     Email = table.Column<string>(type: "text", nullable: true),
                     NormalizedEmail = table.Column<string>(type: "text", nullable: true),
@@ -159,6 +161,30 @@ namespace TicDrive.Migrations
                         column: x => x.WorkshopId,
                         principalTable: "Users",
                         principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "LoginLogs",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    UserId = table.Column<string>(type: "text", nullable: false),
+                    LoginTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    IPAddress = table.Column<string>(type: "character varying(45)", maxLength: 45, nullable: true),
+                    UserAgent = table.Column<string>(type: "character varying(512)", maxLength: 512, nullable: true),
+                    Success = table.Column<bool>(type: "boolean", nullable: false),
+                    FailureReason = table.Column<string>(type: "character varying(512)", maxLength: 512, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LoginLogs", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_LoginLogs_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -325,6 +351,11 @@ namespace TicDrive.Migrations
                 column: "WorkshopId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_LoginLogs_UserId",
+                table: "LoginLogs",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_OfferedServices_ServiceId",
                 table: "OfferedServices",
                 column: "ServiceId");
@@ -369,6 +400,9 @@ namespace TicDrive.Migrations
 
             migrationBuilder.DropTable(
                 name: "FavoriteWorkshops");
+
+            migrationBuilder.DropTable(
+                name: "LoginLogs");
 
             migrationBuilder.DropTable(
                 name: "OfferedServices");

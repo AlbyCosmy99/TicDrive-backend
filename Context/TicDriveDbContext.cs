@@ -83,6 +83,6 @@ namespace TicDrive.Context
         public DbSet<Language> Languages { get; set; }
 
         //logs
-     
+        public DbSet<LoginLog> LoginLogs { get; set; }
     }
 }

@@ -9,7 +9,9 @@ using TicDrive.Context;
 using TicDrive.Dto.UserDto;
 using TicDrive.Enums;
 using TicDrive.Models;
+using TicDrive.Models.Log;
 using TicDrive.Services;
+using TicDrive.Utils.Auth;
 
 namespace TicDrive.Controllers
 {
@@ -23,6 +25,7 @@ namespace TicDrive.Controllers
         private readonly IEmailService _emailService;
         private readonly TicDriveDbContext _context;
         private readonly IMapper _mapper;
+        private readonly LoginLogger _loginLogger;
 
         public AuthController(
             UserManager<User> userManager,
@@ -30,7 +33,8 @@ namespace TicDrive.Controllers
             IAuthService authService,
             IEmailService emailService,
             TicDriveDbContext context,
-            IMapper mapper)
+            IMapper mapper,
+            LoginLogger loginLogger)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -38,6 +42,7 @@ namespace TicDrive.Controllers
             _emailService = emailService;
             _context = context;
             _mapper = mapper;
+            _loginLogger = loginLogger;
         }
 
         public class RegisterBody
@@ -109,8 +114,22 @@ namespace TicDrive.Controllers
 
                             if (!result.Succeeded)
                             {
+                                await _loginLogger.LogAsync(
+                                    userId: user.Id,
+                                    success: false,
+                                    failureReason: string.Join(", ", result.Errors.Select(e => e.Description)),
+                                    httpContext: HttpContext
+                                );
+
                                 return BadRequest(result.Errors);
                             }
+
+                            await _loginLogger.LogAsync(
+                                userId: user.Id,
+                                success: true,
+                                failureReason: null,
+                                httpContext: HttpContext
+                            );
 
                             var emailConfirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                             var confirmationLink = Url.Action(
@@ -131,6 +150,7 @@ namespace TicDrive.Controllers
 
                             var token = _authService.GenerateToken(user);
                             await _context.Database.CommitTransactionAsync();
+
                             return Ok(new
                             {
                                 Token = new JwtSecurityTokenHandler().WriteToken(token),
@@ -147,6 +167,7 @@ namespace TicDrive.Controllers
                 verifySucceeded: null
             );
         }
+
 
         public class ConfirmationEmail
         {
@@ -242,11 +263,13 @@ namespace TicDrive.Controllers
             var user = await _userManager.FindByEmailAsync(payload.Email);
             if (user == null)
             {
+                await _loginLogger.LogAsync(user.Id, false, "Invalid email", HttpContext);
                 return Unauthorized("Invalid email or password.");
             }
 
-            if(user.UserType != payload.UserType)
+            if (user.UserType != payload.UserType)
             {
+                await _loginLogger.LogAsync(user.Id, false, "Unauthorized user type", HttpContext);
                 return Unauthorized("User is not authorized to login.");
             }
 
@@ -254,8 +277,10 @@ namespace TicDrive.Controllers
 
             if (!result.Succeeded)
             {
+                await _loginLogger.LogAsync(user.Id, false, "Invalid password", HttpContext);
                 return Unauthorized("Invalid email or password.");
             }
+            await _loginLogger.LogAsync(user.Id, true, null, HttpContext);
 
             var token = _authService.GenerateToken(user);
 
@@ -266,6 +291,7 @@ namespace TicDrive.Controllers
                 user.EmailConfirmed
             });
         }
+
 
         [HttpGet]
         [Route("confirm-email")]

@@ -195,6 +195,43 @@ namespace TicDrive.Migrations
                     b.ToTable("Languages");
                 });
 
+            modelBuilder.Entity("TicDrive.Models.Log.LoginLog", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("FailureReason")
+                        .HasMaxLength(512)
+                        .HasColumnType("character varying(512)");
+
+                    b.Property<string>("IPAddress")
+                        .HasMaxLength(45)
+                        .HasColumnType("character varying(45)");
+
+                    b.Property<DateTime>("LoginTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("Success")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("UserAgent")
+                        .HasMaxLength(512)
+                        .HasColumnType("character varying(512)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("LoginLogs");
+                });
+
             modelBuilder.Entity("TicDrive.Models.OfferedServices", b =>
                 {
                     b.Property<int>("Id")
@@ -373,6 +410,9 @@ namespace TicDrive.Migrations
                     b.Property<string>("ProfileImageUrl")
                         .HasColumnType("text");
 
+                    b.Property<DateTime?>("RegistrationDate")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<string>("ResetPasswordCode")
                         .IsRequired()
                         .HasColumnType("text");
@@ -385,6 +425,9 @@ namespace TicDrive.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("SecurityStamp")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Surname")
                         .HasColumnType("text");
 
                     b.Property<bool>("TwoFactorEnabled")
@@ -473,6 +516,17 @@ namespace TicDrive.Migrations
                     b.Navigation("Customer");
 
                     b.Navigation("Workshop");
+                });
+
+            modelBuilder.Entity("TicDrive.Models.Log.LoginLog", b =>
+                {
+                    b.HasOne("TicDrive.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("TicDrive.Models.OfferedServices", b =>

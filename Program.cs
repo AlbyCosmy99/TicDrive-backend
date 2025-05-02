@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.OpenApi.Models;
+using TicDrive.Utils.Auth;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -89,6 +90,7 @@ builder.Services.AddAuthentication(options =>
 });
 
 builder.Services.AddScoped<IClaimsTransformation, UserClaimsMapper>();
+builder.Services.AddScoped<LoginLogger>();
 
 var connection = string.Empty;
 if (builder.Environment.IsDevelopment())
