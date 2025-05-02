@@ -29,7 +29,6 @@ bin/
 
 # Ignore publish output
 publish/
-wwwroot/
 
 # Ignore IDE and editor settings
 .vscode/
