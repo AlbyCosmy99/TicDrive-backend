@@ -12,7 +12,7 @@ namespace TicDrive.Services
     {
         Task<IEnumerable<WorkshopDashboardInfoDto>> GetWorkshops(int skip, int take, int? serviceId = 0, string? customerId = null, bool? favorite = null, string? filter = null);
         Task LikeWorkshop(string userId, string workshopId);
-        Task<List<NearbyWorkshopDto>> GetNearbyWorkshops(int skip, int take, decimal latitude, decimal longitude, int? serviceId, int? kmRange = 20, string? filter = null);
+        Task<IEnumerable<NearbyWorkshopDto>> GetNearbyWorkshops(int skip, int take, decimal latitude, decimal longitude, int? serviceId, int? kmRange = 20, string? filter = null);
     }
 
     public class WorkshopsService(TicDriveDbContext context) : IWorkshopsService
@@ -103,7 +103,7 @@ namespace TicDrive.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<List<NearbyWorkshopDto>> GetNearbyWorkshops(int skip, int take, decimal latitude, decimal longitude, int? serviceId, int? kmRange = 20, string? filter = null)
+        public async Task<IEnumerable<NearbyWorkshopDto>> GetNearbyWorkshops(int skip, int take, decimal latitude, decimal longitude, int? serviceId, int? kmRange = 20, string? filter = null)
         {
             if (serviceId != null)
             {
@@ -146,8 +146,7 @@ namespace TicDrive.Services
                         Discount = joined.Service.Discount
                     })
                     .Skip(skip)
-                    .Take(take)
-                    .ToList();
+                    .Take(take);
 
                 return nearbyWorkshops;
             }
@@ -185,8 +184,7 @@ namespace TicDrive.Services
                         Discount = null
                     })
                     .Skip(skip)
-                    .Take(take)
-                    .ToList();
+                    .Take(take);
 
                 return nearbyWorkshops;
             }

@@ -77,6 +77,7 @@ namespace TicDrive.Controllers
             public int Skip { get; set; } = 0;
             public int Take { get; set; } = 10;
             public string? Filter { get; set; } = string.Empty;
+            public string Order { get; set; } = "asc";
         }
 
         [HttpGet]
@@ -97,6 +98,17 @@ namespace TicDrive.Controllers
                 query.KmRange,
                 query.Filter
             );
+
+            switch (query.Order?.ToLower())
+            {
+                case "desc":
+                    nearbyWorkshops = nearbyWorkshops.OrderByDescending(w => w.Name);
+                    break;
+                case "asc":
+                default:
+                    nearbyWorkshops = nearbyWorkshops.OrderBy(w => w.Name);
+                    break;
+            }
 
             return Ok(nearbyWorkshops);
         }
