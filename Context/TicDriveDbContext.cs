@@ -1,6 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TicDrive.Models;
+using TicDrive.Models.DateTime;
+using TicDrive.Models.Legal;
 using TicDrive.Models.Log;
+using TicDrive.Models.Workshops;
 
 namespace TicDrive.Context
 {
@@ -81,6 +84,16 @@ namespace TicDrive.Context
         public DbSet<FavoriteWorkshop> FavoriteWorkshops { get; set ; }
         public DbSet<CustomerCar> CustomerCars { get; set; }
         public DbSet<Language> Languages { get; set; }
+        public DbSet<Day> Days { get; set; }
+        public DbSet<Specialization> Specializations { get; set; }
+        public DbSet<WorkshopDetails> WorkshopsDetails { get; set; }
+        public DbSet<WorkshopNonWorkingDay> WorkshopsNonWorkingDays { get; set; }
+        public DbSet<WorkshopSchedule> WorkshopsSchedules { get; set; }
+        public DbSet<WorkshopSpecialization>  WorkshopsSpecializations { get; set; }
+        public DbSet<LegalDeclaration> LegalDeclarations { get; set; } 
+        public DbSet<UserConsent> UserConsents { get; set; }
+        public DbSet<UserImage> UserImages { get; set; }
+
 
         //logs
         public DbSet<LoginLog> LoginLogs { get; set; }

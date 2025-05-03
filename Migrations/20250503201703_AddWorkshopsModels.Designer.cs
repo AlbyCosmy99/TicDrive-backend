@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TicDrive.Context;
@@ -11,9 +12,11 @@ using TicDrive.Context;
 namespace TicDrive.Migrations
 {
     [DbContext(typeof(TicDriveDbContext))]
-    partial class TicDriveDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250503201703_AddWorkshopsModels")]
+    partial class AddWorkshopsModels
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -526,33 +529,7 @@ namespace TicDrive.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserConsents");
-                });
-
-            modelBuilder.Entity("TicDrive.Models.UserImage", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<bool?>("IsMainImage")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("Url")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("UserImages");
+                    b.ToTable("userConsents");
                 });
 
             modelBuilder.Entity("TicDrive.Models.Workshops.Specialization", b =>
@@ -688,7 +665,7 @@ namespace TicDrive.Migrations
 
                     b.HasIndex("WorkshopId");
 
-                    b.ToTable("WorkshopsSchedules");
+                    b.ToTable("workshopsSchedules");
                 });
 
             modelBuilder.Entity("TicDrive.Models.Workshops.WorkshopSpecialization", b =>
@@ -869,17 +846,6 @@ namespace TicDrive.Migrations
                         .IsRequired();
 
                     b.Navigation("LegalDeclaration");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("TicDrive.Models.UserImage", b =>
-                {
-                    b.HasOne("TicDrive.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
 
                     b.Navigation("User");
                 });

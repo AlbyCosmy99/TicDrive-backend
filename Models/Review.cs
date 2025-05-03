@@ -39,7 +39,7 @@ namespace TicDrive.Models
 
         public required string Text { get; set; }
 
-        public DateTime WhenPublished { get; set; } = DateTime.Now;
+        public System.DateTime WhenPublished { get; set; } = System.DateTime.Now;
 
         private double _stars;
 

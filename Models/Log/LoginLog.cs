@@ -14,7 +14,7 @@ namespace TicDrive.Models.Log
         [ForeignKey(nameof(UserId))]
         public User User { get; set; } = null!;
 
-        public DateTime LoginTime { get; set; } = DateTime.UtcNow;
+        public System.DateTime LoginTime { get; set; } = System.DateTime.UtcNow;
 
         [MaxLength(45)] // Enough for IPv6
         public string? IPAddress { get; set; }

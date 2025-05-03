@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.OpenApi.Models;
 using TicDrive.Utils.Auth;
+using Azure.Storage.Blobs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -108,6 +109,13 @@ builder.Services.AddDbContext<TicDriveDbContext>(options =>
 );
 
 builder.Services.AddAutoMapper(typeof(AutomapperConfig));
+
+builder.Services.AddSingleton(x =>
+{
+    var config = x.GetRequiredService<IConfiguration>();
+    var connString = config["Azure:BlobStorageConnectionString"];
+    return new BlobServiceClient(connString);
+});
 
 var app = builder.Build();
 

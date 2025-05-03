@@ -7,7 +7,7 @@ namespace TicDrive.Models
     {
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            int currentYear = DateTime.Now.Year;
+            int currentYear = System.DateTime.Now.Year;
             if (Year < 1700 || Year > currentYear)
             {
                 yield return new ValidationResult(
