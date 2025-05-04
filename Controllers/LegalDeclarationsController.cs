@@ -62,7 +62,7 @@ namespace TicDrive.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> GetLegalDeclarations([FromQuery] GetLegalDeclarationsQuery query)
+        public IActionResult GetLegalDeclarations([FromQuery] GetLegalDeclarationsQuery query)
         {
             var queryable = _dbContext.LegalDeclarations.AsQueryable();
 
