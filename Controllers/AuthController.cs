@@ -9,7 +9,7 @@ using TicDrive.Context;
 using TicDrive.Dto.UserDto;
 using TicDrive.Enums;
 using TicDrive.Models;
-using TicDrive.Models.Log;
+
 using TicDrive.Services;
 using TicDrive.Utils.Auth;
 
@@ -79,7 +79,7 @@ namespace TicDrive.Controllers
             public string? Address { get; set; }
 
             [RequiredIfUserType(2, ErrorMessage = "Latitude is required when UserType is 2 (workshop).")]
-            public decimal? Latitudine { get; set; }
+            public decimal? Latitude { get; set; }
 
             [RequiredIfUserType(2, ErrorMessage = "Longitude is required when UserType is 2 (workshop).")]
             public decimal? Longitude { get; set; }
@@ -138,6 +138,9 @@ namespace TicDrive.Controllers
                                 UserName = payload.Email,
                                 EmailConfirmed = false,
                                 UserType = payload.UserType,
+                                Latitude = payload.Latitude,
+                                Longitude = payload.Longitude,
+                                Address = payload.Address,
                                 ProfileImageUrl = "https://cdn1.iconfinder.com/data/icons/user-pictures/100/male3-512.png"
                             };
 
