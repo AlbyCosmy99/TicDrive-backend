@@ -76,7 +76,7 @@ namespace TicDrive.Controllers
                 queryable = queryable.Where(ld => ld.Type == query.Type.Value);
             }
 
-            var result = queryable.ToList();
+            var result = queryable.Where(document => document.IsActive).FirstOrDefault();
             return Ok(result);
         }
     }
