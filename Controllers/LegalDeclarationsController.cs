@@ -58,6 +58,7 @@ namespace TicDrive.Controllers
         {
             public List<Enums.LegalDocumentContext> Contexts { get; set; } = new();
             public Enums.LegalDocumentType? Type { get; set; }
+            public bool? MostRecent { get; set; } = false;
         }
 
 
@@ -76,7 +77,11 @@ namespace TicDrive.Controllers
                 queryable = queryable.Where(ld => ld.Type == query.Type.Value);
             }
 
-            var result = queryable.Where(document => document.IsActive).FirstOrDefault();
+            var result = queryable.Where(document => document.IsActive);
+
+            if (query.MostRecent == true) {
+                return Ok(result.FirstOrDefault());
+            }
             return Ok(result);
         }
     }
