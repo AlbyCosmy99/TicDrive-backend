@@ -56,62 +56,79 @@ namespace TicDrive.Services
         {
             return @"
                 <!DOCTYPE html>
-                <html>
+                <html lang=""it"">
                 <head>
+                    <meta charset=""UTF-8"">
+                    <meta name=""viewport"" content=""width=device-width, initial-scale=1.0"">
+                    <title>Conferma la tua registrazione</title>
                     <style>
                         body {{
-                            font-family: Arial, sans-serif;
+                            font-family: 'Segoe UI', Arial, sans-serif;
                             background-color: #f4f4f4;
                             margin: 0;
                             padding: 0;
+                            color: #333333;
                         }}
                         .email-container {{
                             max-width: 600px;
-                            margin: 30px auto;
-                            background: #ffffff;
+                            margin: 40px auto;
+                            background-color: #ffffff;
                             border-radius: 8px;
+                            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
                             overflow: hidden;
-                            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
                         }}
                         .email-header {{
-                            background: #00BF63;
-                            color: #ffffff;
+                            background-color: #00BF63;
+                            padding: 24px;
                             text-align: center;
-                            padding: 20px;
                         }}
                         .email-header h1 {{
+                            color: #ffffff;
                             margin: 0;
-                            font-size: 24px;
+                            font-size: 26px;
                         }}
                         .email-body {{
-                            padding: 20px;
-                            color: #333333;
+                            padding: 24px;
                         }}
                         .email-body p {{
                             font-size: 16px;
-                            line-height: 1.5;
-                            margin: 0 0 15px;
-                        }}
-                        .email-footer {{
-                            text-align: center;
-                            font-size: 12px;
-                            color: #777777;
-                            padding: 10px;
-                            background: #f4f4f4;
+                            line-height: 1.6;
+                            margin: 0 0 16px;
                         }}
                         .confirm-button {{
                             display: inline-block;
-                            margin: 20px 0;
-                            padding: 12px 25px;
-                            font-size: 16px;
-                            color: #ffffff;
+                            padding: 14px 28px;
                             background-color: #00BF63;
+                            color: #ffffff !important;
                             text-decoration: none;
-                            border-radius: 5px;
-                            font-weight: bold;
+                            border-radius: 6px;
+                            font-weight: 600;
+                            font-size: 16px;
+                            transition: background-color 0.3s ease;
+                            outline: none;
+                            border: none;
                         }}
-                        .confirm-button:hover {{
-                            background-color: #005bb5;
+                        .confirm-button:hover,
+                        .confirm-button:focus {{
+                            background-color: #00994e;
+                            text-decoration: none;
+                            box-shadow: 0 0 0 3px rgba(0, 191, 99, 0.3);
+                        }}
+                        .email-footer {{
+                            background-color: #f4f4f4;
+                            padding: 16px;
+                            text-align: center;
+                            font-size: 13px;
+                            color: #888888;
+                        }}
+                        a {{
+                            color: #00BF63;
+                            word-break: break-word;
+                        }}
+                        a:hover,
+                        a:focus {{
+                            text-decoration: underline;
+                            color: #00994e;
                         }}
                     </style>
                 </head>
@@ -121,22 +138,25 @@ namespace TicDrive.Services
                             <h1>TicDrive</h1>
                         </div>
                         <div class=""email-body"">
-                          <p>Ciao,</p>
-                          <p>Grazie per esserti registrato su TicDrive. Per confermare il tuo indirizzo email, clicca sul pulsante qui sotto:</p>
-                          <a class=""confirm-button"" href=""{0}"" target=""_blank"">Conferma Email</a>
-                          <p>Se il pulsante sopra non funziona, puoi copiare e incollare il seguente link nel tuo browser:</p>
-                          <p><a href=""{0}"" target=""_blank"">{0}</a></p>
-                          <p>Grazie,</p>
-                          <p>Il Team di TicDrive</p>
+                            <p>Ciao,</p>
+                            <p>Grazie per esserti registrato su <strong>TicDrive</strong>. Per completare la registrazione, conferma il tuo indirizzo email cliccando sul pulsante qui sotto:</p>
+                            <p style=""text-align: center;"">
+                                <a class=""confirm-button"" href=""{0}"" target=""_blank"" rel=""noopener noreferrer"">Conferma Email</a>
+                            </p>
+                            <p>Se il pulsante non funziona, copia e incolla questo link nel tuo browser:</p>
+                            <p><a href=""{0}"" target=""_blank"" rel=""noopener noreferrer"">{0}</a></p>
+                            <p>Grazie per aver scelto TicDrive!</p>
+                            <p>Il team di TicDrive</p>
                         </div>
                         <div class=""email-footer"">
-                            &copy; 2024 TicDrive. All rights reserved.
+                            &copy; 2024 TicDrive. Tutti i diritti riservati.
                         </div>
                     </div>
                 </body>
                 </html>
             ";
         }
+
     }
 
 }
