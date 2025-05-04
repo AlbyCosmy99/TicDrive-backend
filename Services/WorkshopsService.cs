@@ -13,6 +13,7 @@ namespace TicDrive.Services
         Task<IEnumerable<WorkshopDashboardInfoDto>> GetWorkshops(int? serviceId = 0, string? customerId = null, bool? favorite = null, string? filter = null);
         Task LikeWorkshop(string userId, string workshopId);
         Task<IEnumerable<NearbyWorkshopDto>> GetNearbyWorkshops(decimal latitude, decimal longitude, int? serviceId, int? kmRange = 20, string? filter = null);
+        List<Specialization> GetSpecializations();
     }
 
     public class WorkshopsService(TicDriveDbContext context) : IWorkshopsService
@@ -184,6 +185,11 @@ namespace TicDrive.Services
 
                 return nearbyWorkshops;
             }
+        }
+
+        public List<Specialization> GetSpecializations()
+        {
+            return _context.Specializations.ToList();
         }
     }
 }

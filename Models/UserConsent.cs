@@ -12,6 +12,6 @@ namespace TicDrive.Models
         public int LegalDeclarationId { get; set;}
         [ForeignKey(nameof(LegalDeclarationId))]
         public LegalDeclaration LegalDeclaration { get; set;}
-        public System.DateTime When { get; set;}
+        public System.DateTime? When { get; set;} = System.DateTime.UtcNow; 
     }
 }

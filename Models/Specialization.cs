@@ -1,4 +1,4 @@
-﻿namespace TicDrive.Models.Workshops
+﻿namespace TicDrive.Models
 {
     public class Specialization
     {

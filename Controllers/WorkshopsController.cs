@@ -112,5 +112,12 @@ namespace TicDrive.Controllers
 
             return Ok(new { nearbyWorkshops = pagedNearbyWorkshops, Count = nearbyWorkshops.Count() });
         }
+
+        [HttpGet]
+        [Route("specializations")]
+        public IActionResult GetSpecializations()
+        {
+            return Ok(_workshopsService.GetSpecializations());
+        }
     }
 }

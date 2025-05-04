@@ -61,15 +61,27 @@ namespace TicDrive.Context
                     .HasPrecision(18, 6);
             });
 
+            //Car
             modelBuilder
-            .Entity<Car>() 
-            .Property(e => e.TransmissionType)
-            .HasConversion<string>();
+                .Entity<Car>() 
+                .Property(e => e.TransmissionType)
+                .HasConversion<string>();
 
             modelBuilder
-           .Entity<Car>()
-           .Property(e => e.FuelType)
-           .HasConversion<string>();
+               .Entity<Car>()
+               .Property(e => e.FuelType)
+               .HasConversion<string>();
+
+            //LegalDeclaration
+            modelBuilder
+                .Entity<LegalDeclaration>()
+                .Property(ld => ld.Type)
+                .HasConversion<string>();
+
+            modelBuilder
+                .Entity<LegalDeclaration>()
+                .Property(ld => ld.Context)
+                .HasConversion<string>();
         }
 
         public DbSet<Service> Services { get; set; }

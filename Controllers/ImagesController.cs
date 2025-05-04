@@ -13,12 +13,12 @@ namespace TicDrive.Controllers
     [Route("api/[controller]")]
     public class ImagesController : ControllerBase
     {
-        private readonly AuthService _authService;
+        private readonly IAuthService _authService;
         private readonly BlobServiceClient _blobServiceClient;
         private readonly TicDriveDbContext _dbContext;
         private const string CONTAINER_NAME = "user-images";
 
-        public ImagesController(BlobServiceClient blobServiceClient, TicDriveDbContext dbContext, AuthService authService)
+        public ImagesController(BlobServiceClient blobServiceClient, TicDriveDbContext dbContext, IAuthService authService)
         {
             _blobServiceClient = blobServiceClient;
             _dbContext = dbContext;
@@ -28,6 +28,7 @@ namespace TicDrive.Controllers
         [HttpPost("{userId}")]
         public async Task<IActionResult> UploadImage(string userId, IFormFile file)
         {
+
             if (file == null || file.Length == 0)
                 return BadRequest("File is required.");
 

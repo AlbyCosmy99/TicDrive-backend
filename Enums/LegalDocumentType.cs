@@ -4,6 +4,7 @@
     {
         PrivacyPolicy,
         TermsAndConditions,
-        DeclarationOfConformity
+        DeclarationOfConformity,
+        SocialUpdates
     }
 }
