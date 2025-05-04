@@ -15,6 +15,11 @@ namespace TicDrive.Models
         public decimal? Latitude { get; set; }
         public decimal? Longitude { get; set; }
         public string? ProfileImageUrl { get; set; }
+
+        public string ResetPasswordCode { get; set; } = string.Empty;
+        public System.DateTime ResetPasswordExpiry { get; set; } = System.DateTime.UtcNow.AddMinutes(10);
+        public string ResetPasswordToken { get; set; } = string.Empty;
+        public System.DateTime? RegistrationDate { get; set; } = System.DateTime.UtcNow;
         private bool? _isVerified;
         public bool? IsVerified
         {
@@ -31,9 +36,5 @@ namespace TicDrive.Models
                 }
             }
         }
-        public string ResetPasswordCode { get; set; } = string.Empty;
-        public System.DateTime ResetPasswordExpiry { get; set; } = System.DateTime.UtcNow.AddMinutes(10);
-        public string ResetPasswordToken { get; set; } = string.Empty;
-        public System.DateTime? RegistrationDate { get; set; } = System.DateTime.UtcNow;
     }
 }

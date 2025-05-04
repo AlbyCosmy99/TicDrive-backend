@@ -15,7 +15,7 @@ namespace TicDrive.Models.Workshops
         private User _workshop;
 
         [ForeignKey(nameof(WorkshopId))]
-        public required User Workshop
+        public User Workshop
         {
             get => _workshop;
             set
@@ -31,7 +31,7 @@ namespace TicDrive.Models.Workshops
         public int DayId { get; set; }
 
         [ForeignKey(nameof(DayId))]
-        public required Day Day { get; set; }
+        public Day Day { get; set; }
 
         public TimeOnly? MorningStartTime { get; set; }
         public TimeOnly? MorningEndTime { get; set; }

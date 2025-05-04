@@ -6,6 +6,7 @@ using System.Security.Claims;
 using System.Text;
 using TicDrive.Context;
 using TicDrive.Models;
+using TicDrive.Models.Workshops;
 using static TicDrive.Controllers.AuthController;
 
 namespace TicDrive.Services
@@ -19,6 +20,7 @@ namespace TicDrive.Services
         string? GetUserName(Dictionary<string, string> userClaims);
         Task<User> GetUserData(string userId);
         Task UpdateUser(string userId, UpdatedUser updateUserQuery);
+        void RegisterWorkshop(string userId, string workshopName, List<int> specializations, List<int> services, Dictionary<int, ScheduleEntry> schedule, string description, int laborWarrantyMonths, int maxDailyVehicles, bool offersHomeServices, string signatureName, string signatureSurname);
     }
     public class AuthService : IAuthService
     {
@@ -113,5 +115,69 @@ namespace TicDrive.Services
             await _context.SaveChangesAsync();
         }
 
+        public void RegisterWorkshop(
+            string userId,
+            string workshopName,
+            List<int> specializations,
+            List<int> services,
+            Dictionary<int, ScheduleEntry> schedule,
+            string description, 
+            int laborWarrantyMonths,
+            int maxDailyVehicles, 
+            bool offersHomeServices,
+            string signatureName, 
+            string signatureSurname)
+        {
+            var workshopDetails = new WorkshopDetails
+            {
+                WorkshopId = userId,
+                WorkshopName = workshopName,
+                Description = description,
+                LaborWarrantyMonths = laborWarrantyMonths,
+                MaxDailyVehicles = maxDailyVehicles,
+                OffersHomeServices = offersHomeServices,
+                SignatureName = signatureName,
+                SignatureSurname = signatureSurname,    
+                SignatureDate = System.DateTime.UtcNow
+            };
+
+            _context.WorkshopsDetails.Add(workshopDetails);
+
+            foreach (var specialization in specializations)
+            {
+                _context.WorkshopsSpecializations.Add(new WorkshopSpecialization
+                {
+                    WorkshopId = userId,
+                    SpecializationId = specialization
+                });
+            }
+
+            foreach (var service in services)
+            {
+                _context.OfferedServices.Add(new OfferedServices
+                {
+                    WorkshopId = userId,
+                    ServiceId = service
+                });
+            }
+
+            foreach (var kvp in schedule)
+            {
+                int dayId = kvp.Key;
+                var entry = kvp.Value;
+
+                _context.WorkshopsSchedules.Add(new WorkshopSchedule
+                {
+                    WorkshopId = userId,
+                    DayId = dayId,
+                    MorningStartTime = entry.MorningStartTime,
+                    MorningEndTime = entry.MorningEndTime,
+                    AfternoonStartTime = entry.AfternoonStartTime,
+                    AfternoonEndTime = entry.AfternoonEndTime
+                });
+            }
+
+            _context.SaveChanges();
+        }
     }
 }

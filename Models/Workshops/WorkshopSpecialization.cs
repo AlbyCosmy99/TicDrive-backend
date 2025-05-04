@@ -10,7 +10,7 @@ namespace TicDrive.Models.Workshops
         public string WorkshopId { get; set; }
         private User _workshop;
         [ForeignKey(nameof(WorkshopId))]
-        public required User Workshop
+        public User Workshop
         {
             get => _workshop;
             set

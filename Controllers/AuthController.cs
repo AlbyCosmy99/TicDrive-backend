@@ -45,11 +45,20 @@ namespace TicDrive.Controllers
             _loginLogger = loginLogger;
         }
 
+        public class ScheduleEntry
+        {
+            public TimeOnly? MorningStartTime { get; set; }
+            public TimeOnly? MorningEndTime { get; set; }
+            public TimeOnly? AfternoonStartTime { get; set; }
+            public TimeOnly? AfternoonEndTime { get; set; }
+        }
+
         public class RegisterBody
         {
             [Required]
             [MinLength(1, ErrorMessage = "Name must be at least 1 character long.")]
             public string Name { get; set; } = string.Empty;
+            public string? Surname { get; set; }
 
             [Required]
             [EmailAddress]
@@ -74,7 +83,29 @@ namespace TicDrive.Controllers
 
             [RequiredIfUserType(2, ErrorMessage = "Longitude is required when UserType is 2 (workshop).")]
             public decimal? Longitude { get; set; }
-            public bool? IsVerified { get; set; }
+            [RequiredIfUserType(2, ErrorMessage = "WorkshopName is required when UserType is 2 (workshop).")]
+            public string? WorkshopName { get; set; }
+            [RequiredIfUserType(2, ErrorMessage = "Consents list is required when UserType is 2 (workshop).")]
+            public List<int>? Consents { get; set; } = [];
+            public string? PersonalPhoneNumber { get; set; }
+            public string? PersonalEmail { get; set; }
+            [RequiredIfUserType(2, ErrorMessage = "Specializations list is required when UserType is 2 (workshop).")]
+            public List<int>? Specializations { get; set; } = [];
+            [RequiredIfUserType(2, ErrorMessage = "Services list is required when UserType is 2 (workshop).")]
+            public List<int>? Services { get; set; } = [];
+            [RequiredIfUserType(2, ErrorMessage = "Schedule is required when UserType is 2 (workshop).")]
+            public Dictionary<int, ScheduleEntry>? Schedule = [];
+            public bool OffersHomeServices { get; set; } = false;
+            public int MaxDailyVehicles { get; set; } = 2;
+            [RequiredIfUserType(2, ErrorMessage = "Description is required when UserType is 2 (workshop).")]
+            public string? Description { get; set; }
+            public List<int> SpokenLanguages { get; set; } = [];
+            public int LaborWarrantyMonths { get; set; } = 0;
+            [RequiredIfUserType(2, ErrorMessage = "SignatureName is required when UserType is 2 (workshop).")]
+            public string? SignatureName { get; set; }
+            [RequiredIfUserType(2, ErrorMessage = "SignatureSurname is required when UserType is 2 (workshop).")]
+            public string? SignatureSurname { get; set; }
+
         }
 
         [HttpPost]
@@ -102,11 +133,11 @@ namespace TicDrive.Controllers
                             var user = new User
                             {
                                 Name = payload.Name,
+                                Surname = payload.Surname,
                                 Email = payload.Email,
                                 UserName = payload.Email,
                                 EmailConfirmed = false,
                                 UserType = payload.UserType,
-                                IsVerified = payload.IsVerified,
                                 ProfileImageUrl = "https://cdn1.iconfinder.com/data/icons/user-pictures/100/male3-512.png"
                             };
 
@@ -149,6 +180,32 @@ namespace TicDrive.Controllers
                             await _emailService.SendEmailAsync(user.Email, "Benvenuto! Conferma la tua mail.", formattedBody);
 
                             var token = _authService.GenerateToken(user);
+
+                            foreach (var consent in payload.Consents)
+                            {
+                                _context.UserConsents.Add(new UserConsent
+                                {
+                                    UserId = user.Id,
+                                    LegalDeclarationId = consent,
+                                    When = System.DateTime.UtcNow
+                                });
+                            }
+
+
+                            foreach (var language in payload.SpokenLanguages)
+                            {
+                                _context.SpokenLanguages.Add(new UserSpokenLanguage
+                                {
+                                    UserId = user.Id,
+                                    LanguageId = language
+                                });
+                            }
+
+                            if (user.UserType == UserType.Workshop)
+                            {
+                                _authService.RegisterWorkshop(user.Id, payload.WorkshopName, payload.Specializations, payload.Services, payload.Schedule,payload.Description, payload.LaborWarrantyMonths, payload.MaxDailyVehicles, payload.OffersHomeServices, payload.SignatureName, payload.SignatureSurname);
+                            }
+
                             await _context.Database.CommitTransactionAsync();
 
                             return Ok(new

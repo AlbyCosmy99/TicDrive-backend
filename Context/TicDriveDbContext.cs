@@ -93,6 +93,7 @@ namespace TicDrive.Context
         public DbSet<LegalDeclaration> LegalDeclarations { get; set; } 
         public DbSet<UserConsent> UserConsents { get; set; }
         public DbSet<UserImage> UserImages { get; set; }
+        public DbSet<UserSpokenLanguage> SpokenLanguages { get; set; }
 
 
         //logs

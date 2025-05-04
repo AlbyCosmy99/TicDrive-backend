@@ -4,14 +4,14 @@ namespace TicDrive.Models
 {
     public class OfferedServices
     {
-        public required int Id { get; set; }
+        public int Id { get; set; }
         public required int ServiceId { get; set; }
         [ForeignKey(nameof(ServiceId))]
-        public required Service Service { get; set; }
+        public Service Service { get; set; }
         private User _workshop;
         public required string WorkshopId { get; set; }
         [ForeignKey(nameof(WorkshopId))]
-        public required User Workshop
+        public User Workshop
         {
             get => _workshop;
             set
@@ -22,8 +22,8 @@ namespace TicDrive.Models
                 }
             }
         }
-        public required decimal Price { get; set; }
-        public required char Currency { get; set; } = '€';
+        public decimal? Price { get; set; } = 0; //TODO: to make it required once the workshops can add prices on their own
+        public char? Currency { get; set; } = '€';
         public decimal? Discount { get; set; } = 0;
     } 
 }
