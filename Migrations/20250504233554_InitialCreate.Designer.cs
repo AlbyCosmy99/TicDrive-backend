@@ -12,8 +12,8 @@ using TicDrive.Context;
 namespace TicDrive.Migrations
 {
     [DbContext(typeof(TicDriveDbContext))]
-    [Migration("20250504001312_addWorkshopsModels3")]
-    partial class addWorkshopsModels3
+    [Migration("20250504233554_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -226,8 +226,8 @@ namespace TicDrive.Migrations
                     b.Property<string>("Content")
                         .HasColumnType("text");
 
-                    b.Property<int?>("Context")
-                        .HasColumnType("integer");
+                    b.Property<string>("Context")
+                        .HasColumnType("text");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
@@ -239,8 +239,9 @@ namespace TicDrive.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("Type")
-                        .HasColumnType("integer");
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("Url")
                         .HasColumnType("text");
@@ -409,6 +410,23 @@ namespace TicDrive.Migrations
                     b.ToTable("ServicesTranslations");
                 });
 
+            modelBuilder.Entity("TicDrive.Models.Specialization", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Specializations");
+                });
+
             modelBuilder.Entity("TicDrive.Models.User", b =>
                 {
                     b.Property<string>("Id")
@@ -520,7 +538,7 @@ namespace TicDrive.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("When")
+                    b.Property<DateTime?>("When")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
@@ -582,23 +600,6 @@ namespace TicDrive.Migrations
                     b.ToTable("SpokenLanguages");
                 });
 
-            modelBuilder.Entity("TicDrive.Models.Workshops.Specialization", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Specializations");
-                });
-
             modelBuilder.Entity("TicDrive.Models.Workshops.WorkshopDetails", b =>
                 {
                     b.Property<int>("Id")
@@ -621,11 +622,9 @@ namespace TicDrive.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<string>("PersonalEmail")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("PersonalPhoneNumber")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime>("SignatureDate")
@@ -967,7 +966,7 @@ namespace TicDrive.Migrations
 
             modelBuilder.Entity("TicDrive.Models.Workshops.WorkshopSpecialization", b =>
                 {
-                    b.HasOne("TicDrive.Models.Workshops.Specialization", "Specialization")
+                    b.HasOne("TicDrive.Models.Specialization", "Specialization")
                         .WithMany()
                         .HasForeignKey("SpecializationId")
                         .OnDelete(DeleteBehavior.Cascade)
