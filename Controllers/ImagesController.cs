@@ -54,7 +54,6 @@ namespace TicDrive.Controllers
             return Ok(new { message = "All images uploaded successfully" });
         }
 
-
         [Authorize]
         [HttpGet("")]
         public async Task<IActionResult> GetUserImages()
