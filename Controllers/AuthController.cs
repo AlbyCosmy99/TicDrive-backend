@@ -94,7 +94,7 @@ namespace TicDrive.Controllers
             [RequiredIfUserType(2, ErrorMessage = "Services list is required when UserType is 2 (workshop).")]
             public List<int>? Services { get; set; } = [];
             [RequiredIfUserType(2, ErrorMessage = "Schedule is required when UserType is 2 (workshop).")]
-            public Dictionary<string, ScheduleEntry>? Schedule = [];
+            public Dictionary<string, ScheduleEntry>? Schedule { get; set; } = [];
             public bool OffersHomeServices { get; set; } = false;
             public int MaxDailyVehicles { get; set; } = 2;
             [RequiredIfUserType(2, ErrorMessage = "Description is required when UserType is 2 (workshop).")]
