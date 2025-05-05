@@ -94,7 +94,7 @@ namespace TicDrive.Controllers
             [RequiredIfUserType(2, ErrorMessage = "Services list is required when UserType is 2 (workshop).")]
             public List<int>? Services { get; set; } = [];
             [RequiredIfUserType(2, ErrorMessage = "Schedule is required when UserType is 2 (workshop).")]
-            public Dictionary<int, ScheduleEntry>? Schedule = [];
+            public Dictionary<string, ScheduleEntry>? Schedule = [];
             public bool OffersHomeServices { get; set; } = false;
             public int MaxDailyVehicles { get; set; } = 2;
             [RequiredIfUserType(2, ErrorMessage = "Description is required when UserType is 2 (workshop).")]
@@ -206,7 +206,26 @@ namespace TicDrive.Controllers
 
                             if (user.UserType == UserType.Workshop)
                             {
-                                _authService.RegisterWorkshop(user.Id, payload.WorkshopName, payload.Specializations, payload.Services, payload.Schedule,payload.Description, payload.LaborWarrantyMonths, payload.MaxDailyVehicles, payload.OffersHomeServices, payload.SignatureName, payload.SignatureSurname);
+                                var parsedSchedule = payload.Schedule?
+                                    .Where(kvp => int.TryParse(kvp.Key, out _))
+                                    .ToDictionary(
+                                        kvp => int.Parse(kvp.Key),
+                                        kvp => kvp.Value
+                                    ) ?? new Dictionary<int, ScheduleEntry>();
+
+                                await _authService.RegisterWorkshop(
+                                    user.Id,
+                                    payload.WorkshopName!,
+                                    payload.Specializations!,
+                                    payload.Services!,
+                                    parsedSchedule,
+                                    payload.Description!,
+                                    payload.LaborWarrantyMonths,
+                                    payload.MaxDailyVehicles,
+                                    payload.OffersHomeServices,
+                                    payload.SignatureName!,
+                                    payload.SignatureSurname!
+                                );
                             }
 
                             await _context.Database.CommitTransactionAsync();

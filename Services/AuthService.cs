@@ -20,7 +20,7 @@ namespace TicDrive.Services
         string? GetUserName(Dictionary<string, string> userClaims);
         Task<User> GetUserData(string userId);
         Task UpdateUser(string userId, UpdatedUser updateUserQuery);
-        void RegisterWorkshop(string userId, string workshopName, List<int> specializations, List<int> services, Dictionary<int, ScheduleEntry> schedule, string description, int laborWarrantyMonths, int maxDailyVehicles, bool offersHomeServices, string signatureName, string signatureSurname);
+        Task RegisterWorkshop(string userId, string workshopName, List<int> specializations, List<int> services, Dictionary<int, ScheduleEntry> schedule, string description, int laborWarrantyMonths, int maxDailyVehicles, bool offersHomeServices, string signatureName, string signatureSurname);
     }
     public class AuthService : IAuthService
     {
@@ -115,7 +115,7 @@ namespace TicDrive.Services
             await _context.SaveChangesAsync();
         }
 
-        public void RegisterWorkshop(
+        public async Task RegisterWorkshop(
             string userId,
             string workshopName,
             List<int> specializations,
@@ -177,7 +177,7 @@ namespace TicDrive.Services
                 });
             }
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
     }
 }
