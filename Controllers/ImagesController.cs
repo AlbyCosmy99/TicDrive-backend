@@ -25,33 +25,35 @@ namespace TicDrive.Controllers
             _authService = authService;
         }
 
-        [HttpPost("{userId}")]
-        public async Task<IActionResult> UploadImage(string userId, IFormFile file)
+        [HttpPost("{userId}/multiple")]
+        public async Task<IActionResult> UploadImages(string userId, List<IFormFile> files)
         {
-
-            if (file == null || file.Length == 0)
-                return BadRequest("File is required.");
+            if (files == null || files.Count == 0)
+                return BadRequest("Files are required.");
 
             var containerClient = _blobServiceClient.GetBlobContainerClient(CONTAINER_NAME);
             await containerClient.CreateIfNotExistsAsync();
 
-            var blobName = $"{userId}/{Guid.NewGuid()}_{file.FileName}";
-            var blobClient = containerClient.GetBlobClient(blobName);
-
-            using var stream = file.OpenReadStream();
-            await blobClient.UploadAsync(stream, overwrite: true);
-
-            var userImage = new UserImage
+            foreach (var file in files)
             {
-                UserId = userId,
-                Url = blobName
-            };
+                var blobName = $"{userId}/{Guid.NewGuid()}_{file.FileName}";
+                var blobClient = containerClient.GetBlobClient(blobName);
 
-            _dbContext.UserImages.Add(userImage);
+                using var stream = file.OpenReadStream();
+                await blobClient.UploadAsync(stream, overwrite: true);
+
+                _dbContext.UserImages.Add(new UserImage
+                {
+                    UserId = userId,
+                    Url = blobName
+                });
+            }
+
             await _dbContext.SaveChangesAsync();
 
-            return Ok(new { message = "Image uploaded", blobName });
+            return Ok(new { message = "All images uploaded successfully" });
         }
+
 
         [Authorize]
         [HttpGet("")]
