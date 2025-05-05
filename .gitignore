@@ -46,3 +46,7 @@ Thumbs.db          # Windows system files
 # Ignore .backup.json files
 *.backup.json
 
+# Don't ignore appsettings JSON files
+!appsettings.json
+!appsettings.Development.json
+!appsettings.Production.json
