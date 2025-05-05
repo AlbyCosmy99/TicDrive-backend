@@ -20,7 +20,7 @@ namespace TicDrive.Services
         string? GetUserName(Dictionary<string, string> userClaims);
         Task<User> GetUserData(string userId);
         Task UpdateUser(string userId, UpdatedUser updateUserQuery);
-        Task RegisterWorkshop(string userId, string workshopName, List<int> specializations, List<int> services, Dictionary<int, ScheduleEntry> schedule, string description, int laborWarrantyMonths, int maxDailyVehicles, bool offersHomeServices, string signatureName, string signatureSurname);
+        void RegisterWorkshop(string userId, string workshopName, List<int> specializations, List<int> services, Dictionary<int, ScheduleEntry> schedule, string description, int laborWarrantyMonths, int maxDailyVehicles, bool offersHomeServices, string signatureName, string signatureSurname);
     }
     public class AuthService : IAuthService
     {
@@ -115,17 +115,17 @@ namespace TicDrive.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task RegisterWorkshop(
+        public void RegisterWorkshop(
             string userId,
             string workshopName,
             List<int> specializations,
             List<int> services,
             Dictionary<int, ScheduleEntry> schedule,
-            string description,
+            string description, 
             int laborWarrantyMonths,
-            int maxDailyVehicles,
+            int maxDailyVehicles, 
             bool offersHomeServices,
-            string signatureName,
+            string signatureName, 
             string signatureSurname)
         {
             var workshopDetails = new WorkshopDetails
@@ -137,8 +137,8 @@ namespace TicDrive.Services
                 MaxDailyVehicles = maxDailyVehicles,
                 OffersHomeServices = offersHomeServices,
                 SignatureName = signatureName,
-                SignatureSurname = signatureSurname,
-                SignatureDate = DateTime.UtcNow
+                SignatureSurname = signatureSurname,    
+                SignatureDate = System.DateTime.UtcNow
             };
 
             _context.WorkshopsDetails.Add(workshopDetails);
@@ -177,8 +177,7 @@ namespace TicDrive.Services
                 });
             }
 
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
         }
-
     }
 }
