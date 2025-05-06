@@ -28,7 +28,7 @@ namespace TicDrive.Models.Workshops
         public string? PersonalEmail { get; set; }
         public bool? OffersHomeServices { get; set; } = false;
         public int MaxDailyVehicles { get; set; } = 2;
-        public string Description { get; set; }
+        public string? Description { get; set; }
         public int LaborWarrantyMonths { get; set; } = 0;
         public string SignatureName { get; set; }
         public string SignatureSurname { get; set; }
