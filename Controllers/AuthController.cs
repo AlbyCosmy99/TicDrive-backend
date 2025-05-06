@@ -140,8 +140,7 @@ namespace TicDrive.Controllers
                                 UserType = payload.UserType,
                                 Latitude = payload.Latitude,
                                 Longitude = payload.Longitude,
-                                Address = payload.Address,
-                                ProfileImageUrl = "https://cdn1.iconfinder.com/data/icons/user-pictures/100/male3-512.png"
+                                Address = payload.Address
                             };
 
                             var result = await _userManager.CreateAsync(user, payload.Password);
@@ -342,7 +341,6 @@ namespace TicDrive.Controllers
             var user = await _userManager.FindByEmailAsync(payload.Email);
             if (user == null)
             {
-                await _loginLogger.LogAsync(user.Id, false, "Invalid email", HttpContext);
                 return Unauthorized("Invalid email or password.");
             }
 
@@ -438,8 +436,24 @@ namespace TicDrive.Controllers
                 var email = _authService.GetUserEmail(userClaims);
                 var userId = _authService.GetUserId(userClaims);
                 var name = _authService.GetUserName(userClaims);
+                var userType = _authService.GetUserType(userClaims);
 
-                var userData = await _authService.GetUserData(userId);
+                if (userId == null)
+                {
+                    return BadRequest("User info not found. Payload broken.");
+                }
+
+                if (userType == null)
+                {
+                    return BadRequest("Invalid user type.");
+                }
+
+                var userData = await _authService.GetUserData((UserType) userType, userId);
+
+                if(userData == null)
+                {
+                    return BadRequest("User data not found.");
+                }
 
                 return Ok(new
                 {
@@ -447,7 +461,6 @@ namespace TicDrive.Controllers
                     userId,
                     email,
                     name,
-                    imageUrl = userData.ProfileImageUrl,
                     phoneNumber = userData.PhoneNumber,
                     address = userData.Address
                 });
@@ -458,6 +471,7 @@ namespace TicDrive.Controllers
             }
         }
 
+
         [HttpGet]
         [Authorize]
         [Route("get-user-data")]
@@ -467,10 +481,24 @@ namespace TicDrive.Controllers
             {
                 var userClaims = _authService.GetUserClaims(this);
                 var userId = _authService.GetUserId(userClaims);
+                var userType = _authService.GetUserType(userClaims);
 
-                var userData = await _authService.GetUserData(userId);
+                if(userId == null)
+                {
+                    return BadRequest("User info not found. Payload broken.");
+                }
 
-                return Ok(_mapper.Map<FullUserDto>(userData));
+                if (userType == null)
+                {
+                    return BadRequest("Invalid user type.");
+                }
+
+                var userData = await _authService.GetUserData((UserType) userType, userId);
+
+                if (userData == null)
+                    return NotFound("User data not found.");
+
+                return Ok(userData);
             }
             catch (ArgumentNullException ex)
             {
@@ -541,9 +569,10 @@ namespace TicDrive.Controllers
             }
 
             var user = await _userManager.FindByEmailAsync(payload.Email);
+
             if (user == null)
             {
-                return BadRequest(new { Message = "Invalid request." });
+                return NotFound("Invalid request. User not found.");
             }
 
             var result = await _userManager.ResetPasswordAsync(user, user.ResetPasswordToken, payload.NewPassword);
@@ -573,12 +602,13 @@ namespace TicDrive.Controllers
             }
 
             var user = await _userManager.FindByEmailAsync(query.Email);
+
             if (user == null)
             {
-                return NotFound(new { Message = "Invalid request. User not found." });
+                return NotFound("Invalid request. User not found.");
             }
 
-            if(user.ResetPasswordCode == query.Code)
+            if (user.ResetPasswordCode == query.Code)
             {
                 return NoContent();
             }
@@ -591,7 +621,6 @@ namespace TicDrive.Controllers
             public string? Address { get; set; }
             public decimal? Latitude { get; set; }
             public decimal? Longitude { get; set; }
-            public string? ProfileImageUrl { get; set; }
             public string? PhoneNumber { get; set; }
             public string? Email { get; set; }
 
@@ -608,6 +637,12 @@ namespace TicDrive.Controllers
             }
             var userClaims = _authService.GetUserClaims(this);
             var userId = _authService.GetUserId(userClaims);
+
+            if (userId == null)
+            {
+                return NotFound("Invalid request. User not found.");
+            }
+
             await _authService.UpdateUser(userId, newUser);
 
             return NoContent();

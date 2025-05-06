@@ -27,7 +27,7 @@ namespace TicDrive.Services
                     Id = review.Id,
                     CustomerId = review.CustomerId!,
                     CustomerName = review.Customer.Name,
-                    CustomerImageUrl = review.Customer.ProfileImageUrl ?? string.Empty,
+                    //CustomerImageUrl = review.Customer.ProfileImageUrl ?? string.Empty, TODO
                     WorkshopId = review.WorkshopId,
                     Text = review.Text,
                     WhenPublished = review.WhenPublished,

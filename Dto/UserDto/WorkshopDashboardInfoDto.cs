@@ -9,7 +9,6 @@ namespace TicDrive.Dto.UserDto
         public string? Address { get; set; }
         public decimal? Longitude { get; set; }
         public decimal? Latitude { get; set; }
-        public string? ProfileImageUrl { get; set; }
         public double MeanStars { get; set; }
         public int NumberOfReviews { get; set; }
         public decimal? ServicePrice { get; set; }

@@ -8,14 +8,13 @@ namespace TicDrive.Models
         public int Id { get; set; }
 
         [Required]
-        public string UserId { get; set; }
+        public required string UserId { get; set; }
 
         [ForeignKey(nameof(UserId))]
         public User User { get; set; }
 
         [Required]
-        [Url]
-        public string Url { get; set; } = string.Empty;
+        public required string Filename { get; set; }
         public bool? IsMainImage { get; set; } = false;
     }
 }

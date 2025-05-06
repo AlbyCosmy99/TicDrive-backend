@@ -1,11 +1,13 @@
-﻿using Azure.Storage.Blobs;
-using Azure.Storage.Sas;
+﻿using AutoMapper;
+using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TicDrive.Context;
+using TicDrive.Dto.UserImageDto;
 using TicDrive.Models;
 using TicDrive.Services;
+using TicDrive.utils.files;
 
 namespace TicDrive.Controllers
 {
@@ -13,20 +15,34 @@ namespace TicDrive.Controllers
     [Route("api/[controller]")]
     public class ImagesController : ControllerBase
     {
-        private readonly IAuthService _authService;
-        private readonly BlobServiceClient _blobServiceClient;
-        private readonly TicDriveDbContext _dbContext;
         private const string CONTAINER_NAME = "user-images";
 
-        public ImagesController(BlobServiceClient blobServiceClient, TicDriveDbContext dbContext, IAuthService authService)
+        private readonly IAuthService _authService;
+        private readonly IImagesService _imagesService;
+        private readonly BlobServiceClient _blobServiceClient;
+        private readonly TicDriveDbContext _dbContext;
+        private readonly IMapper _mapper;
+
+
+        public ImagesController(
+            BlobServiceClient blobServiceClient, 
+            TicDriveDbContext dbContext, 
+            IAuthService authService, 
+            IImagesService imagesService, 
+            IMapper mapper)
         {
             _blobServiceClient = blobServiceClient;
             _dbContext = dbContext;
             _authService = authService;
+            _imagesService = imagesService;
+            _mapper = mapper;
         }
 
         [HttpPost("{userId}/multiple")]
-        public async Task<IActionResult> UploadImages(string userId, List<IFormFile> files)
+        public async Task<IActionResult> UploadImages(
+          string userId,
+          List<IFormFile> files,
+          [FromForm] int mainImageIndex = 0)
         {
             if (files == null || files.Count == 0)
                 return BadRequest("Files are required.");
@@ -34,8 +50,13 @@ namespace TicDrive.Controllers
             var containerClient = _blobServiceClient.GetBlobContainerClient(CONTAINER_NAME);
             await containerClient.CreateIfNotExistsAsync();
 
-            foreach (var file in files)
+            var existingImages = _dbContext.UserImages.Where(ui => ui.UserId == userId);
+            foreach (var img in existingImages)
+                img.IsMainImage = false;
+
+            for (int i = 0; i < files.Count; i++)
             {
+                var file = files[i];
                 var blobName = $"{userId}/{Guid.NewGuid()}_{file.FileName}";
                 var blobClient = containerClient.GetBlobClient(blobName);
 
@@ -45,7 +66,8 @@ namespace TicDrive.Controllers
                 _dbContext.UserImages.Add(new UserImage
                 {
                     UserId = userId,
-                    Url = blobName
+                    Filename = blobName,
+                    IsMainImage = (i == mainImageIndex)
                 });
             }
 
@@ -54,70 +76,26 @@ namespace TicDrive.Controllers
             return Ok(new { message = "All images uploaded successfully" });
         }
 
+        public class GetUserImagesQuery
+        {
+            public int Take { get; set; }
+        }
+
         [Authorize]
         [HttpGet("")]
-        public async Task<IActionResult> GetUserImages()
+        public async Task<IActionResult> GetUserImages([FromQuery] GetUserImagesQuery query)
         {
             var userClaims = _authService.GetUserClaims(this);
             var userId = _authService.GetUserId(userClaims);
 
-            var userImages = await _dbContext.UserImages
-                .Where(img => img.UserId == userId)
-                .OrderByDescending(img => img.Id)
-                .ToListAsync();
-
-            if (!userImages.Any())
-                return NotFound();
-
-            var containerClient = _blobServiceClient.GetBlobContainerClient(CONTAINER_NAME);
-
-            var result = new List<object>();
-
-            foreach (var image in userImages)
+            if (userId == null)
             {
-                var blobClient = containerClient.GetBlobClient(image.Url);
-
-                if (await blobClient.ExistsAsync())
-                {
-                    var sasUri = GenerateSasUri(blobClient, TimeSpan.FromMinutes(15));
-
-                    result.Add(new
-                    {
-                        image.Id,
-                        image.UserId,
-                        Url = sasUri.ToString()
-                    });
-                }
+                return BadRequest("User info not found. Payload broken.");
             }
 
-            return Ok(result);
-        }
+            var images = await _imagesService.GetUserImagesAsync(userId, query?.Take ?? 5);
 
-        private Uri GenerateSasUri(BlobClient blobClient, TimeSpan validFor)
-        {
-            var sasBuilder = new BlobSasBuilder
-            {
-                BlobContainerName = blobClient.BlobContainerName,
-                BlobName = blobClient.Name,
-                Resource = "b",
-                ExpiresOn = DateTimeOffset.UtcNow.Add(validFor)
-            };
-
-            sasBuilder.SetPermissions(BlobSasPermissions.Read);
-
-            return blobClient.GenerateSasUri(sasBuilder);
-        }
-
-        private string? GetContentTypeFromExtension(string fileName)
-        {
-            var ext = Path.GetExtension(fileName).ToLowerInvariant();
-            return ext switch
-            {
-                ".jpg" or ".jpeg" => "image/jpeg",
-                ".png" => "image/png",
-                ".gif" => "image/gif",
-                _ => null
-            };
+            return Ok(_mapper.Map<List<FullUserImageDto>>(images));
         }
     }
 }
