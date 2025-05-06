@@ -95,15 +95,7 @@ builder.Services.AddScoped<IClaimsTransformation, UserClaimsMapper>();
 builder.Services.AddScoped<LoginLogger>();
 
 var connection = string.Empty;
-if (builder.Environment.IsDevelopment())
-{
-    builder.Configuration.AddEnvironmentVariables().AddJsonFile("appsettings.Development.json");
-    connection = builder.Configuration.GetConnectionString("TICDRIVE_RAILWAY_POSTGRESQL_CONNECTIONSTRING");
-}
-else
-{
-    connection = Environment.GetEnvironmentVariable("TICDRIVE_RAILWAY_POSTGRESQL_CONNECTIONSTRING");
-}
+connection = Environment.GetEnvironmentVariable("TICDRIVE_RAILWAY_POSTGRESQL_CONNECTIONSTRING");
 
 builder.Services.AddDbContext<TicDriveDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("TICDRIVE_RAILWAY_POSTGRESQL_CONNECTIONSTRING"))
