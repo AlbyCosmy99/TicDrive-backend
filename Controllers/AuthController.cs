@@ -87,6 +87,7 @@ namespace TicDrive.Controllers
             public string? WorkshopName { get; set; }
             [RequiredIfUserType(2, ErrorMessage = "Consents list is required when UserType is 2 (workshop).")]
             public List<int>? Consents { get; set; } = [];
+            public string? PhoneNumber { get; set; }
             public string? PersonalPhoneNumber { get; set; }
             public string? PersonalEmail { get; set; }
             [RequiredIfUserType(2, ErrorMessage = "Specializations list is required when UserType is 2 (workshop).")]
@@ -140,7 +141,8 @@ namespace TicDrive.Controllers
                                 UserType = payload.UserType,
                                 Latitude = payload.Latitude,
                                 Longitude = payload.Longitude,
-                                Address = payload.Address
+                                Address = payload.Address,
+                                PhoneNumber = payload.PhoneNumber
                             };
 
                             var result = await _userManager.CreateAsync(user, payload.Password);
