@@ -98,7 +98,6 @@ namespace TicDrive.Controllers
             public Dictionary<string, ScheduleEntry>? Schedule { get; set; } = [];
             public bool OffersHomeServices { get; set; } = false;
             public int MaxDailyVehicles { get; set; } = 2;
-            [RequiredIfUserType(2, ErrorMessage = "Description is required when UserType is 2 (workshop).")]
             public string? Description { get; set; }
             public List<int> SpokenLanguages { get; set; } = [];
             public int LaborWarrantyMonths { get; set; } = 0;
