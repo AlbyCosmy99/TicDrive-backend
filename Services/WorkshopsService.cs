@@ -1,7 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Autofac.Features.OwnedInstances;
+using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using TicDrive.Context;
 using TicDrive.Dto.UserDto;
 using TicDrive.Dto.UserDto.WorkshopDto;
+using TicDrive.Dto.UserImageDto;
 using TicDrive.Enums;
 using TicDrive.Models;
 using TicDrive.Utils.Location;
@@ -20,11 +23,13 @@ namespace TicDrive.Services
     {
         private readonly TicDriveDbContext _context;
         private readonly IImagesService _imagesService;
+        private readonly IMapper _mapper;
 
-        public WorkshopsService(TicDriveDbContext context, IImagesService imagesService)
+        public WorkshopsService(TicDriveDbContext context, IImagesService imagesService, IMapper mapper)
         {
             _context = context;
             _imagesService = imagesService;
+            _mapper = mapper;
         }
 
         public async Task<IEnumerable<WorkshopDashboardInfoDto>> GetWorkshops(int? serviceId, string? customerId, bool? favorite = false, string? filter = null)
@@ -63,7 +68,16 @@ namespace TicDrive.Services
 
             var uniqueWorkshops = workshopsData
                 .GroupBy(joined => joined.Workshop.Id)
-                .Select(group => group.First())
+                .Select(group => group.First());
+
+            Dictionary<string, List<FullUserImageDto>> imagesDict = [];
+            foreach (var data in uniqueWorkshops)
+            {
+                var images = await _imagesService.GetUserImagesAsync(data.Workshop.Id,1);
+                imagesDict[data.Workshop.Id] = _mapper.Map<List<FullUserImageDto>>(images);
+            }
+
+            var projectedWorkshops = uniqueWorkshops
                 .Select(joined => new WorkshopDashboardInfoDto
                 {
                     Id = joined.Workshop.Id,
@@ -77,15 +91,16 @@ namespace TicDrive.Services
                     Currency = serviceId != 0 && joined.OfferedService != null ? joined.OfferedService.Currency : null,
                     Discount = serviceId != 0 && joined.OfferedService != null ? joined.OfferedService.Discount : null,
                     IsVerified = joined.Workshop.IsVerified,
-                    IsFavorite = string.IsNullOrEmpty(customerId) ? null : favoriteWorkshopIds.Contains(joined.Workshop.Id)
+                    IsFavorite = string.IsNullOrEmpty(customerId) ? null : favoriteWorkshopIds.Contains(joined.Workshop.Id),
+                    Images = imagesDict[joined.Workshop.Id]
                 });
 
             if (favorite == true)
             {
-                uniqueWorkshops = uniqueWorkshops.Where(workshop => workshop.IsFavorite == true);
+                projectedWorkshops = projectedWorkshops.Where(workshop => workshop.IsFavorite == true);
             }
 
-            return uniqueWorkshops
+            return projectedWorkshops
                 .Where(workshop => workshop.Name.ToLower().Contains(filter?.ToLower() ?? string.Empty));
         }
 
@@ -139,7 +154,16 @@ namespace TicDrive.Services
                             (double)joined.Workshop.Longitude!
                         );
                         return distanceInMeters <= (kmRange ?? 20) * 1000;
-                    })
+                    });
+
+                Dictionary<string, List<FullUserImageDto>> imagesDict = [];
+                foreach (var data in nearbyWorkshops)
+                {
+                    var images = await _imagesService.GetUserImagesAsync(data.Workshop.Id, 1);
+                    imagesDict[data.Workshop.Id] = _mapper.Map<List<FullUserImageDto>>(images);
+                }
+
+                var projectedWorkshops = nearbyWorkshops
                     .Select(joined => new NearbyWorkshopDto
                     {
                         Id = joined.Workshop.Id,
@@ -149,10 +173,11 @@ namespace TicDrive.Services
                         Longitude = joined.Workshop.Longitude,
                         ServicePrice = joined.Service.Price,
                         Currency = joined.Service.Currency,
-                        Discount = joined.Service.Discount
+                        Discount = joined.Service.Discount,
+                        Images = imagesDict[joined.Workshop.Id]
                     });
 
-                return nearbyWorkshops;
+                return projectedWorkshops;
             }
             else
             {
@@ -174,7 +199,17 @@ namespace TicDrive.Services
                             (double)workshop.Longitude!
                         );
                         return distanceInMeters <= (kmRange ?? 20) * 1000;
-                    })
+                    });
+
+
+                Dictionary<string, List<FullUserImageDto>> imagesDict = [];
+                foreach (var workshop in nearbyWorkshops)
+                {
+                    var images = await _imagesService.GetUserImagesAsync(workshop.Id, 1);
+                    imagesDict[workshop.Id] = _mapper.Map<List<FullUserImageDto>>(images);
+                }
+
+                var projectedWorkshops = nearbyWorkshops
                     .Select(workshop => new NearbyWorkshopDto
                     {
                         Id = workshop.Id,
@@ -184,10 +219,11 @@ namespace TicDrive.Services
                         Longitude = workshop.Longitude,
                         ServicePrice = null,
                         Currency = null,
-                        Discount = null
+                        Discount = null,
+                        Images = imagesDict[workshop.Id]
                     });
 
-                return nearbyWorkshops;
+                return projectedWorkshops;
             }
         }
 

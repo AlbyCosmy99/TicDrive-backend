@@ -1,4 +1,6 @@
-﻿namespace TicDrive.Dto.UserDto.WorkshopDto
+﻿using TicDrive.Dto.UserImageDto;
+
+namespace TicDrive.Dto.UserDto.WorkshopDto
 {
     public class NearbyWorkshopDto
     {
@@ -10,5 +12,6 @@
         public decimal? ServicePrice { get; set; }
         public char? Currency { get; set; } = '€';
         public decimal? Discount { get; set; }
+        public List<FullUserImageDto> Images { get; set; } = [];
     }
 }
