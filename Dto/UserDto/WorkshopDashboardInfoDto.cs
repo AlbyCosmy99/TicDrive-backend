@@ -1,4 +1,5 @@
-﻿using TicDrive.Enums;
+﻿using TicDrive.Dto.UserImageDto;
+using TicDrive.Enums;
 
 namespace TicDrive.Dto.UserDto
 {
@@ -16,5 +17,6 @@ namespace TicDrive.Dto.UserDto
         public decimal? Discount { get; set; }
         public bool? IsVerified { get; set; }
         public bool? IsFavorite { get; set; }
+        public List<FullUserImageDto> Images { get; set; } = [];
     }
 }

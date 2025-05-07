@@ -16,9 +16,16 @@ namespace TicDrive.Services
         List<Specialization> GetSpecializations();
     }
 
-    public class WorkshopsService(TicDriveDbContext context) : IWorkshopsService
+    public class WorkshopsService : IWorkshopsService
     {
-        private readonly TicDriveDbContext _context = context;
+        private readonly TicDriveDbContext _context;
+        private readonly IImagesService _imagesService;
+
+        public WorkshopsService(TicDriveDbContext context, IImagesService imagesService)
+        {
+            _context = context;
+            _imagesService = imagesService;
+        }
 
         public async Task<IEnumerable<WorkshopDashboardInfoDto>> GetWorkshops(int? serviceId, string? customerId, bool? favorite = false, string? filter = null)
         {
