@@ -73,7 +73,7 @@ namespace TicDrive.Services
             Dictionary<string, List<FullUserImageDto>> imagesDict = [];
             foreach (var data in uniqueWorkshops)
             {
-                var images = await _imagesService.GetUserImagesAsync(data.Workshop.Id,1);
+                var images = await _imagesService.GetUserImagesAsync(data.Workshop.Id,5);
                 imagesDict[data.Workshop.Id] = _mapper.Map<List<FullUserImageDto>>(images);
             }
 
@@ -159,7 +159,7 @@ namespace TicDrive.Services
                 Dictionary<string, List<FullUserImageDto>> imagesDict = [];
                 foreach (var data in nearbyWorkshops)
                 {
-                    var images = await _imagesService.GetUserImagesAsync(data.Workshop.Id, 1);
+                    var images = await _imagesService.GetUserImagesAsync(data.Workshop.Id, 5);
                     imagesDict[data.Workshop.Id] = _mapper.Map<List<FullUserImageDto>>(images);
                 }
 
@@ -205,7 +205,7 @@ namespace TicDrive.Services
                 Dictionary<string, List<FullUserImageDto>> imagesDict = [];
                 foreach (var workshop in nearbyWorkshops)
                 {
-                    var images = await _imagesService.GetUserImagesAsync(workshop.Id, 1);
+                    var images = await _imagesService.GetUserImagesAsync(workshop.Id, 5);
                     imagesDict[workshop.Id] = _mapper.Map<List<FullUserImageDto>>(images);
                 }
 
