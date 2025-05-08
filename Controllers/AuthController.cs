@@ -99,7 +99,7 @@ namespace TicDrive.Controllers
             public bool OffersHomeServices { get; set; } = false;
             public int MaxDailyVehicles { get; set; } = 2;
             public string? Description { get; set; }
-            public List<int> SpokenLanguages { get; set; } = [];
+            public List<int>? SpokenLanguages { get; set; } = [];
             public int LaborWarrantyMonths { get; set; } = 0;
             [RequiredIfUserType(2, ErrorMessage = "SignatureName is required when UserType is 2 (workshop).")]
             public string? SignatureName { get; set; }
