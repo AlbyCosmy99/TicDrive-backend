@@ -15,10 +15,6 @@
       "RelativeMoniker": "D:0:0:{2261EFAA-42BF-489C-A394-7082C77073AA}|TicDrive.csproj|solutionrelative:controllers\\customercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{2261EFAA-42BF-489C-A394-7082C77073AA}|TicDrive.csproj|c:\\users\\asus\\desktop\\ticdrive\\ticdrivebackend\\dto\\userdto\\workshopdashboardinfodto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2261EFAA-42BF-489C-A394-7082C77073AA}|TicDrive.csproj|solutionrelative:dto\\userdto\\workshopdashboardinfodto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{2261EFAA-42BF-489C-A394-7082C77073AA}|TicDrive.csproj|c:\\users\\asus\\desktop\\ticdrive\\ticdrivebackend\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{2261EFAA-42BF-489C-A394-7082C77073AA}|TicDrive.csproj|solutionrelative:controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -209,21 +205,8 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 1,
           "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "WorkshopDashboardInfoDto.cs",
-              "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Dto\\UserDto\\WorkshopDashboardInfoDto.cs",
-              "RelativeDocumentMoniker": "Dto\\UserDto\\WorkshopDashboardInfoDto.cs",
-              "ToolTip": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Dto\\UserDto\\WorkshopDashboardInfoDto.cs",
-              "RelativeToolTip": "Dto\\UserDto\\WorkshopDashboardInfoDto.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-08T07:50:17.424Z",
-              "EditorCaption": ""
-            },
             {
               "$type": "Document",
               "DocumentIndex": 1,
@@ -232,7 +215,7 @@
               "RelativeDocumentMoniker": "Controllers\\WorkshopsController.cs",
               "ToolTip": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Controllers\\WorkshopsController.cs",
               "RelativeToolTip": "Controllers\\WorkshopsController.cs",
-              "ViewState": "AgIAAEUAAAAAAAAAAAAnwF8AAAAfAAAAAAAAAA==",
+              "ViewState": "AgIAAFcAAAAAAAAAAAAtwF8AAAAfAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-08T09:02:11.331Z",
               "EditorCaption": ""
@@ -245,14 +228,14 @@
               "RelativeDocumentMoniker": "Services\\WorkshopsService.cs",
               "ToolTip": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Services\\WorkshopsService.cs",
               "RelativeToolTip": "Services\\WorkshopsService.cs",
-              "ViewState": "AgIAADIAAAAAAAAAAAAYwIgAAAATAAAAAAAAAA==",
+              "ViewState": "AgIAAFYAAAAAAAAAAAAswGgAAAA5AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-05-06T04:44:59.82Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 11,
               "Title": "AutofacModule.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\AppConfig\\AutofacModule.cs",
               "RelativeDocumentMoniker": "AppConfig\\AutofacModule.cs",
@@ -264,7 +247,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 9,
               "Title": "ReviewsController.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Controllers\\ReviewsController.cs",
               "RelativeDocumentMoniker": "Controllers\\ReviewsController.cs",
@@ -289,7 +272,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 4,
               "Title": "WorkshopDetails.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Models\\Workshops\\WorkshopDetails.cs",
               "RelativeDocumentMoniker": "Models\\Workshops\\WorkshopDetails.cs",
@@ -301,7 +284,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 5,
               "Title": "User.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Models\\User.cs",
               "RelativeDocumentMoniker": "Models\\User.cs",
@@ -313,7 +296,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 3,
               "Title": "AuthController.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Controllers\\AuthController.cs",
               "RelativeDocumentMoniker": "Controllers\\AuthController.cs",
@@ -326,7 +309,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 10,
               "Title": "LanguagesController.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Controllers\\LanguagesController.cs",
               "RelativeDocumentMoniker": "Controllers\\LanguagesController.cs",
@@ -338,7 +321,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 6,
               "Title": "AuthService.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Services\\AuthService.cs",
               "RelativeDocumentMoniker": "Services\\AuthService.cs",
@@ -350,7 +333,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 7,
               "Title": "AutomapperConfig.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\AppConfig\\AutomapperConfig.cs",
               "RelativeDocumentMoniker": "AppConfig\\AutomapperConfig.cs",
@@ -362,7 +345,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 8,
               "Title": "OfferedServicesController.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Controllers\\OfferedServicesController.cs",
               "RelativeDocumentMoniker": "Controllers\\OfferedServicesController.cs",
@@ -374,7 +357,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 47,
+              "DocumentIndex": 46,
               "Title": "20250506050531_UpdateImageModel.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Migrations\\20250506050531_UpdateImageModel.cs",
               "RelativeDocumentMoniker": "Migrations\\20250506050531_UpdateImageModel.cs",
@@ -386,7 +369,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 12,
               "Title": "ReviewsService.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Services\\ReviewsService.cs",
               "RelativeDocumentMoniker": "Services\\ReviewsService.cs",
@@ -398,7 +381,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 14,
               "Title": "EmailService.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Services\\EmailService.cs",
               "RelativeDocumentMoniker": "Services\\EmailService.cs",
@@ -410,7 +393,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 13,
               "Title": "LogLoginAttempt.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\utils\\auth\\LogLoginAttempt.cs",
               "RelativeDocumentMoniker": "utils\\auth\\LogLoginAttempt.cs",
@@ -422,7 +405,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 17,
+              "DocumentIndex": 16,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Program.cs",
               "RelativeDocumentMoniker": "Program.cs",
@@ -434,7 +417,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 48,
+              "DocumentIndex": 47,
               "Title": "appsettings.Production.json",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\appsettings.Production.json",
               "RelativeDocumentMoniker": "appsettings.Production.json",
@@ -446,7 +429,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
+              "DocumentIndex": 15,
               "Title": "CarsService.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Services\\CarsService.cs",
               "RelativeDocumentMoniker": "Services\\CarsService.cs",
@@ -458,7 +441,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 18,
+              "DocumentIndex": 17,
               "Title": "RequiredIfUserTypeAttribute.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Attributes\\RequiredIfUserTypeAttribute.cs",
               "RelativeDocumentMoniker": "Attributes\\RequiredIfUserTypeAttribute.cs",
@@ -470,7 +453,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 22,
+              "DocumentIndex": 21,
               "Title": "LegalDocumentContext.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Enums\\LegalDocumentContext.cs",
               "RelativeDocumentMoniker": "Enums\\LegalDocumentContext.cs",
@@ -482,7 +465,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 20,
+              "DocumentIndex": 19,
               "Title": "Dockerfile",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Dockerfile",
               "RelativeDocumentMoniker": "Dockerfile",
@@ -494,7 +477,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 19,
+              "DocumentIndex": 18,
               "Title": "docker-compose.yml",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\docker-compose.yml",
               "RelativeDocumentMoniker": "docker-compose.yml",
@@ -506,7 +489,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 21,
+              "DocumentIndex": 20,
               "Title": "LegalDocumentType.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Enums\\LegalDocumentType.cs",
               "RelativeDocumentMoniker": "Enums\\LegalDocumentType.cs",
@@ -518,7 +501,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 49,
+              "DocumentIndex": 48,
               "Title": "appsettings.Development.json",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\appsettings.Development.json",
               "RelativeDocumentMoniker": "appsettings.Development.json",
@@ -530,7 +513,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 46,
+              "DocumentIndex": 45,
               "Title": "20250504233554_InitialCreate.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Migrations\\20250504233554_InitialCreate.cs",
               "RelativeDocumentMoniker": "Migrations\\20250504233554_InitialCreate.cs",
@@ -542,7 +525,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 23,
+              "DocumentIndex": 22,
               "Title": "EmailVerificationSuccess.html",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\wwwroot\\EmailVerificationSuccess.html",
               "RelativeDocumentMoniker": "wwwroot\\EmailVerificationSuccess.html",
@@ -554,7 +537,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 26,
+              "DocumentIndex": 25,
               "Title": "DateTimeController.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Controllers\\DateTimeController.cs",
               "RelativeDocumentMoniker": "Controllers\\DateTimeController.cs",
@@ -566,7 +549,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 24,
+              "DocumentIndex": 23,
               "Title": "LegalDeclarationsController.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Controllers\\LegalDeclarationsController.cs",
               "RelativeDocumentMoniker": "Controllers\\LegalDeclarationsController.cs",
@@ -578,7 +561,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 25,
+              "DocumentIndex": 24,
               "Title": "Language.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Models\\Language.cs",
               "RelativeDocumentMoniker": "Models\\Language.cs",
@@ -590,7 +573,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 28,
+              "DocumentIndex": 27,
               "Title": "Specialization.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Models\\Specialization.cs",
               "RelativeDocumentMoniker": "Models\\Specialization.cs",
@@ -602,7 +585,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 27,
+              "DocumentIndex": 26,
               "Title": "Day.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Models\\DateTime\\Day.cs",
               "RelativeDocumentMoniker": "Models\\DateTime\\Day.cs",
@@ -614,7 +597,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 31,
+              "DocumentIndex": 30,
               "Title": "UserConsent.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Models\\UserConsent.cs",
               "RelativeDocumentMoniker": "Models\\UserConsent.cs",
@@ -626,7 +609,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 29,
+              "DocumentIndex": 28,
               "Title": "TransmissionType.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Enums\\TransmissionType.cs",
               "RelativeDocumentMoniker": "Enums\\TransmissionType.cs",
@@ -638,7 +621,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 30,
+              "DocumentIndex": 29,
               "Title": "LegalDeclaration.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Models\\Legal\\LegalDeclaration.cs",
               "RelativeDocumentMoniker": "Models\\Legal\\LegalDeclaration.cs",
@@ -650,7 +633,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 32,
+              "DocumentIndex": 31,
               "Title": "TicDriveDbContext.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Context\\TicDriveDbContext.cs",
               "RelativeDocumentMoniker": "Context\\TicDriveDbContext.cs",
@@ -662,7 +645,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 33,
+              "DocumentIndex": 32,
               "Title": "LoginLog.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Models\\Log\\LoginLog.cs",
               "RelativeDocumentMoniker": "Models\\Log\\LoginLog.cs",
@@ -674,7 +657,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 34,
+              "DocumentIndex": 33,
               "Title": "Review.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Models\\Review.cs",
               "RelativeDocumentMoniker": "Models\\Review.cs",
@@ -686,7 +669,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 35,
+              "DocumentIndex": 34,
               "Title": "WorkshopNonWorkingDay.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Models\\Workshops\\WorkshopNonWorkingDay.cs",
               "RelativeDocumentMoniker": "Models\\Workshops\\WorkshopNonWorkingDay.cs",
@@ -698,7 +681,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 37,
+              "DocumentIndex": 36,
               "Title": "Service.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Models\\Service.cs",
               "RelativeDocumentMoniker": "Models\\Service.cs",
@@ -710,7 +693,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 36,
+              "DocumentIndex": 35,
               "Title": "ServiceTranslation.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Models\\ServiceTranslation.cs",
               "RelativeDocumentMoniker": "Models\\ServiceTranslation.cs",
@@ -722,7 +705,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 38,
+              "DocumentIndex": 37,
               "Title": "ServicesController.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Controllers\\ServicesController.cs",
               "RelativeDocumentMoniker": "Controllers\\ServicesController.cs",
@@ -734,7 +717,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 39,
+              "DocumentIndex": 38,
               "Title": "CustomerCar.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Models\\CustomerCar.cs",
               "RelativeDocumentMoniker": "Models\\CustomerCar.cs",
@@ -746,7 +729,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 40,
+              "DocumentIndex": 39,
               "Title": "ServicesService.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Services\\ServicesService.cs",
               "RelativeDocumentMoniker": "Services\\ServicesService.cs",
@@ -758,7 +741,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 42,
+              "DocumentIndex": 41,
               "Title": "20250501232654_InitialCreate.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Migrations\\20250501232654_InitialCreate.cs",
               "RelativeDocumentMoniker": "Migrations\\20250501232654_InitialCreate.cs",
@@ -770,7 +753,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 41,
+              "DocumentIndex": 40,
               "Title": "20250501233210_InitialCreate.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Migrations\\20250501233210_InitialCreate.cs",
               "RelativeDocumentMoniker": "Migrations\\20250501233210_InitialCreate.cs",
@@ -782,7 +765,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 43,
+              "DocumentIndex": 42,
               "Title": "Container.targets",
               "DocumentMoniker": "C:\\Users\\ASUS\\.nuget\\packages\\microsoft.visualstudio.azure.containers.tools.targets\\1.21.0\\build\\Container.targets",
               "RelativeDocumentMoniker": "..\\..\\..\\.nuget\\packages\\microsoft.visualstudio.azure.containers.tools.targets\\1.21.0\\build\\Container.targets",
@@ -794,7 +777,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 45,
+              "DocumentIndex": 44,
               "Title": "CarsController.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Controllers\\CarsController.cs",
               "RelativeDocumentMoniker": "Controllers\\CarsController.cs",
@@ -806,7 +789,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 44,
+              "DocumentIndex": 43,
               "Title": "CarModel.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Models\\CarModel.cs",
               "RelativeDocumentMoniker": "Models\\CarModel.cs",

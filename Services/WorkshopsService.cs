@@ -14,7 +14,7 @@ namespace TicDrive.Services
 {
     public interface IWorkshopsService
     {
-        Task<IEnumerable<WorkshopDashboardInfoDto>> GetWorkshops(int? serviceId, string? customerId, decimal? latitude, decimal? longitude, bool? favorite = false, string? filter = null, int? kmRange = 20);
+        Task<IEnumerable<ExtendedFullWorkshopDto>> GetWorkshops(int? serviceId, string? customerId, decimal? latitude, decimal? longitude, bool? favorite = false, string? filter = null, int? kmRange = 20);
         Task LikeWorkshop(string userId, string workshopId);
         List<Specialization> GetSpecializations();
     }
@@ -32,7 +32,7 @@ namespace TicDrive.Services
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<WorkshopDashboardInfoDto>> GetWorkshops(int? serviceId, string? customerId, decimal? latitude, decimal? longitude, bool? favorite = false, string? filter = null, int? kmRange = 20)
+        public async Task<IEnumerable<ExtendedFullWorkshopDto>> GetWorkshops(int? serviceId, string? customerId, decimal? latitude, decimal? longitude, bool? favorite = false, string? filter = null, int? kmRange = 20)
         {
             var workshopsQuery = _context.Users
                 .Where(user => user.UserType == Enums.UserType.Workshop)
@@ -93,21 +93,27 @@ namespace TicDrive.Services
             }
 
             var projectedWorkshops = uniqueWorkshops
-                .Select(joined => new WorkshopDashboardInfoDto
+                .Join(_context.WorkshopsDetails,
+                workshop => workshop.Workshop.Id,
+                details => details.WorkshopId,
+                (w,d) => new { w,d})
+                .Select(joined => new ExtendedFullWorkshopDto
                 {
-                    Id = joined.Workshop.Id,
-                    Name = joined.Workshop.Name,
-                    Address = joined.Workshop.Address,
-                    Latitude = joined.Workshop.Latitude,
-                    Longitude = joined.Workshop.Longitude,
-                    MeanStars = joined.Reviews.Any() ? joined.Reviews.Average(review => review.Stars) : 0,
-                    NumberOfReviews = joined.Reviews.Count(),
-                    ServicePrice = serviceId != 0 && joined.OfferedService != null ? joined.OfferedService.Price : null,
-                    Currency = serviceId != 0 && joined.OfferedService != null ? joined.OfferedService.Currency : null,
-                    Discount = serviceId != 0 && joined.OfferedService != null ? joined.OfferedService.Discount : null,
-                    IsVerified = joined.Workshop.IsVerified,
-                    IsFavorite = string.IsNullOrEmpty(customerId) ? null : favoriteWorkshopIds.Contains(joined.Workshop.Id),
-                    Images = imagesDict[joined.Workshop.Id]
+                    Id = joined.w.Workshop.Id,
+                    Name = joined.w.Workshop.Name,
+                    Surname = joined.w.Workshop.Surname,
+                    WorkshopName = joined.d.WorkshopName,
+                    Address = joined.w.Workshop.Address,
+                    Latitude = joined.w.Workshop.Latitude,
+                    Longitude = joined.w.Workshop.Longitude,
+                    MeanStars = joined.w.Reviews.Any() ? joined.w.Reviews.Average(review => review.Stars) : 0,
+                    NumberOfReviews = joined.w.Reviews.Count(),
+                    ServicePrice = serviceId != 0 && joined.w.OfferedService != null ? joined.w.OfferedService.Price : null,
+                    Currency = serviceId != 0 && joined.w.OfferedService != null ? joined.w.OfferedService.Currency : null,
+                    Discount = serviceId != 0 && joined.w.OfferedService != null ? joined.w.OfferedService.Discount : null,
+                    IsVerified = joined.w.Workshop.IsVerified,
+                    IsFavorite = string.IsNullOrEmpty(customerId) ? null : favoriteWorkshopIds.Contains(joined.w.Workshop.Id),
+                    Images = imagesDict[joined.w.Workshop.Id]
                 });
 
             if (favorite == true)

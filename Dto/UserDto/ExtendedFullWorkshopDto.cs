@@ -3,12 +3,12 @@ using TicDrive.Enums;
 
 namespace TicDrive.Dto.UserDto
 {
-    public class WorkshopDashboardInfoDto
+    public class ExtendedFullWorkshopDto
     {
         public string Id { get; set; }
         public required string Name { get; set; }
         public string? Surname { get; set; }
-
+        public required string WorkshopName { get; set; }
         public string? Address { get; set; }
         public decimal? Longitude { get; set; }
         public decimal? Latitude { get; set; }
