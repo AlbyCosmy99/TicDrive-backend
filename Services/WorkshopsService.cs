@@ -1,4 +1,5 @@
-﻿using Autofac.Features.OwnedInstances;
+﻿using System;
+using Autofac.Features.OwnedInstances;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using TicDrive.Context;
@@ -13,9 +14,8 @@ namespace TicDrive.Services
 {
     public interface IWorkshopsService
     {
-        Task<IEnumerable<WorkshopDashboardInfoDto>> GetWorkshops(int? serviceId = 0, string? customerId = null, bool? favorite = null, string? filter = null);
+        Task<IEnumerable<WorkshopDashboardInfoDto>> GetWorkshops(int? serviceId, string? customerId, decimal? latitude, decimal? longitude, bool? favorite = false, string? filter = null, int? kmRange = 20);
         Task LikeWorkshop(string userId, string workshopId);
-        Task<IEnumerable<NearbyWorkshopDto>> GetNearbyWorkshops(decimal latitude, decimal longitude, int? serviceId, int? kmRange = 20, string? filter = null);
         List<Specialization> GetSpecializations();
     }
 
@@ -32,7 +32,7 @@ namespace TicDrive.Services
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<WorkshopDashboardInfoDto>> GetWorkshops(int? serviceId, string? customerId, bool? favorite = false, string? filter = null)
+        public async Task<IEnumerable<WorkshopDashboardInfoDto>> GetWorkshops(int? serviceId, string? customerId, decimal? latitude, decimal? longitude, bool? favorite = false, string? filter = null, int? kmRange = 20)
         {
             var workshopsQuery = _context.Users
                 .Where(user => user.UserType == Enums.UserType.Workshop)
@@ -49,7 +49,7 @@ namespace TicDrive.Services
                     (group, offeredService) => new { group.Workshop, group.Reviews, OfferedService = offeredService }
                 );
 
-            if (serviceId != 0)
+            if (serviceId != 0 && serviceId != null)
             {
                 workshopsQuery = workshopsQuery
                     .Where(joined => joined.OfferedService != null && joined.OfferedService.Service.Id == serviceId);
@@ -69,6 +69,21 @@ namespace TicDrive.Services
             var uniqueWorkshops = workshopsData
                 .GroupBy(joined => joined.Workshop.Id)
                 .Select(group => group.First());
+
+            if(latitude != null && longitude != null && favorite != true)
+            {
+                uniqueWorkshops = uniqueWorkshops
+                   .Where(joined =>
+                   {
+                       double distanceInMeters = DistanceCalculator.CalculateDistanceInMeters(
+                           (double)latitude,
+                           (double)longitude,
+                           (double)joined.Workshop.Latitude!,
+                           (double)joined.Workshop.Longitude!
+                       );
+                       return distanceInMeters <= (kmRange ?? 20) * 1000;
+                   });
+            }
 
             Dictionary<string, List<FullUserImageDto>> imagesDict = [];
             foreach (var data in uniqueWorkshops)
@@ -123,108 +138,6 @@ namespace TicDrive.Services
             }
 
             await _context.SaveChangesAsync();
-        }
-
-        public async Task<IEnumerable<NearbyWorkshopDto>> GetNearbyWorkshops(decimal latitude, decimal longitude, int? serviceId, int? kmRange = 20, string? filter = null)
-        {
-            if (serviceId != null)
-            {
-                var workshopsWithService = await _context.Users
-                    .Where(user => 
-                        user.UserType == UserType.Workshop 
-                        && user.Latitude != null 
-                        && user.Longitude != null
-                        && (filter == null || (user.Name.Contains(filter))))
-                    .Join(
-                        _context.OfferedServices,
-                        workshop => workshop.Id,
-                        service => service.WorkshopId,
-                        (workshop, service) => new { Workshop = workshop, Service = service }
-                    )
-                    .Where(joined => joined.Service.ServiceId == serviceId)
-                    .ToListAsync();
-
-                var nearbyWorkshops = workshopsWithService
-                    .Where(joined =>
-                    {
-                        double distanceInMeters = DistanceCalculator.CalculateDistanceInMeters(
-                            (double)latitude,
-                            (double)longitude,
-                            (double)joined.Workshop.Latitude!,
-                            (double)joined.Workshop.Longitude!
-                        );
-                        return distanceInMeters <= (kmRange ?? 20) * 1000;
-                    });
-
-                Dictionary<string, List<FullUserImageDto>> imagesDict = [];
-                foreach (var data in nearbyWorkshops)
-                {
-                    var images = await _imagesService.GetUserImagesAsync(data.Workshop.Id, 1);
-                    imagesDict[data.Workshop.Id] = _mapper.Map<List<FullUserImageDto>>(images);
-                }
-
-                var projectedWorkshops = nearbyWorkshops
-                    .Select(joined => new NearbyWorkshopDto
-                    {
-                        Id = joined.Workshop.Id,
-                        Name = joined.Workshop.Name!,
-                        Address = joined.Workshop.Address,
-                        Latitude = joined.Workshop.Latitude,
-                        Longitude = joined.Workshop.Longitude,
-                        ServicePrice = joined.Service.Price,
-                        Currency = joined.Service.Currency,
-                        Discount = joined.Service.Discount,
-                        Images = imagesDict[joined.Workshop.Id]
-                    });
-
-                return projectedWorkshops;
-            }
-            else
-            {
-                var allWorkshops = await _context.Users
-                     .Where(user =>
-                        user.UserType == UserType.Workshop
-                        && user.Latitude != null
-                        && user.Longitude != null
-                        && (filter == null || (user.Name.Contains(filter))))
-                    .ToListAsync();
-
-                var nearbyWorkshops = allWorkshops
-                    .Where(workshop =>
-                    {
-                        double distanceInMeters = DistanceCalculator.CalculateDistanceInMeters(
-                            (double)latitude,
-                            (double)longitude,
-                            (double)workshop.Latitude!,
-                            (double)workshop.Longitude!
-                        );
-                        return distanceInMeters <= (kmRange ?? 20) * 1000;
-                    });
-
-
-                Dictionary<string, List<FullUserImageDto>> imagesDict = [];
-                foreach (var workshop in nearbyWorkshops)
-                {
-                    var images = await _imagesService.GetUserImagesAsync(workshop.Id, 1);
-                    imagesDict[workshop.Id] = _mapper.Map<List<FullUserImageDto>>(images);
-                }
-
-                var projectedWorkshops = nearbyWorkshops
-                    .Select(workshop => new NearbyWorkshopDto
-                    {
-                        Id = workshop.Id,
-                        Name = workshop.Name!,
-                        Address = workshop.Address,
-                        Latitude = workshop.Latitude,
-                        Longitude = workshop.Longitude,
-                        ServicePrice = null,
-                        Currency = null,
-                        Discount = null,
-                        Images = imagesDict[workshop.Id]
-                    });
-
-                return projectedWorkshops;
-            }
         }
 
         public List<Specialization> GetSpecializations()

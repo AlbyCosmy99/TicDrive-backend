@@ -37,7 +37,7 @@ namespace TicDrive.Controllers
             var userClaims = _authService.GetUserClaims(this);
             var userId = _authService.GetUserId(userClaims);
 
-            var favoriteWorkshops = await _workshopsService.GetWorkshops(customerId: userId, favorite: true, filter: query.Filter);
+            var favoriteWorkshops = await _workshopsService.GetWorkshops(null, customerId: userId, null, null, favorite: true, filter: query.Filter);
 
             switch (query.Order?.ToLower())
             {

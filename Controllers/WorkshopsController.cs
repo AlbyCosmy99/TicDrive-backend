@@ -45,7 +45,7 @@ namespace TicDrive.Controllers
 
             try
             {
-                var workshops = await _workshopsService.GetWorkshops(serviceId, userId, filter: query.Filter);
+                var workshops = await _workshopsService.GetWorkshops(serviceId, userId,null, null, false, filter: query.Filter);
 
                 switch (query.Order?.ToLower())
                 {
@@ -89,12 +89,17 @@ namespace TicDrive.Controllers
                 return BadRequest("Latitude and longitude are required.");
             }
 
-            var nearbyWorkshops = await _workshopsService.GetNearbyWorkshops(
+            var userClaims = _authService.GetUserClaims(this);
+            var userId = _authService.GetUserId(userClaims);
+
+            var nearbyWorkshops = await _workshopsService.GetWorkshops(
+                query.ServiceId,
+                userId,
                 (decimal)query.Latitude,
                 (decimal)query.Longitude,
-                query.ServiceId,
-                query.KmRange,
-                query.Filter
+                false,
+                query.Filter,
+                query.KmRange
             );
 
             switch (query.Order?.ToLower())

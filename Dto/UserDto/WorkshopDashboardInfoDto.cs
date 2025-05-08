@@ -7,6 +7,8 @@ namespace TicDrive.Dto.UserDto
     {
         public string Id { get; set; }
         public required string Name { get; set; }
+        public string? Surname { get; set; }
+
         public string? Address { get; set; }
         public decimal? Longitude { get; set; }
         public decimal? Latitude { get; set; }
