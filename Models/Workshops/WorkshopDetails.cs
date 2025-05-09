@@ -33,5 +33,6 @@ namespace TicDrive.Models.Workshops
         public string SignatureName { get; set; }
         public string SignatureSurname { get; set; }
         public System.DateTime SignatureDate { get; set; } = System.DateTime.UtcNow;
+        public bool Active { get; set; } = true;
     }
 }
