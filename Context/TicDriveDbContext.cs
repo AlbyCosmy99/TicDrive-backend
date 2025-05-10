@@ -106,7 +106,7 @@ namespace TicDrive.Context
         public DbSet<UserConsent> UserConsents { get; set; }
         public DbSet<UserImage> UserImages { get; set; }
         public DbSet<UserSpokenLanguage> SpokenLanguages { get; set; }
-
+        public DbSet<DayTranslation> DaysTranslations { get; set; }
 
         //logs
         public DbSet<LoginLog> LoginLogs { get; set; }
