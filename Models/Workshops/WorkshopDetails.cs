@@ -1,7 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Diagnostics.Contracts;
-using TicDrive.Enums;
 
 namespace TicDrive.Models.Workshops
 {
@@ -9,7 +7,7 @@ namespace TicDrive.Models.Workshops
     {
         public int Id { get; set; }
         [Required]
-        public string WorkshopId { get; set; }
+        public required string WorkshopId { get; set; }
         private User _workshop;
         [ForeignKey(nameof(WorkshopId))]
         public User Workshop
@@ -23,7 +21,7 @@ namespace TicDrive.Models.Workshops
                 }
             }
         }
-        public string WorkshopName { get; set; }
+        public required string WorkshopName { get; set; }
         public string? PersonalPhoneNumber { get; set; }
         public string? PersonalEmail { get; set; }
         public bool? OffersHomeServices { get; set; } = false;

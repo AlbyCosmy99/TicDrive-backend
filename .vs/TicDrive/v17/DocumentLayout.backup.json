@@ -3,6 +3,34 @@
   "WorkspaceRootPath": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{2261EFAA-42BF-489C-A394-7082C77073AA}|TicDrive.csproj|c:\\users\\asus\\desktop\\ticdrive\\ticdrivebackend\\controllers\\datetimecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2261EFAA-42BF-489C-A394-7082C77073AA}|TicDrive.csproj|solutionrelative:controllers\\datetimecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Migrations\\20250510220245_AddDayTranslationModel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Migrations\\20250510220245_AddDayTranslationModel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2261EFAA-42BF-489C-A394-7082C77073AA}|TicDrive.csproj|c:\\users\\asus\\desktop\\ticdrive\\ticdrivebackend\\context\\ticdrivedbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2261EFAA-42BF-489C-A394-7082C77073AA}|TicDrive.csproj|solutionrelative:context\\ticdrivedbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2261EFAA-42BF-489C-A394-7082C77073AA}|TicDrive.csproj|c:\\users\\asus\\desktop\\ticdrive\\ticdrivebackend\\models\\daytranslation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2261EFAA-42BF-489C-A394-7082C77073AA}|TicDrive.csproj|solutionrelative:models\\daytranslation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2261EFAA-42BF-489C-A394-7082C77073AA}|TicDrive.csproj|c:\\users\\asus\\desktop\\ticdrive\\ticdrivebackend\\models\\servicetranslation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2261EFAA-42BF-489C-A394-7082C77073AA}|TicDrive.csproj|solutionrelative:models\\servicetranslation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2261EFAA-42BF-489C-A394-7082C77073AA}|TicDrive.csproj|c:\\users\\asus\\desktop\\ticdrive\\ticdrivebackend\\controllers\\servicescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2261EFAA-42BF-489C-A394-7082C77073AA}|TicDrive.csproj|solutionrelative:controllers\\servicescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2261EFAA-42BF-489C-A394-7082C77073AA}|TicDrive.csproj|c:\\users\\asus\\desktop\\ticdrive\\ticdrivebackend\\services\\workshopsservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2261EFAA-42BF-489C-A394-7082C77073AA}|TicDrive.csproj|solutionrelative:services\\workshopsservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{2261EFAA-42BF-489C-A394-7082C77073AA}|TicDrive.csproj|c:\\users\\asus\\desktop\\ticdrive\\ticdrivebackend\\models\\workshops\\workshopdetails.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{2261EFAA-42BF-489C-A394-7082C77073AA}|TicDrive.csproj|solutionrelative:models\\workshops\\workshopdetails.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -13,14 +41,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{2261EFAA-42BF-489C-A394-7082C77073AA}|TicDrive.csproj|c:\\users\\asus\\desktop\\ticdrive\\ticdrivebackend\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{2261EFAA-42BF-489C-A394-7082C77073AA}|TicDrive.csproj|solutionrelative:controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2261EFAA-42BF-489C-A394-7082C77073AA}|TicDrive.csproj|c:\\users\\asus\\desktop\\ticdrive\\ticdrivebackend\\controllers\\servicescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2261EFAA-42BF-489C-A394-7082C77073AA}|TicDrive.csproj|solutionrelative:controllers\\servicescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2261EFAA-42BF-489C-A394-7082C77073AA}|TicDrive.csproj|c:\\users\\asus\\desktop\\ticdrive\\ticdrivebackend\\services\\workshopsservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2261EFAA-42BF-489C-A394-7082C77073AA}|TicDrive.csproj|solutionrelative:services\\workshopsservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{2261EFAA-42BF-489C-A394-7082C77073AA}|TicDrive.csproj|c:\\users\\asus\\desktop\\ticdrive\\ticdrivebackend\\controllers\\workshopscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -111,10 +131,6 @@
       "RelativeMoniker": "D:0:0:{2261EFAA-42BF-489C-A394-7082C77073AA}|TicDrive.csproj|solutionrelative:models\\language.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{2261EFAA-42BF-489C-A394-7082C77073AA}|TicDrive.csproj|c:\\users\\asus\\desktop\\ticdrive\\ticdrivebackend\\controllers\\datetimecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2261EFAA-42BF-489C-A394-7082C77073AA}|TicDrive.csproj|solutionrelative:controllers\\datetimecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{2261EFAA-42BF-489C-A394-7082C77073AA}|TicDrive.csproj|c:\\users\\asus\\desktop\\ticdrive\\ticdrivebackend\\models\\datetime\\day.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{2261EFAA-42BF-489C-A394-7082C77073AA}|TicDrive.csproj|solutionrelative:models\\datetime\\day.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -135,10 +151,6 @@
       "RelativeMoniker": "D:0:0:{2261EFAA-42BF-489C-A394-7082C77073AA}|TicDrive.csproj|solutionrelative:models\\userconsent.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{2261EFAA-42BF-489C-A394-7082C77073AA}|TicDrive.csproj|c:\\users\\asus\\desktop\\ticdrive\\ticdrivebackend\\context\\ticdrivedbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2261EFAA-42BF-489C-A394-7082C77073AA}|TicDrive.csproj|solutionrelative:context\\ticdrivedbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{2261EFAA-42BF-489C-A394-7082C77073AA}|TicDrive.csproj|c:\\users\\asus\\desktop\\ticdrive\\ticdrivebackend\\models\\log\\loginlog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{2261EFAA-42BF-489C-A394-7082C77073AA}|TicDrive.csproj|solutionrelative:models\\log\\loginlog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -149,10 +161,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{2261EFAA-42BF-489C-A394-7082C77073AA}|TicDrive.csproj|c:\\users\\asus\\desktop\\ticdrive\\ticdrivebackend\\models\\workshops\\workshopnonworkingday.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{2261EFAA-42BF-489C-A394-7082C77073AA}|TicDrive.csproj|solutionrelative:models\\workshops\\workshopnonworkingday.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2261EFAA-42BF-489C-A394-7082C77073AA}|TicDrive.csproj|c:\\users\\asus\\desktop\\ticdrive\\ticdrivebackend\\models\\servicetranslation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2261EFAA-42BF-489C-A394-7082C77073AA}|TicDrive.csproj|solutionrelative:models\\servicetranslation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{2261EFAA-42BF-489C-A394-7082C77073AA}|TicDrive.csproj|c:\\users\\asus\\desktop\\ticdrive\\ticdrivebackend\\models\\service.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -209,85 +217,37 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 5,
           "Children": [
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "IUserDto.cs",
-              "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Interfaces\\Dto\\IUserDto.cs",
-              "RelativeDocumentMoniker": "Interfaces\\Dto\\IUserDto.cs",
-              "ToolTip": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Interfaces\\Dto\\IUserDto.cs",
-              "RelativeToolTip": "Interfaces\\Dto\\IUserDto.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Title": "20250510220245_AddDayTranslationModel.cs",
+              "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Migrations\\20250510220245_AddDayTranslationModel.cs",
+              "RelativeDocumentMoniker": "Migrations\\20250510220245_AddDayTranslationModel.cs",
+              "ToolTip": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Migrations\\20250510220245_AddDayTranslationModel.cs",
+              "RelativeToolTip": "Migrations\\20250510220245_AddDayTranslationModel.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAAA8AAAAlAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-09T23:48:12.355Z",
+              "WhenOpened": "2025-05-10T22:02:45.932Z",
               "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 13,
-              "Title": "AutofacModule.cs",
-              "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\AppConfig\\AutofacModule.cs",
-              "RelativeDocumentMoniker": "AppConfig\\AutofacModule.cs",
-              "ToolTip": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\AppConfig\\AutofacModule.cs",
-              "RelativeToolTip": "AppConfig\\AutofacModule.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-06T04:59:38.211Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 11,
-              "Title": "ReviewsController.cs",
-              "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Controllers\\ReviewsController.cs",
-              "RelativeDocumentMoniker": "Controllers\\ReviewsController.cs",
-              "ToolTip": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Controllers\\ReviewsController.cs",
-              "RelativeToolTip": "Controllers\\ReviewsController.cs",
-              "ViewState": "AgIAABUAAAAAAAAAAAA1wAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-06T05:11:40.516Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "CustomerController.cs",
-              "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Controllers\\CustomerController.cs",
-              "RelativeDocumentMoniker": "Controllers\\CustomerController.cs",
-              "ToolTip": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Controllers\\CustomerController.cs",
-              "RelativeToolTip": "Controllers\\CustomerController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAACcAAAB/AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-02T16:18:37.141Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "WorkshopDetails.cs",
-              "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Models\\Workshops\\WorkshopDetails.cs",
-              "RelativeDocumentMoniker": "Models\\Workshops\\WorkshopDetails.cs",
-              "ToolTip": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Models\\Workshops\\WorkshopDetails.cs",
-              "RelativeToolTip": "Models\\Workshops\\WorkshopDetails.cs",
-              "ViewState": "AgIAABsAAAAAAAAAAAAowCMAAAATAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-03T23:32:53.983Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "User.cs",
-              "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Models\\User.cs",
-              "RelativeDocumentMoniker": "Models\\User.cs",
-              "ToolTip": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Models\\User.cs",
-              "RelativeToolTip": "Models\\User.cs",
-              "ViewState": "AgIAAAoAAAAAAAAAAAAQwAwAAAAuAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-06T04:23:43.479Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
+              "Title": "DayTranslation.cs",
+              "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Models\\DayTranslation.cs",
+              "RelativeDocumentMoniker": "Models\\DayTranslation.cs",
+              "ToolTip": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Models\\DayTranslation.cs",
+              "RelativeToolTip": "Models\\DayTranslation.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAfAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-10T21:58:25.737Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
               "Title": "ServicesController.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Controllers\\ServicesController.cs",
               "RelativeDocumentMoniker": "Controllers\\ServicesController.cs",
@@ -300,7 +260,46 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 6,
+              "Title": "WorkshopsService.cs",
+              "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Services\\WorkshopsService.cs",
+              "RelativeDocumentMoniker": "Services\\WorkshopsService.cs",
+              "ToolTip": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Services\\WorkshopsService.cs",
+              "RelativeToolTip": "Services\\WorkshopsService.cs",
+              "ViewState": "AgIAADIAAAAAAAAAAAAswFQAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-06T04:44:59.82Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "ServiceTranslation.cs",
+              "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Models\\ServiceTranslation.cs",
+              "RelativeDocumentMoniker": "Models\\ServiceTranslation.cs",
+              "ToolTip": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Models\\ServiceTranslation.cs",
+              "RelativeToolTip": "Models\\ServiceTranslation.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAHAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-01T22:53:49.276Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "DateTimeController.cs",
+              "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Controllers\\DateTimeController.cs",
+              "RelativeDocumentMoniker": "Controllers\\DateTimeController.cs",
+              "ToolTip": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Controllers\\DateTimeController.cs",
+              "RelativeToolTip": "Controllers\\DateTimeController.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAawBMAAAAaAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-04T15:52:44.681Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
               "Title": "AuthController.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Controllers\\AuthController.cs",
               "RelativeDocumentMoniker": "Controllers\\AuthController.cs",
@@ -308,24 +307,96 @@
               "RelativeToolTip": "Controllers\\AuthController.cs",
               "ViewState": "AgIAANwBAAAAAAAAAAAtwN0BAAAYAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-02T00:12:47.188Z",
+              "WhenOpened": "2025-05-02T00:12:47.188Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "User.cs",
+              "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Models\\User.cs",
+              "RelativeDocumentMoniker": "Models\\User.cs",
+              "ToolTip": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Models\\User.cs",
+              "RelativeToolTip": "Models\\User.cs",
+              "ViewState": "AgIAAAoAAAAAAAAAAAAQwAwAAAAuAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-06T04:23:43.479Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "TicDriveDbContext.cs",
+              "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Context\\TicDriveDbContext.cs",
+              "RelativeDocumentMoniker": "Context\\TicDriveDbContext.cs",
+              "ToolTip": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Context\\TicDriveDbContext.cs",
+              "RelativeToolTip": "Context\\TicDriveDbContext.cs",
+              "ViewState": "AgIAAGEAAAAAAAAAAAA8wG0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-04T10:08:30.113Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "WorkshopsService.cs",
-              "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Services\\WorkshopsService.cs",
-              "RelativeDocumentMoniker": "Services\\WorkshopsService.cs",
-              "ToolTip": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Services\\WorkshopsService.cs",
-              "RelativeToolTip": "Services\\WorkshopsService.cs",
-              "ViewState": "AgIAAFYAAAAAAAAAAAAswGgAAAA5AAAAAAAAAA==",
+              "DocumentIndex": 7,
+              "Title": "WorkshopDetails.cs",
+              "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Models\\Workshops\\WorkshopDetails.cs",
+              "RelativeDocumentMoniker": "Models\\Workshops\\WorkshopDetails.cs",
+              "ToolTip": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Models\\Workshops\\WorkshopDetails.cs",
+              "RelativeToolTip": "Models\\Workshops\\WorkshopDetails.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAzAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-06T04:44:59.82Z"
+              "WhenOpened": "2025-05-03T23:32:53.983Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 11,
+              "Title": "CustomerController.cs",
+              "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Controllers\\CustomerController.cs",
+              "RelativeDocumentMoniker": "Controllers\\CustomerController.cs",
+              "ToolTip": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Controllers\\CustomerController.cs",
+              "RelativeToolTip": "Controllers\\CustomerController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACcAAAB/AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-02T16:18:37.141Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "IUserDto.cs",
+              "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Interfaces\\Dto\\IUserDto.cs",
+              "RelativeDocumentMoniker": "Interfaces\\Dto\\IUserDto.cs",
+              "ToolTip": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Interfaces\\Dto\\IUserDto.cs",
+              "RelativeToolTip": "Interfaces\\Dto\\IUserDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-09T23:48:12.355Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "ReviewsController.cs",
+              "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Controllers\\ReviewsController.cs",
+              "RelativeDocumentMoniker": "Controllers\\ReviewsController.cs",
+              "ToolTip": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Controllers\\ReviewsController.cs",
+              "RelativeToolTip": "Controllers\\ReviewsController.cs",
+              "ViewState": "AgIAABUAAAAAAAAAAAA1wAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-06T05:11:40.516Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "AutofacModule.cs",
+              "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\AppConfig\\AutofacModule.cs",
+              "RelativeDocumentMoniker": "AppConfig\\AutofacModule.cs",
+              "ToolTip": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\AppConfig\\AutofacModule.cs",
+              "RelativeToolTip": "AppConfig\\AutofacModule.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-06T04:59:38.211Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
               "Title": "WorkshopsController.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Controllers\\WorkshopsController.cs",
               "RelativeDocumentMoniker": "Controllers\\WorkshopsController.cs",
@@ -337,7 +408,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 17,
               "Title": "LanguagesController.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Controllers\\LanguagesController.cs",
               "RelativeDocumentMoniker": "Controllers\\LanguagesController.cs",
@@ -349,7 +420,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 13,
               "Title": "AuthService.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Services\\AuthService.cs",
               "RelativeDocumentMoniker": "Services\\AuthService.cs",
@@ -361,7 +432,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 14,
               "Title": "AutomapperConfig.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\AppConfig\\AutomapperConfig.cs",
               "RelativeDocumentMoniker": "AppConfig\\AutomapperConfig.cs",
@@ -373,7 +444,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 15,
               "Title": "OfferedServicesController.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Controllers\\OfferedServicesController.cs",
               "RelativeDocumentMoniker": "Controllers\\OfferedServicesController.cs",
@@ -385,7 +456,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 47,
+              "DocumentIndex": 49,
               "Title": "20250506050531_UpdateImageModel.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Migrations\\20250506050531_UpdateImageModel.cs",
               "RelativeDocumentMoniker": "Migrations\\20250506050531_UpdateImageModel.cs",
@@ -397,7 +468,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 19,
               "Title": "ReviewsService.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Services\\ReviewsService.cs",
               "RelativeDocumentMoniker": "Services\\ReviewsService.cs",
@@ -409,7 +480,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
+              "DocumentIndex": 21,
               "Title": "EmailService.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Services\\EmailService.cs",
               "RelativeDocumentMoniker": "Services\\EmailService.cs",
@@ -421,7 +492,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 20,
               "Title": "LogLoginAttempt.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\utils\\auth\\LogLoginAttempt.cs",
               "RelativeDocumentMoniker": "utils\\auth\\LogLoginAttempt.cs",
@@ -433,7 +504,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 18,
+              "DocumentIndex": 23,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Program.cs",
               "RelativeDocumentMoniker": "Program.cs",
@@ -445,7 +516,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 48,
+              "DocumentIndex": 50,
               "Title": "appsettings.Production.json",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\appsettings.Production.json",
               "RelativeDocumentMoniker": "appsettings.Production.json",
@@ -457,7 +528,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 17,
+              "DocumentIndex": 22,
               "Title": "CarsService.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Services\\CarsService.cs",
               "RelativeDocumentMoniker": "Services\\CarsService.cs",
@@ -469,7 +540,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 19,
+              "DocumentIndex": 24,
               "Title": "RequiredIfUserTypeAttribute.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Attributes\\RequiredIfUserTypeAttribute.cs",
               "RelativeDocumentMoniker": "Attributes\\RequiredIfUserTypeAttribute.cs",
@@ -481,7 +552,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 23,
+              "DocumentIndex": 28,
               "Title": "LegalDocumentContext.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Enums\\LegalDocumentContext.cs",
               "RelativeDocumentMoniker": "Enums\\LegalDocumentContext.cs",
@@ -493,7 +564,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 21,
+              "DocumentIndex": 26,
               "Title": "Dockerfile",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Dockerfile",
               "RelativeDocumentMoniker": "Dockerfile",
@@ -505,7 +576,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 20,
+              "DocumentIndex": 25,
               "Title": "docker-compose.yml",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\docker-compose.yml",
               "RelativeDocumentMoniker": "docker-compose.yml",
@@ -517,7 +588,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 22,
+              "DocumentIndex": 27,
               "Title": "LegalDocumentType.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Enums\\LegalDocumentType.cs",
               "RelativeDocumentMoniker": "Enums\\LegalDocumentType.cs",
@@ -529,7 +600,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 49,
+              "DocumentIndex": 51,
               "Title": "appsettings.Development.json",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\appsettings.Development.json",
               "RelativeDocumentMoniker": "appsettings.Development.json",
@@ -541,7 +612,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 46,
+              "DocumentIndex": 48,
               "Title": "20250504233554_InitialCreate.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Migrations\\20250504233554_InitialCreate.cs",
               "RelativeDocumentMoniker": "Migrations\\20250504233554_InitialCreate.cs",
@@ -553,7 +624,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 24,
+              "DocumentIndex": 29,
               "Title": "EmailVerificationSuccess.html",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\wwwroot\\EmailVerificationSuccess.html",
               "RelativeDocumentMoniker": "wwwroot\\EmailVerificationSuccess.html",
@@ -565,19 +636,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 27,
-              "Title": "DateTimeController.cs",
-              "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Controllers\\DateTimeController.cs",
-              "RelativeDocumentMoniker": "Controllers\\DateTimeController.cs",
-              "ToolTip": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Controllers\\DateTimeController.cs",
-              "RelativeToolTip": "Controllers\\DateTimeController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-04T15:52:44.681Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 25,
+              "DocumentIndex": 30,
               "Title": "LegalDeclarationsController.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Controllers\\LegalDeclarationsController.cs",
               "RelativeDocumentMoniker": "Controllers\\LegalDeclarationsController.cs",
@@ -589,7 +648,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 26,
+              "DocumentIndex": 31,
               "Title": "Language.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Models\\Language.cs",
               "RelativeDocumentMoniker": "Models\\Language.cs",
@@ -601,7 +660,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 29,
+              "DocumentIndex": 33,
               "Title": "Specialization.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Models\\Specialization.cs",
               "RelativeDocumentMoniker": "Models\\Specialization.cs",
@@ -613,7 +672,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 28,
+              "DocumentIndex": 32,
               "Title": "Day.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Models\\DateTime\\Day.cs",
               "RelativeDocumentMoniker": "Models\\DateTime\\Day.cs",
@@ -625,7 +684,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 32,
+              "DocumentIndex": 36,
               "Title": "UserConsent.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Models\\UserConsent.cs",
               "RelativeDocumentMoniker": "Models\\UserConsent.cs",
@@ -637,7 +696,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 30,
+              "DocumentIndex": 34,
               "Title": "TransmissionType.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Enums\\TransmissionType.cs",
               "RelativeDocumentMoniker": "Enums\\TransmissionType.cs",
@@ -649,7 +708,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 31,
+              "DocumentIndex": 35,
               "Title": "LegalDeclaration.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Models\\Legal\\LegalDeclaration.cs",
               "RelativeDocumentMoniker": "Models\\Legal\\LegalDeclaration.cs",
@@ -661,19 +720,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 33,
-              "Title": "TicDriveDbContext.cs",
-              "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Context\\TicDriveDbContext.cs",
-              "RelativeDocumentMoniker": "Context\\TicDriveDbContext.cs",
-              "ToolTip": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Context\\TicDriveDbContext.cs",
-              "RelativeToolTip": "Context\\TicDriveDbContext.cs",
-              "ViewState": "AgIAADwAAAAAAAAAAAAYwE0AAAAjAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-04T10:08:30.113Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 34,
+              "DocumentIndex": 37,
               "Title": "LoginLog.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Models\\Log\\LoginLog.cs",
               "RelativeDocumentMoniker": "Models\\Log\\LoginLog.cs",
@@ -685,7 +732,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 35,
+              "DocumentIndex": 38,
               "Title": "Review.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Models\\Review.cs",
               "RelativeDocumentMoniker": "Models\\Review.cs",
@@ -697,7 +744,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 36,
+              "DocumentIndex": 39,
               "Title": "WorkshopNonWorkingDay.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Models\\Workshops\\WorkshopNonWorkingDay.cs",
               "RelativeDocumentMoniker": "Models\\Workshops\\WorkshopNonWorkingDay.cs",
@@ -709,7 +756,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 38,
+              "DocumentIndex": 40,
               "Title": "Service.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Models\\Service.cs",
               "RelativeDocumentMoniker": "Models\\Service.cs",
@@ -721,19 +768,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 37,
-              "Title": "ServiceTranslation.cs",
-              "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Models\\ServiceTranslation.cs",
-              "RelativeDocumentMoniker": "Models\\ServiceTranslation.cs",
-              "ToolTip": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Models\\ServiceTranslation.cs",
-              "RelativeToolTip": "Models\\ServiceTranslation.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAABIAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-01T22:53:49.276Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 39,
+              "DocumentIndex": 41,
               "Title": "CustomerCar.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Models\\CustomerCar.cs",
               "RelativeDocumentMoniker": "Models\\CustomerCar.cs",
@@ -745,7 +780,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 40,
+              "DocumentIndex": 42,
               "Title": "ServicesService.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Services\\ServicesService.cs",
               "RelativeDocumentMoniker": "Services\\ServicesService.cs",
@@ -757,7 +792,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 42,
+              "DocumentIndex": 44,
               "Title": "20250501232654_InitialCreate.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Migrations\\20250501232654_InitialCreate.cs",
               "RelativeDocumentMoniker": "Migrations\\20250501232654_InitialCreate.cs",
@@ -769,7 +804,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 41,
+              "DocumentIndex": 43,
               "Title": "20250501233210_InitialCreate.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Migrations\\20250501233210_InitialCreate.cs",
               "RelativeDocumentMoniker": "Migrations\\20250501233210_InitialCreate.cs",
@@ -781,7 +816,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 43,
+              "DocumentIndex": 45,
               "Title": "Container.targets",
               "DocumentMoniker": "C:\\Users\\ASUS\\.nuget\\packages\\microsoft.visualstudio.azure.containers.tools.targets\\1.21.0\\build\\Container.targets",
               "RelativeDocumentMoniker": "..\\..\\..\\.nuget\\packages\\microsoft.visualstudio.azure.containers.tools.targets\\1.21.0\\build\\Container.targets",
@@ -793,7 +828,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 45,
+              "DocumentIndex": 47,
               "Title": "CarsController.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Controllers\\CarsController.cs",
               "RelativeDocumentMoniker": "Controllers\\CarsController.cs",
@@ -805,7 +840,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 44,
+              "DocumentIndex": 46,
               "Title": "CarModel.cs",
               "DocumentMoniker": "C:\\Users\\ASUS\\Desktop\\TicDrive\\TicDriveBackend\\Models\\CarModel.cs",
               "RelativeDocumentMoniker": "Models\\CarModel.cs",

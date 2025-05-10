@@ -93,7 +93,8 @@ namespace TicDrive.Services
             }
 
             var projectedWorkshops = uniqueWorkshops
-                .Join(_context.WorkshopsDetails,
+                .Join(_context.WorkshopsDetails
+                    .Where(details => details.Active),
                 workshop => workshop.Workshop.Id,
                 details => details.WorkshopId,
                 (w,d) => new { w,d})
