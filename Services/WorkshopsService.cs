@@ -35,7 +35,7 @@ namespace TicDrive.Services
         public async Task<IEnumerable<ExtendedFullWorkshopDto>> GetWorkshops(int? serviceId, string? customerId, decimal? latitude, decimal? longitude, bool? favorite = false, string? filter = null, int? kmRange = 20)
         {
             var workshopsQuery = _context.Users
-                .Where(user => user.UserType == Enums.UserType.Workshop)
+                .Where(user => user.UserType == Enums.UserType.Workshop && user.EmailConfirmed)
                 .GroupJoin(
                     _context.Reviews,
                     workshop => workshop.Id,
