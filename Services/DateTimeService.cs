@@ -1,4 +1,5 @@
-﻿using TicDrive.Context;
+﻿using System.Linq;
+using TicDrive.Context;
 using TicDrive.Dto.DateTimeDto;
 using TicDrive.Models.DateTime;
 using TicDrive.Models.Workshops;
@@ -8,6 +9,7 @@ namespace TicDrive.Services
     public interface IDateTimeService
     {
         WorkshopNotAvailableDaysDto GetWorkshopNotAvailableDays(string workshopId);
+        WorkshopWorkingHoursDto GetWorkshopWorkingHours(string workshopId, string day);
     }
     public class DateTimeService : IDateTimeService
     {
@@ -56,6 +58,36 @@ namespace TicDrive.Services
                 WorkshopId = workshopId,
                 Days = nonWorkingDays,
                 Dates = notWorkingDates
+            };
+        }
+
+        public WorkshopWorkingHoursDto GetWorkshopWorkingHours(string workshopId, string day)
+        {
+            var dayId = _dbContext.DaysTranslations
+                .Where(d => d.Label.ToLower() == day.ToLower())
+                .FirstOrDefault()
+                ?.DayId;
+
+            if(dayId == null)
+            {
+                throw new Exception("Day Id not found.");
+            }
+
+            var workshopSchedule = _dbContext.WorkshopsSchedules
+                .Where(schedule => schedule.DayId == dayId && schedule.WorkshopId == workshopId)
+                .FirstOrDefault();
+
+            if(workshopSchedule == null)
+            {
+                throw new Exception("Workshop not found.");
+            }
+
+            return new WorkshopWorkingHoursDto
+            {
+                Id = workshopSchedule.Id,
+                Morning = new List<TimeOnly?> { workshopSchedule.MorningStartTime, workshopSchedule.MorningEndTime },
+                Afternoon = new List<TimeOnly?> { workshopSchedule.AfternoonStartTime, workshopSchedule.AfternoonEndTime },
+
             };
         }
 

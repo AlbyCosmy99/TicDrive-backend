@@ -53,5 +53,28 @@ namespace TicDrive.Controllers
 
             return Ok(_dateTimeService.GetWorkshopNotAvailableDays(query.WorkshopId));
         }
+
+        public class GetWorkshopWorkingHoursQuery
+        {
+            public string Day { get; set; }
+            public string WorkshopId { get; set; }
+        }
+
+        [HttpGet("workshop/workingHours")]
+        public IActionResult GetWorkshopWorkingHours([FromQuery] GetWorkshopWorkingHoursQuery query)
+        {
+            if(query == null || query.Day == null || query.WorkshopId == null)
+            {
+                return BadRequest("The day name and workshop id are necessary.");
+            }
+            
+            try
+            {
+                return Ok(_dateTimeService.GetWorkshopWorkingHours(query.WorkshopId, query.Day));
+            } catch(Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
     }
 }
