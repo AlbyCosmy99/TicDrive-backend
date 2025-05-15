@@ -34,7 +34,7 @@ namespace TicDrive.Controllers
                     language => language.Id,
                     (dayTranslation, language) => new
                     {
-                        dayTranslation.Id,
+                        dayTranslation.DayId,
                         dayTranslation.LanguageId,
                         dayTranslation.Label
                     });
