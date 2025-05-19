@@ -648,5 +648,47 @@ namespace TicDrive.Controllers
 
             return NoContent();
         }
+
+        public class ChangePasswordBody
+        {
+            [Required]
+            public string CurrentPassword { get; set; } = string.Empty;
+
+            [Required]
+            [MinLength(6, ErrorMessage = "New password must be at least 8 characters long.")]
+            public string NewPassword { get; set; } = string.Empty;
+
+            [Required]
+            [Compare("NewPassword", ErrorMessage = "Passwords do not match.")]
+            public string ConfirmPassword { get; set; } = string.Empty;
+        }
+
+        [HttpPost]
+        [Authorize]
+        [Route("change-password")]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordBody request)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var userClaims = _authService.GetUserClaims(this);
+            var userId = _authService.GetUserId(userClaims);
+
+            if (string.IsNullOrEmpty(userId))
+                return Unauthorized("Invalid user.");
+
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+                return NotFound("User not found.");
+
+            var result = await _userManager.ChangePasswordAsync(user, request.CurrentPassword, request.NewPassword);
+            if (!result.Succeeded)
+            {
+                var errors = result.Errors.Select(e => e.Description);
+                return BadRequest(new { Message = "Password change failed", Errors = errors });
+            }
+
+            return Ok(new { Message = "Password changed successfully." });
+        }
     }
 }
