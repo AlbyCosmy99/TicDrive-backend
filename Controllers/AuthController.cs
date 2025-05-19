@@ -449,9 +449,9 @@ namespace TicDrive.Controllers
                     return BadRequest("Invalid user type.");
                 }
 
-                var userData = await _authService.GetUserData((UserType) userType, userId);
+                var userData = await _authService.GetUserData((UserType)userType, userId);
 
-                if(userData == null)
+                if (userData == null)
                 {
                     return BadRequest("User data not found.");
                 }
@@ -484,7 +484,7 @@ namespace TicDrive.Controllers
                 var userId = _authService.GetUserId(userClaims);
                 var userType = _authService.GetUserType(userClaims);
 
-                if(userId == null)
+                if (userId == null)
                 {
                     return BadRequest("User info not found. Payload broken.");
                 }
@@ -494,7 +494,7 @@ namespace TicDrive.Controllers
                     return BadRequest("Invalid user type.");
                 }
 
-                var userData = await _authService.GetUserData((UserType) userType, userId);
+                var userData = await _authService.GetUserData((UserType)userType, userId);
 
                 if (userData == null)
                     return NotFound("User data not found.");
@@ -597,7 +597,7 @@ namespace TicDrive.Controllers
         [Route("send-code-password-forgot")]
         public async Task<IActionResult> SendCodePasswordForgot([FromBody] SendCodePasswordForgotQuery query)
         {
-            if(string.IsNullOrEmpty(query.Code))
+            if (string.IsNullOrEmpty(query.Code))
             {
                 return BadRequest("Code is required");
             }
@@ -632,7 +632,7 @@ namespace TicDrive.Controllers
         [HttpPut]
         public async Task<IActionResult> UpdateUser([FromBody] UpdatedUser newUser)
         {
-            if(newUser == null)
+            if (newUser == null)
             {
                 return BadRequest("Params are required.");
             }
@@ -647,6 +647,48 @@ namespace TicDrive.Controllers
             await _authService.UpdateUser(userId, newUser);
 
             return NoContent();
+        }
+
+        public class ChangePasswordBody
+        {
+            [Required]
+            public string CurrentPassword { get; set; } = string.Empty;
+
+            [Required]
+            [MinLength(6, ErrorMessage = "New password must be at least 8 characters long.")]
+            public string NewPassword { get; set; } = string.Empty;
+
+            [Required]
+            [Compare("NewPassword", ErrorMessage = "Passwords do not match.")]
+            public string ConfirmPassword { get; set; } = string.Empty;
+        }
+
+        [HttpPost]
+        [Authorize]
+        [Route("change-password")]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordBody request)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var userClaims = _authService.GetUserClaims(this);
+            var userId = _authService.GetUserId(userClaims);
+
+            if (string.IsNullOrEmpty(userId))
+                return Unauthorized("Invalid user.");
+
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+                return NotFound("User not found.");
+
+            var result = await _userManager.ChangePasswordAsync(user, request.CurrentPassword, request.NewPassword);
+            if (!result.Succeeded)
+            {
+                var errors = result.Errors.Select(e => e.Description);
+                return BadRequest(new { Message = "Password change failed", Errors = errors });
+            }
+
+            return Ok(new { Message = "Password changed successfully." });
         }
     }
 }
