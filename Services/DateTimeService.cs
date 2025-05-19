@@ -9,7 +9,7 @@ namespace TicDrive.Services
     public interface IDateTimeService
     {
         WorkshopNotAvailableDaysDto GetWorkshopNotAvailableDays(string workshopId);
-        WorkshopWorkingHoursDto GetWorkshopWorkingHours(string workshopId, string day);
+        List<WorkshopWorkingHoursDto> GetWorkshopWorkingHours(string workshopId, string day);
     }
     public class DateTimeService : IDateTimeService
     {
@@ -61,35 +61,31 @@ namespace TicDrive.Services
             };
         }
 
-        public WorkshopWorkingHoursDto GetWorkshopWorkingHours(string workshopId, string day)
+        public List<WorkshopWorkingHoursDto> GetWorkshopWorkingHours(string workshopId, string day)
         {
-            var dayId = _dbContext.DaysTranslations
-                .Where(d => d.Label.ToLower() == day.ToLower())
-                .FirstOrDefault()
-                ?.DayId;
+            int? dayId = null;
 
-            if(dayId == null)
+            if (!string.IsNullOrWhiteSpace(day))
             {
-                throw new Exception("Day Id not found.");
+                var normalizedDay = day.ToLower();
+                dayId = _dbContext.DaysTranslations
+                    .Where(d => d.Label.ToLower() == normalizedDay)
+                    .Select(d => (int?)d.DayId)
+                    .FirstOrDefault();
             }
 
-            var workshopSchedule = _dbContext.WorkshopsSchedules
-                .Where(schedule => schedule.DayId == dayId && schedule.WorkshopId == workshopId)
-                .FirstOrDefault();
-
-            if(workshopSchedule == null)
-            {
-                throw new Exception("Workshop not found.");
-            }
-
-            return new WorkshopWorkingHoursDto
-            {
-                Id = workshopSchedule.Id,
-                Morning = new List<TimeOnly?> { workshopSchedule.MorningStartTime, workshopSchedule.MorningEndTime },
-                Afternoon = new List<TimeOnly?> { workshopSchedule.AfternoonStartTime, workshopSchedule.AfternoonEndTime },
-
-            };
+            return _dbContext.WorkshopsSchedules
+                .Where(schedule => (dayId == null || schedule.DayId == dayId) && schedule.WorkshopId == workshopId)
+                .Select(schedule => new WorkshopWorkingHoursDto
+                {
+                    Id = schedule.Id,
+                    DayId = schedule.DayId,
+                    Morning = new List<TimeOnly?> { schedule.MorningStartTime, schedule.MorningEndTime },
+                    Afternoon = new List<TimeOnly?> { schedule.AfternoonStartTime, schedule.AfternoonEndTime },
+                })
+                .ToList();
         }
+
 
     }
 }
