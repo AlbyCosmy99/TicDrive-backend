@@ -10,31 +10,43 @@ namespace TicDrive.Services
         Task<List<FullReviewDto>> GetAllReviewsByWorkshopId(string workshopId, int skip, int take);
     }
 
-    public class ReviewsService(TicDriveDbContext context) : IReviewsService
+    public class ReviewsService(TicDriveDbContext context, ImagesService imagesService) : IReviewsService
     {
         private readonly TicDriveDbContext _context = context;
+        private readonly IImagesService _imagesService = imagesService;
 
         public async Task<List<FullReviewDto>> GetAllReviewsByWorkshopId(string workshopId, int skip, int take)
         {
-            return await _context.Reviews
+            var reviews = _context.Reviews
                 .Where(review => review.Workshop.Id == workshopId)
                 .Include(review => review.Customer)
                 .Include(review => review.Workshop)
                 .Skip(skip)
                 .Take(take)
-                .Select(review => new FullReviewDto 
-                { 
+                .ToList();
+
+            var fullReviewDtos = new List<FullReviewDto>();
+
+            foreach (var review in reviews)
+            {
+                var customerImageUrl = await _imagesService.GetUserImagesAsync(review.CustomerId!, 1);
+                var image = customerImageUrl.FirstOrDefault();
+
+                fullReviewDtos.Add(new FullReviewDto
+                {
                     Id = review.Id,
                     CustomerId = review.CustomerId!,
                     CustomerName = review.Customer.Name,
-                    //CustomerImageUrl = review.Customer.ProfileImageUrl ?? string.Empty, TODO
+                    CustomerImageUrl = image != null ? image.Filename : string.Empty,
                     WorkshopId = review.WorkshopId,
                     Text = review.Text,
                     WhenPublished = review.WhenPublished,
                     Stars = review.Stars
+                });
+            }
 
-})
-                .ToListAsync();
+            return fullReviewDtos;
         }
+
     }
 }
