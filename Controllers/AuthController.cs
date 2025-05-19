@@ -688,7 +688,7 @@ namespace TicDrive.Controllers
                 return BadRequest(new { Message = "Password change failed", Errors = errors });
             }
 
-            return Ok(new { Message = "Password changed successfully." });
+            return NoContent();
         }
     }
 }
