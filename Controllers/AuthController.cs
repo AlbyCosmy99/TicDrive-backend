@@ -451,9 +451,9 @@ namespace TicDrive.Controllers
                     return BadRequest("Invalid user type.");
                 }
 
-                var userData = await _authService.GetUserData((UserType) userType, userId);
+                var userData = await _authService.GetUserData((UserType)userType, userId);
 
-                if(userData == null)
+                if (userData == null)
                 {
                     return BadRequest("User data not found.");
                 }
@@ -486,7 +486,7 @@ namespace TicDrive.Controllers
                 var userId = _authService.GetUserId(userClaims);
                 var userType = _authService.GetUserType(userClaims);
 
-                if(userId == null)
+                if (userId == null)
                 {
                     return BadRequest("User info not found. Payload broken.");
                 }
@@ -496,7 +496,7 @@ namespace TicDrive.Controllers
                     return BadRequest("Invalid user type.");
                 }
 
-                var userData = await _authService.GetUserData((UserType) userType, userId);
+                var userData = await _authService.GetUserData((UserType)userType, userId);
 
                 if (userData == null)
                     return NotFound("User data not found.");
@@ -599,7 +599,7 @@ namespace TicDrive.Controllers
         [Route("send-code-password-forgot")]
         public async Task<IActionResult> SendCodePasswordForgot([FromBody] SendCodePasswordForgotQuery query)
         {
-            if(string.IsNullOrEmpty(query.Code))
+            if (string.IsNullOrEmpty(query.Code))
             {
                 return BadRequest("Code is required");
             }
@@ -634,7 +634,7 @@ namespace TicDrive.Controllers
         [HttpPut]
         public async Task<IActionResult> UpdateUser([FromBody] UpdatedUser newUser)
         {
-            if(newUser == null)
+            if (newUser == null)
             {
                 return BadRequest("Params are required.");
             }

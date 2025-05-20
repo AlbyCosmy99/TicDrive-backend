@@ -85,6 +85,12 @@ namespace TicDrive.Controllers
         [HttpGet("")]
         public async Task<IActionResult> GetUserImages([FromQuery] GetUserImagesQuery query)
         {
+            var take = 5;
+
+            if(query?.Take != null)
+            {
+                take = query.Take;
+            }
             var userClaims = _authService.GetUserClaims(this);
             var userId = _authService.GetUserId(userClaims);
 
@@ -93,7 +99,7 @@ namespace TicDrive.Controllers
                 return BadRequest("User info not found. Payload broken.");
             }
 
-            var images = await _imagesService.GetUserImagesAsync(userId, query?.Take ?? 5);
+            var images = await _imagesService.GetUserImagesAsync(userId, take);
 
             return Ok(_mapper.Map<List<FullUserImageDto>>(images));
         }
