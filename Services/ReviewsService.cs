@@ -10,7 +10,7 @@ namespace TicDrive.Services
         Task<List<FullReviewDto>> GetAllReviewsByWorkshopId(string workshopId, int skip, int take);
     }
 
-    public class ReviewsService(TicDriveDbContext context, ImagesService imagesService) : IReviewsService
+    public class ReviewsService(TicDriveDbContext context, IImagesService imagesService) : IReviewsService
     {
         private readonly TicDriveDbContext _context = context;
         private readonly IImagesService _imagesService = imagesService;
