@@ -66,8 +66,6 @@ namespace TicDrive.Controllers
 
             [Required]
             [MinLength(8, ErrorMessage = "Password must be at least 8 characters long.")]
-            [RegularExpression(@"^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$",
-            ErrorMessage = "Password must contain at least one uppercase letter, one lowercase letter, and one number.")]
             public string Password { get; set; } = string.Empty;
 
             [Required]
