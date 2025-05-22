@@ -1,4 +1,5 @@
-﻿using Azure.Identity;
+﻿using Azure.Core;
+using Azure.Identity;
 using Microsoft.Graph;
 using Microsoft.Graph.Models;
 using Microsoft.Graph.Users.Item.SendMail;
@@ -18,6 +19,7 @@ namespace TicDrive.Services
         private readonly GraphServiceClient _graphClient;
         private readonly string _senderEmail;
         private readonly TicDriveDbContext _dbContext;
+        private readonly ClientSecretCredential _credential;
 
         public EmailService(IConfiguration config, TicDriveDbContext dbContext)
         {
@@ -30,10 +32,21 @@ namespace TicDrive.Services
 
             var credential = new ClientSecretCredential(tenantId, clientId, clientSecret);
             _graphClient = new GraphServiceClient(credential, new[] { "https://graph.microsoft.com/.default" });
+            _credential = credential;
+        }
+
+        public async Task<string> GetAccessTokenAsync()
+        {
+            var token = await _credential.GetTokenAsync(new TokenRequestContext(
+                new[] { "https://graph.microsoft.com/.default" }
+            ));
+
+            return token.Token;
         }
 
         public async Task SendEmailAsync(string to, string subject, string body)
         {
+            var token = await GetAccessTokenAsync();
             var message = new Message
             {
                 Subject = subject,
@@ -60,7 +73,6 @@ namespace TicDrive.Services
                 SaveToSentItems = false
             };
 
-            // ✅ CHIAMATA CORRETTA per Graph SDK v5+
             await _graphClient.Users[_senderEmail].SendMail.PostAsync(sendMailRequest);
         }
 
