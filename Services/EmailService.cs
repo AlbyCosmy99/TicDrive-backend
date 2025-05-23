@@ -1,8 +1,10 @@
 ﻿using Azure.Core;
 using Azure.Identity;
+using MailKit.Net.Smtp;
 using Microsoft.Graph;
 using Microsoft.Graph.Models;
 using Microsoft.Graph.Users.Item.SendMail;
+using MimeKit;
 using TicDrive.Context;
 
 namespace TicDrive.Services
@@ -16,67 +18,32 @@ namespace TicDrive.Services
 
     public class EmailService : IEmailService
     {
-        private readonly GraphServiceClient _graphClient;
         private readonly string _senderEmail;
+        private readonly string _senderPassword;
         private readonly TicDriveDbContext _dbContext;
-        private readonly ClientSecretCredential _credential;
 
         public EmailService(IConfiguration config, TicDriveDbContext dbContext)
         {
             _dbContext = dbContext;
-            _senderEmail = config["GraphSettings:SenderEmail"]!;
-
-            var tenantId = config["GraphSettings:TenantId"];
-            var clientId = config["GraphSettings:ClientId"];
-            var clientSecret = config["GraphSettings:ClientSecret"];
-
-            var credential = new ClientSecretCredential(tenantId, clientId, clientSecret);
-            _graphClient = new GraphServiceClient(credential, new[] { "https://graph.microsoft.com/.default" });
-            _credential = credential;
-        }
-
-        public async Task<string> GetAccessTokenAsync()
-        {
-            var token = await _credential.GetTokenAsync(new TokenRequestContext(
-                new[] { "https://graph.microsoft.com/.default" }
-            ));
-
-            return token.Token;
+            _senderEmail = config["EmailSettings:SenderEmail"]!;
+            _senderPassword = config["EmailSettings:SenderPassword"]!;
         }
 
         public async Task SendEmailAsync(string to, string subject, string body)
         {
-            var token = await GetAccessTokenAsync();
-            var message = new Message
-            {
-                Subject = subject,
-                Body = new ItemBody
-                {
-                    ContentType = BodyType.Html,
-                    Content = body
-                },
-                ToRecipients = new List<Recipient>
-        {
-            new Recipient
-            {
-                EmailAddress = new EmailAddress
-                {
-                    Address = to
-                }
-            }
+            var message = new MimeMessage();
+            message.From.Add(new MailboxAddress("TicDrive", _senderEmail));
+            message.To.Add(new MailboxAddress(to, to));
+            message.Subject = subject;
+
+            message.Body = new TextPart("html") { Text = body };
+
+            using var client = new SmtpClient();
+            await client.ConnectAsync("smtp.office365.com", 587, MailKit.Security.SecureSocketOptions.StartTls);
+            await client.AuthenticateAsync(_senderEmail, _senderPassword);
+            await client.SendAsync(message);
+            await client.DisconnectAsync(true);
         }
-            };
-
-            var sendMailRequest = new SendMailPostRequestBody
-            {
-                Message = message,
-                SaveToSentItems = false
-            };
-
-            await _graphClient.Users[_senderEmail].SendMail.PostAsync(sendMailRequest);
-        }
-
-
         public bool IsEmailConfirmed(string? email)
         {
             return _dbContext.Users.FirstOrDefault(u => u.Email == email)?.EmailConfirmed ?? false;
