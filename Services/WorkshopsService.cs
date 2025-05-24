@@ -109,7 +109,7 @@ namespace TicDrive.Services
                     Longitude = joined.w.Workshop.Longitude,
                     MeanStars = joined.w.Reviews.Any() ? joined.w.Reviews.Average(review => review.Stars) : 0,
                     NumberOfReviews = joined.w.Reviews.Count(),
-                    ServicePrice = serviceId != 0 && joined.w.OfferedService != null ? joined.w.OfferedService.Price : null,
+                    ServicePrice = serviceId != 0 && serviceId != null && joined.w.OfferedService != null ? joined.w.OfferedService.Price : null,
                     Currency = serviceId != 0 && joined.w.OfferedService != null ? joined.w.OfferedService.Currency : null,
                     Discount = serviceId != 0 && joined.w.OfferedService != null ? joined.w.OfferedService.Discount : null,
                     IsVerified = joined.w.Workshop.IsVerified,
