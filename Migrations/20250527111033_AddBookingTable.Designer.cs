@@ -12,8 +12,8 @@ using TicDrive.Context;
 namespace TicDrive.Migrations
 {
     [DbContext(typeof(TicDriveDbContext))]
-    [Migration("20250510220245_AddDayTranslationModel")]
-    partial class AddDayTranslationModel
+    [Migration("20250527111033_AddBookingTable")]
+    partial class AddBookingTable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,47 @@ namespace TicDrive.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("TicDrive.Models.Booking", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CustomerCarId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("CustomerId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("DateTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<decimal>("FinalPrice")
+                        .HasColumnType("numeric");
+
+                    b.Property<int>("ServiceId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("WorkshopId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomerCarId");
+
+                    b.HasIndex("CustomerId");
+
+                    b.HasIndex("ServiceId");
+
+                    b.HasIndex("WorkshopId");
+
+                    b.ToTable("Bookings");
+                });
 
             modelBuilder.Entity("TicDrive.Models.Car", b =>
                 {
@@ -394,6 +435,12 @@ namespace TicDrive.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("BG_Image")
+                        .HasColumnType("text");
+
+                    b.Property<int?>("FatherId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Icon")
                         .HasColumnType("text");
 
@@ -402,6 +449,8 @@ namespace TicDrive.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("FatherId");
 
                     b.ToTable("Services");
                 });
@@ -432,7 +481,8 @@ namespace TicDrive.Migrations
 
                     b.HasIndex("LanguageId");
 
-                    b.HasIndex("ServiceId");
+                    b.HasIndex("ServiceId", "LanguageId")
+                        .IsUnique();
 
                     b.ToTable("ServicesTranslations");
                 });
@@ -761,6 +811,41 @@ namespace TicDrive.Migrations
                     b.ToTable("WorkshopsSpecializations");
                 });
 
+            modelBuilder.Entity("TicDrive.Models.Booking", b =>
+                {
+                    b.HasOne("TicDrive.Models.CustomerCar", "CustomerCar")
+                        .WithMany()
+                        .HasForeignKey("CustomerCarId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TicDrive.Models.User", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TicDrive.Models.Service", "Service")
+                        .WithMany()
+                        .HasForeignKey("ServiceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TicDrive.Models.User", "Workshop")
+                        .WithMany()
+                        .HasForeignKey("WorkshopId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+
+                    b.Navigation("CustomerCar");
+
+                    b.Navigation("Service");
+
+                    b.Navigation("Workshop");
+                });
+
             modelBuilder.Entity("TicDrive.Models.Car", b =>
                 {
                     b.HasOne("TicDrive.Models.CarModelVersion", "CarModelVersion")
@@ -898,6 +983,15 @@ namespace TicDrive.Migrations
                     b.Navigation("Customer");
 
                     b.Navigation("Workshop");
+                });
+
+            modelBuilder.Entity("TicDrive.Models.Service", b =>
+                {
+                    b.HasOne("TicDrive.Models.Service", "Father")
+                        .WithMany()
+                        .HasForeignKey("FatherId");
+
+                    b.Navigation("Father");
                 });
 
             modelBuilder.Entity("TicDrive.Models.ServiceTranslation", b =>

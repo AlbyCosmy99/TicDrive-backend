@@ -14,12 +14,17 @@ namespace TicDrive.Context
         {
             base.OnModelCreating(modelBuilder);
 
-            //Users
+            //ServiceTranslation
+            modelBuilder.Entity<ServiceTranslation>()
+            .HasIndex(st => new { st.ServiceId, st.LanguageId })
+            .IsUnique();
+
+            //User
             modelBuilder.Entity<User>()
                 .HasIndex(u => u.Email)
                 .IsUnique();
 
-            //Reviews
+            //Review
             modelBuilder.Entity<Review>()
                 .HasOne(model => model.Customer)
                 .WithMany()
@@ -34,7 +39,7 @@ namespace TicDrive.Context
              .OnDelete(DeleteBehavior.NoAction)
              .IsRequired();
 
-            //FavoriteWorkshops
+            //FavoriteWorkshop
             modelBuilder.Entity<FavoriteWorkshop>()
                 .HasOne(model => model.Workshop)
                 .WithMany()
@@ -107,6 +112,7 @@ namespace TicDrive.Context
         public DbSet<UserImage> UserImages { get; set; }
         public DbSet<UserSpokenLanguage> SpokenLanguages { get; set; }
         public DbSet<DayTranslation> DaysTranslations { get; set; }
+        public DbSet<Booking> Bookings { get; set; }
 
         //logs
         public DbSet<LoginLog> LoginLogs { get; set; }

@@ -6,7 +6,7 @@ namespace TicDrive.Services
 {
     public interface IServicesService
     {
-        IQueryable<FullServiceDto> GetServices(string workshopId, string? filter = null, string? languageCode = "en");
+        IQueryable<FullServiceDto> GetServices(string workshopId, string? filter = null, string? languageCode = "en", int? fatherId = null);
     }
 
     public class ServicesService : IServicesService
@@ -18,9 +18,10 @@ namespace TicDrive.Services
             _dbContext = dbContext;
         }
 
-        public IQueryable<FullServiceDto> GetServices(string workshopId, string? filter = null, string? languageCode = "en")
+        public IQueryable<FullServiceDto> GetServices(string workshopId, string? filter = null, string? languageCode = "en",int? fatherId = null)
         {
             var query = _dbContext.Services
+                .Where(service => service.FatherId ==  fatherId)
                 .Join(_dbContext.ServicesTranslations,
                     service => service.Id,
                     serviceTranslation => serviceTranslation.ServiceId,
@@ -54,7 +55,9 @@ namespace TicDrive.Services
                     Id = sstl.service.Id,
                     Title = sstl.serviceTranslation.Title,
                     Description = sstl.serviceTranslation.Description,
-                    Icon = sstl.service.Icon
+                    Icon = sstl.service.Icon,
+                    Bg_Image = sstl.service.Bg_Image,
+                    FatherId = sstl.service.FatherId,
                 });
         }
     }

@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace TicDrive.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -80,11 +80,18 @@ namespace TicDrive.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Key = table.Column<string>(type: "text", nullable: false),
-                    Icon = table.Column<string>(type: "text", nullable: true)
+                    Icon = table.Column<string>(type: "text", nullable: true),
+                    BG_Image = table.Column<string>(type: "text", nullable: true),
+                    FatherId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Services", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Services_Services_FatherId",
+                        column: x => x.FatherId,
+                        principalTable: "Services",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -112,7 +119,6 @@ namespace TicDrive.Migrations
                     Address = table.Column<string>(type: "text", nullable: true),
                     Latitude = table.Column<decimal>(type: "numeric(18,6)", precision: 18, scale: 6, nullable: true),
                     Longitude = table.Column<decimal>(type: "numeric(18,6)", precision: 18, scale: 6, nullable: true),
-                    ProfileImageUrl = table.Column<string>(type: "text", nullable: true),
                     ResetPasswordCode = table.Column<string>(type: "text", nullable: false),
                     ResetPasswordExpiry = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     ResetPasswordToken = table.Column<string>(type: "text", nullable: false),
@@ -153,6 +159,33 @@ namespace TicDrive.Migrations
                         name: "FK_CarModels_CarMakes_CarMakeId",
                         column: x => x.CarMakeId,
                         principalTable: "CarMakes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DaysTranslations",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    LanguageId = table.Column<int>(type: "integer", nullable: false),
+                    DayId = table.Column<int>(type: "integer", nullable: false),
+                    Label = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DaysTranslations", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_DaysTranslations_Days_DayId",
+                        column: x => x.DayId,
+                        principalTable: "Days",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_DaysTranslations_Languages_LanguageId",
+                        column: x => x.LanguageId,
+                        principalTable: "Languages",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -349,7 +382,7 @@ namespace TicDrive.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     UserId = table.Column<string>(type: "text", nullable: false),
-                    Url = table.Column<string>(type: "text", nullable: false),
+                    Filename = table.Column<string>(type: "text", nullable: false),
                     IsMainImage = table.Column<bool>(type: "boolean", nullable: true)
                 },
                 constraints: table =>
@@ -375,11 +408,12 @@ namespace TicDrive.Migrations
                     PersonalEmail = table.Column<string>(type: "text", nullable: true),
                     OffersHomeServices = table.Column<bool>(type: "boolean", nullable: true),
                     MaxDailyVehicles = table.Column<int>(type: "integer", nullable: false),
-                    Description = table.Column<string>(type: "text", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: true),
                     LaborWarrantyMonths = table.Column<int>(type: "integer", nullable: false),
                     SignatureName = table.Column<string>(type: "text", nullable: false),
                     SignatureSurname = table.Column<string>(type: "text", nullable: false),
-                    SignatureDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    SignatureDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Active = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -566,6 +600,16 @@ namespace TicDrive.Migrations
                 column: "CustomerId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_DaysTranslations_DayId",
+                table: "DaysTranslations",
+                column: "DayId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DaysTranslations_LanguageId",
+                table: "DaysTranslations",
+                column: "LanguageId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_FavoriteWorkshops_CustomerId",
                 table: "FavoriteWorkshops",
                 column: "CustomerId");
@@ -601,14 +645,20 @@ namespace TicDrive.Migrations
                 column: "WorkshopId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Services_FatherId",
+                table: "Services",
+                column: "FatherId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ServicesTranslations_LanguageId",
                 table: "ServicesTranslations",
                 column: "LanguageId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ServicesTranslations_ServiceId",
+                name: "IX_ServicesTranslations_ServiceId_LanguageId",
                 table: "ServicesTranslations",
-                column: "ServiceId");
+                columns: new[] { "ServiceId", "LanguageId" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_SpokenLanguages_LanguageId",
@@ -677,6 +727,9 @@ namespace TicDrive.Migrations
         {
             migrationBuilder.DropTable(
                 name: "CustomerCars");
+
+            migrationBuilder.DropTable(
+                name: "DaysTranslations");
 
             migrationBuilder.DropTable(
                 name: "FavoriteWorkshops");

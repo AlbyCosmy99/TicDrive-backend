@@ -20,6 +20,7 @@ namespace TicDrive.Controllers
             public int? Take { get; set; } = 10;
             public string? Filter { get; set; } = string.Empty;
             public string? LanguageCode { get; set; }
+            public int? FatherId { get; set; }
         }
 
         [HttpGet]
@@ -34,7 +35,7 @@ namespace TicDrive.Controllers
 
             try
             {
-                var services = _servicesService.GetServices(workshopId, query.Filter, languageCode);
+                var services = _servicesService.GetServices(workshopId, query.Filter, languageCode, query.FatherId);
                 var paginatedServices = services.Skip(query.Skip ?? 0).Take(query.Take ?? 10).ToList();
 
                 return Ok(paginatedServices);
