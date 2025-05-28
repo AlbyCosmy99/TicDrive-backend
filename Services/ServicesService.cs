@@ -19,46 +19,68 @@ namespace TicDrive.Services
             _dbContext = dbContext;
         }
 
-        public IQueryable<FullServiceDto> GetServices(string workshopId, string? filter = null, string? languageCode = "en",int? fatherId = null)
+        public IQueryable<FullServiceDto> GetServices(string workshopId, string? filter = null, string? languageCode = "en", int? fatherId = null)
         {
-            var query = _dbContext.Services
-                .Where(service => service.FatherId ==  fatherId)
-                .Join(_dbContext.ServicesTranslations,
-                    service => service.Id,
-                    serviceTranslation => serviceTranslation.ServiceId,
-                    (service, serviceTranslation) => new { service, serviceTranslation })
-                .Join(_dbContext.Languages
-                    .Where(language => language.Code == languageCode),
-                    sst => sst.serviceTranslation.LanguageId,
-                    language => language.Id,
-                    (sst, language) => new { sst.service, sst.serviceTranslation, language })
-                .AsQueryable();
-
+            var servicesQuery = _dbContext.Services.AsQueryable();
 
             if (!string.IsNullOrEmpty(workshopId))
             {
-                query = query.Join(
-                    _dbContext.OfferedServices.Where(os => os.Workshop.Id == workshopId),
-                    sstl => sstl.service.Id,
-                    offeredService => offeredService.Service.Id,
-                    (service, offeredService) => service
-                );
+                var offeredServiceIds = _dbContext.OfferedServices
+                    .Where(os => os.Workshop.Id == workshopId)
+                    .Select(os => os.Service.Id)
+                    .ToList();
+
+                // Get a local cache of all services to walk the tree in memory
+                var allServices = _dbContext.Services.ToList();
+
+                var topLevelServiceIds = new HashSet<int>();
+
+                foreach (var serviceId in offeredServiceIds)
+                {
+                    var current = allServices.FirstOrDefault(s => s.Id == serviceId);
+                    while (current != null && current.FatherId != null)
+                    {
+                        current = allServices.FirstOrDefault(s => s.Id == current.FatherId);
+                    }
+                    if (current != null)
+                    {
+                        topLevelServiceIds.Add(current.Id);
+                    }
+                }
+
+                servicesQuery = _dbContext.Services
+                    .Where(s => topLevelServiceIds.Contains(s.Id));
             }
+            else
+            {
+                servicesQuery = servicesQuery.Where(service => service.FatherId == fatherId);
+            }
+
+            var query = servicesQuery
+                .Join(_dbContext.ServicesTranslations,
+                    service => service.Id,
+                    translation => translation.ServiceId,
+                    (service, translation) => new { service, translation })
+                .Join(_dbContext.Languages.Where(l => l.Code == languageCode),
+                    st => st.translation.LanguageId,
+                    language => language.Id,
+                    (st, language) => new { st.service, translation = st.translation });
 
             if (!string.IsNullOrEmpty(filter))
             {
-                query = query.Where(sstl => sstl.serviceTranslation.Title.Contains(filter));
+                query = query.Where(q => q.translation.Title.Contains(filter));
             }
 
-            return query.OrderBy(sstl => sstl.service.Id)
-                .Select(sstl => new FullServiceDto
+            return query
+                .OrderBy(q => q.service.Id)
+                .Select(q => new FullServiceDto
                 {
-                    Id = sstl.service.Id,
-                    Title = sstl.serviceTranslation.Title,
-                    Description = sstl.serviceTranslation.Description,
-                    Icon = sstl.service.Icon,
-                    Bg_Image = sstl.service.Bg_Image,
-                    FatherId = sstl.service.FatherId,
+                    Id = q.service.Id,
+                    Title = q.translation.Title,
+                    Description = q.translation.Description,
+                    Icon = q.service.Icon,
+                    Bg_Image = q.service.Bg_Image,
+                    FatherId = q.service.FatherId
                 });
         }
 
