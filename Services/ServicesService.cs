@@ -7,6 +7,7 @@ namespace TicDrive.Services
     public interface IServicesService
     {
         IQueryable<FullServiceDto> GetServices(string workshopId, string? filter = null, string? languageCode = "en", int? fatherId = null);
+        bool ServiceHasChildren(int serviceId);
     }
 
     public class ServicesService : IServicesService
@@ -59,6 +60,11 @@ namespace TicDrive.Services
                     Bg_Image = sstl.service.Bg_Image,
                     FatherId = sstl.service.FatherId,
                 });
+        }
+
+        public bool ServiceHasChildren(int serviceId)
+        {
+            return _dbContext.Services.Any(s => s.FatherId == serviceId);
         }
     }
 }
