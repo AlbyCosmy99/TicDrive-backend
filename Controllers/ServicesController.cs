@@ -46,7 +46,7 @@ namespace TicDrive.Controllers
             }
         }
 
-        [HttpGet("serviceHasChildren/{serviceId}")]
+        [HttpGet("serviceHasChildren/{serviceId: int}")]
         public IActionResult ServiceHasChildren(int serviceId)
         {
             return Ok(new { ServiceHasChildren = _servicesService.ServiceHasChildren(serviceId) });
