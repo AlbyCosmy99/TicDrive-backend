@@ -14,7 +14,7 @@ namespace TicDrive.Services
 {
     public interface IWorkshopsService
     {
-        Task<IEnumerable<ExtendedFullWorkshopDto>> GetWorkshops(int? serviceId, string? customerId, decimal? latitude, decimal? longitude, bool? favorite = false, string? filter = null, int? kmRange = 20);
+        Task<IEnumerable<ExtendedFullWorkshopDto>> GetWorkshops(int? serviceId, string? customerId, string? workshopId, decimal? latitude, decimal? longitude, bool? favorite = false, string? filter = null, int? kmRange = 20);
         Task LikeWorkshop(string userId, string workshopId);
         List<Specialization> GetSpecializations();
     }
@@ -32,7 +32,7 @@ namespace TicDrive.Services
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<ExtendedFullWorkshopDto>> GetWorkshops(int? serviceId, string? customerId, decimal? latitude, decimal? longitude, bool? favorite = false, string? filter = null, int? kmRange = 20)
+        public async Task<IEnumerable<ExtendedFullWorkshopDto>> GetWorkshops(int? serviceId, string? customerId, string? workshopId, decimal? latitude, decimal? longitude, bool? favorite = false, string? filter = null, int? kmRange = 20)
         {
             var workshopsQuery = _context.Users
                 .Where(user => user.UserType == Enums.UserType.Workshop && user.EmailConfirmed)
@@ -122,8 +122,13 @@ namespace TicDrive.Services
                 projectedWorkshops = projectedWorkshops.Where(workshop => workshop.IsFavorite == true);
             }
 
+            if(workshopId != null)
+            {
+                projectedWorkshops = projectedWorkshops.Where(workshop => workshop.Id == workshopId);
+            }
+
             return projectedWorkshops
-                .Where(workshop => workshop.Name.ToLower().Contains(filter?.ToLower() ?? string.Empty));
+                .Where(workshop => workshop.WorkshopName.ToLower().Contains(filter?.ToLower() ?? string.Empty));
         }
 
         public async Task LikeWorkshop(string userId, string workshopId)

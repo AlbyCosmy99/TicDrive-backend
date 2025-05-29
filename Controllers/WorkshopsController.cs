@@ -30,6 +30,7 @@ namespace TicDrive.Controllers
             public int ServiceId { get; set; } = 0;
             public string? Filter { get; set; } = string.Empty;
             public string Order { get; set; } = "asc";
+            public string? WorkshopId { get; set; } = null;
         }
 
         [HttpGet]
@@ -45,7 +46,7 @@ namespace TicDrive.Controllers
 
             try
             {
-                var workshops = await _workshopsService.GetWorkshops(serviceId, userId,null, null, false, filter: query.Filter);
+                var workshops = await _workshopsService.GetWorkshops(serviceId, userId, query.WorkshopId, null, null, false, filter: query.Filter);
 
                 switch (query.Order?.ToLower())
                 {
@@ -60,7 +61,13 @@ namespace TicDrive.Controllers
 
                 var pagedWorkshops = workshops.Skip(skip).Take(take).ToList();
 
-                return Ok(new { workshops = pagedWorkshops, Count = workshops.Count() });
+                if(query?.WorkshopId != null)
+                {
+                    return Ok(new { workshop = pagedWorkshops.FirstOrDefault(), Count = pagedWorkshops.Count() > 0 ? 1 : 0 });
+                } else
+                {
+                    return Ok(new { workshops = pagedWorkshops, Count = workshops.Count() });
+                }
             }
             catch (Exception ex)
             {
@@ -78,6 +85,7 @@ namespace TicDrive.Controllers
             public int Take { get; set; } = 10;
             public string? Filter { get; set; } = string.Empty;
             public string Order { get; set; } = "asc";
+            public string? WorkshopId { get; set; } = null;
         }
 
         [HttpGet]
@@ -95,6 +103,7 @@ namespace TicDrive.Controllers
             var nearbyWorkshops = await _workshopsService.GetWorkshops(
                 query.ServiceId,
                 userId,
+                query.WorkshopId,
                 (decimal)query.Latitude,
                 (decimal)query.Longitude,
                 false,
@@ -115,7 +124,14 @@ namespace TicDrive.Controllers
 
             var pagedNearbyWorkshops = nearbyWorkshops.Skip(query.Skip).Take(query.Take).ToList();
 
-            return Ok(new { nearbyWorkshops = pagedNearbyWorkshops, Count = nearbyWorkshops.Count() });
+            if(query?.WorkshopId != null)
+            {
+                return Ok(new { nearbyWorkshop = pagedNearbyWorkshops.FirstOrDefault(), Count = nearbyWorkshops.Count() > 0 ? 1 : 0 });
+            }
+            else
+            {
+                return Ok(new { nearbyWorkshops = pagedNearbyWorkshops, Count = nearbyWorkshops.Count() });
+            }
         }
 
         [HttpGet]
