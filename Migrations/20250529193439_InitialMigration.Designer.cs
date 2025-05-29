@@ -12,8 +12,8 @@ using TicDrive.Context;
 namespace TicDrive.Migrations
 {
     [DbContext(typeof(TicDriveDbContext))]
-    [Migration("20250527111033_AddBookingTable")]
-    partial class AddBookingTable
+    [Migration("20250529193439_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -435,7 +435,7 @@ namespace TicDrive.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("BG_Image")
+                    b.Property<string>("Bg_Image")
                         .HasColumnType("text");
 
                     b.Property<int?>("FatherId")

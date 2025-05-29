@@ -81,7 +81,7 @@ namespace TicDrive.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Key = table.Column<string>(type: "text", nullable: false),
                     Icon = table.Column<string>(type: "text", nullable: true),
-                    BG_Image = table.Column<string>(type: "text", nullable: true),
+                    Bg_Image = table.Column<string>(type: "text", nullable: true),
                     FatherId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
@@ -574,6 +574,68 @@ namespace TicDrive.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Bookings",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    DateTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CustomerId = table.Column<string>(type: "text", nullable: false),
+                    WorkshopId = table.Column<string>(type: "text", nullable: false),
+                    ServiceId = table.Column<int>(type: "integer", nullable: false),
+                    CustomerCarId = table.Column<int>(type: "integer", nullable: false),
+                    FinalPrice = table.Column<decimal>(type: "numeric", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Bookings", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Bookings_CustomerCars_CustomerCarId",
+                        column: x => x.CustomerCarId,
+                        principalTable: "CustomerCars",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Bookings_Services_ServiceId",
+                        column: x => x.ServiceId,
+                        principalTable: "Services",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Bookings_Users_CustomerId",
+                        column: x => x.CustomerId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Bookings_Users_WorkshopId",
+                        column: x => x.WorkshopId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Bookings_CustomerCarId",
+                table: "Bookings",
+                column: "CustomerCarId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Bookings_CustomerId",
+                table: "Bookings",
+                column: "CustomerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Bookings_ServiceId",
+                table: "Bookings",
+                column: "ServiceId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Bookings_WorkshopId",
+                table: "Bookings",
+                column: "WorkshopId");
+
             migrationBuilder.CreateIndex(
                 name: "IX_CarModels_CarMakeId",
                 table: "CarModels",
@@ -726,7 +788,7 @@ namespace TicDrive.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "CustomerCars");
+                name: "Bookings");
 
             migrationBuilder.DropTable(
                 name: "DaysTranslations");
@@ -768,7 +830,7 @@ namespace TicDrive.Migrations
                 name: "WorkshopsSpecializations");
 
             migrationBuilder.DropTable(
-                name: "Cars");
+                name: "CustomerCars");
 
             migrationBuilder.DropTable(
                 name: "Services");
@@ -784,6 +846,9 @@ namespace TicDrive.Migrations
 
             migrationBuilder.DropTable(
                 name: "Specializations");
+
+            migrationBuilder.DropTable(
+                name: "Cars");
 
             migrationBuilder.DropTable(
                 name: "Users");
