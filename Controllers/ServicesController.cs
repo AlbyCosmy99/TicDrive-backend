@@ -21,6 +21,7 @@ namespace TicDrive.Controllers
             public string? Filter { get; set; } = string.Empty;
             public string? LanguageCode { get; set; }
             public int? FatherId { get; set; }
+            public bool GetAncestors { get; set; } = false;
         }
 
         [HttpGet]
@@ -35,7 +36,7 @@ namespace TicDrive.Controllers
 
             try
             {
-                var services = _servicesService.GetServices(workshopId, query.Filter, languageCode, query.FatherId);
+                var services = _servicesService.GetServices(workshopId, query.Filter, languageCode, query.FatherId, query.GetAncestors);
                 var paginatedServices = services.Skip(query.Skip ?? 0).Take(query.Take ?? 10).ToList();
 
                 return Ok(paginatedServices);

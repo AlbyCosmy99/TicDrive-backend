@@ -6,7 +6,7 @@ namespace TicDrive.Services
 {
     public interface IServicesService
     {
-        IQueryable<FullServiceDto> GetServices(string workshopId, string? filter = null, string? languageCode = "en", int? fatherId = null);
+        IQueryable<FullServiceDto> GetServices(string workshopId, string? filter = null, string? languageCode = "en", int? fatherId = null, bool getAncestors = false);
         bool ServiceHasChildren(int serviceId);
     }
 
@@ -19,7 +19,12 @@ namespace TicDrive.Services
             _dbContext = dbContext;
         }
 
-        public IQueryable<FullServiceDto> GetServices(string workshopId, string? filter = null, string? languageCode = "en", int? fatherId = null)
+        public IQueryable<FullServiceDto> GetServices(
+            string workshopId,
+            string? filter = null,
+            string? languageCode = "en",
+            int? fatherId = null,
+            bool getAncestors = true)
         {
             var servicesQuery = _dbContext.Services.AsQueryable();
 
@@ -30,26 +35,32 @@ namespace TicDrive.Services
                     .Select(os => os.Service.Id)
                     .ToList();
 
-                // Get a local cache of all services to walk the tree in memory
-                var allServices = _dbContext.Services.ToList();
-
-                var topLevelServiceIds = new HashSet<int>();
-
-                foreach (var serviceId in offeredServiceIds)
+                if (getAncestors)
                 {
-                    var current = allServices.FirstOrDefault(s => s.Id == serviceId);
-                    while (current != null && current.FatherId != null)
-                    {
-                        current = allServices.FirstOrDefault(s => s.Id == current.FatherId);
-                    }
-                    if (current != null)
-                    {
-                        topLevelServiceIds.Add(current.Id);
-                    }
-                }
+                    var allServices = _dbContext.Services.ToList();
+                    var topLevelServiceIds = new HashSet<int>();
 
-                servicesQuery = _dbContext.Services
-                    .Where(s => topLevelServiceIds.Contains(s.Id));
+                    foreach (var serviceId in offeredServiceIds)
+                    {
+                        var current = allServices.FirstOrDefault(s => s.Id == serviceId);
+                        while (current != null && current.FatherId != null)
+                        {
+                            current = allServices.FirstOrDefault(s => s.Id == current.FatherId);
+                        }
+                        if (current != null)
+                        {
+                            topLevelServiceIds.Add(current.Id);
+                        }
+                    }
+
+                    servicesQuery = _dbContext.Services
+                        .Where(s => topLevelServiceIds.Contains(s.Id));
+                }
+                else
+                {
+                    servicesQuery = _dbContext.Services
+                        .Where(s => offeredServiceIds.Contains(s.Id));
+                }
             }
             else
             {
