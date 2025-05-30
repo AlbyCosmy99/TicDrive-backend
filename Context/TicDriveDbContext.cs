@@ -87,6 +87,12 @@ namespace TicDrive.Context
                 .Entity<LegalDeclaration>()
                 .Property(ld => ld.Context)
                 .HasConversion<string>();
+
+            //booking
+            modelBuilder
+               .Entity<Booking>()
+               .Property(e => e.Status)
+               .HasConversion<string>();
         }
 
         public DbSet<Service> Services { get; set; }

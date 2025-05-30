@@ -5,7 +5,8 @@ namespace TicDrive.Models
     public class Booking
     {
         public int Id { get; set; }
-        public System.DateTime DateTime { get; set; }
+        public System.DateTime BookingDate { get; set; }
+        public System.DateTime AppointmentDate { get; set; }
         private User _customer;
         public required string CustomerId { get; set; }
         [ForeignKey(nameof(CustomerId))]
@@ -41,5 +42,6 @@ namespace TicDrive.Models
         [ForeignKey(nameof(CustomerCarId))]
         public CustomerCar CustomerCar { get; set; }
         public decimal FinalPrice { get; set; }
+        public BookingType Status { get; set; }
     }
 }

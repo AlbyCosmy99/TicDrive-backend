@@ -17,6 +17,7 @@ namespace TicDrive.AppConfig
             builder.RegisterType<OfferedServicesService>().As<IOfferedServicesService>();
             builder.RegisterType<ImagesService>().As<IImagesService>();
             builder.RegisterType<DateTimeService>().As<IDateTimeService>();
+            builder.RegisterType<BookingsService>().As<IBookingsService>();
         }
     }
 }
