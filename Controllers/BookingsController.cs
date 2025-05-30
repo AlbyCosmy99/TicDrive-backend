@@ -1,8 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using TicDrive.Models;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using TicDrive.Context;
 using Microsoft.AspNetCore.Authorization;
 using TicDrive.Services;
 
@@ -12,13 +8,13 @@ namespace TicDrive.Controllers
     [ApiController]
     public class BookingsController : ControllerBase
     {
-        private readonly TicDriveDbContext _context;
         private readonly IAuthService _authService;
+        private readonly IBookingsService _bookingsService;
 
-        public BookingsController(TicDriveDbContext context, IAuthService authService)
+        public BookingsController(IAuthService authService, IBookingsService bookingsService)
         {
-            _context = context;
             _authService = authService;
+            _bookingsService = bookingsService;
         }
 
         public class BookServiceBody
@@ -41,38 +37,26 @@ namespace TicDrive.Controllers
             var userId = _authService.GetUserId(userClaims);
             var userType = _authService.GetUserType(userClaims);
 
-            var workshop = await _context.Users.FindAsync(payload.WorkshopId);
-            var service = await _context.Services.FindAsync(payload.ServiceId);
-            var customerCar = await _context.CustomerCars.FindAsync(payload.CustomerCarId);
-
-            if (userId == null || userType != Enums.UserType.Customer)
-                return BadRequest("Invalid customer");
-
-            if (workshop == null || workshop.UserType != Enums.UserType.Workshop)
-                return BadRequest("Invalid workshop");
-
-            if (service == null)
-                return BadRequest("Invalid service");
-
-            if (customerCar == null)
-                return BadRequest("Invalid car");
-
-            var booking = new Booking
+            if (userId == null || userType == null)
             {
-                CustomerId = userId,
-                WorkshopId = payload.WorkshopId,
-                ServiceId = payload.ServiceId,
-                CustomerCarId = payload.CustomerCarId,
-                AppointmentDate = payload.AppointmentDate,
-                BookingDate = DateTime.UtcNow,
-                FinalPrice = payload.FinalPrice,
-                Status = BookingType.Waiting
-            };
+                return Unauthorized("User is not authorize to book a service.");
+            }
 
-            _context.Bookings.Add(booking);
-            await _context.SaveChangesAsync();
+            var result = await _bookingsService.BookAServiceAsync(
+                userId,
+                (Enums.UserType) userType,
+                payload.WorkshopId,
+                payload.ServiceId,
+                payload.CustomerCarId,
+                payload.AppointmentDate,
+                payload.FinalPrice
+            );
 
-            return Ok(new { Message = "Booking created", BookingId = booking.Id });
+            if (!result.Success)
+                return BadRequest(result.Message);
+
+            return Ok(new { result.Message, result.BookingId });
         }
+
     }
 }
