@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
+using TicDrive.Context;
+using TicDrive.Enums;
 using TicDrive.Services;
 
 namespace TicDrive.Controllers
@@ -10,11 +13,19 @@ namespace TicDrive.Controllers
     {
         private readonly IAuthService _authService;
         private readonly IBookingsService _bookingsService;
+        private readonly IEmailService _emailService;
+        private readonly TicDriveDbContext _context;
 
-        public BookingsController(IAuthService authService, IBookingsService bookingsService)
+        public BookingsController(
+            IAuthService authService,
+            IBookingsService bookingsService,
+            IEmailService emailService,
+            TicDriveDbContext context)
         {
             _authService = authService;
             _bookingsService = bookingsService;
+            _emailService = emailService;
+            _context = context;
         }
 
         public class BookServiceBody
@@ -37,14 +48,12 @@ namespace TicDrive.Controllers
             var userId = _authService.GetUserId(userClaims);
             var userType = _authService.GetUserType(userClaims);
 
-            if (userId == null || userType == null)
-            {
-                return Unauthorized("User is not authorize to book a service.");
-            }
+            if (userId == null || userType != UserType.Customer)
+                return Unauthorized("Non sei autorizzato a prenotare un servizio.");
 
             var result = await _bookingsService.BookAServiceAsync(
                 userId,
-                (Enums.UserType) userType,
+                (UserType)userType,
                 payload.WorkshopId,
                 payload.ServiceId,
                 payload.CustomerCarId,
@@ -55,8 +64,43 @@ namespace TicDrive.Controllers
             if (!result.Success)
                 return BadRequest(result.Message);
 
+            var customer = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            var workshop = await _context.Users.FirstOrDefaultAsync(u => u.Id == payload.WorkshopId);
+            var service = await _context.ServicesTranslations.FirstOrDefaultAsync(s => s.ServiceId == payload.ServiceId);
+
+            if (customer?.EmailConfirmed == true && !string.IsNullOrEmpty(customer.Email))
+            {
+                var emailBody = $@"
+                    <p>Ciao {customer.Name},</p>
+                    <p>Hai prenotato con successo il servizio <strong>{service?.Title}</strong> presso l'officina <strong>{workshop?.Name}</strong>.</p>
+                    <p><strong>Data appuntamento:</strong> {payload.AppointmentDate:dddd dd MMMM yyyy, HH:mm}</p>
+                    <p><strong>Prezzo:</strong> €{payload.FinalPrice:F2}</p>
+                    <p>Grazie per aver scelto TicDrive!</p>";
+
+                await _emailService.SendEmailAsync(
+                    customer.Email,
+                    "Conferma prenotazione TicDrive",
+                    emailBody
+                );
+            }
+
+            if (workshop?.EmailConfirmed == true && !string.IsNullOrEmpty(workshop.Email))
+            {
+                var emailBody = $@"
+                    <p>Ciao {workshop.Name},</p>
+                    <p>Hai ricevuto una nuova prenotazione per il servizio <strong>{service?.Title}</strong> da parte del cliente <strong>{customer?.Name}</strong>.</p>
+                    <p><strong>Data appuntamento:</strong> {payload.AppointmentDate:dddd dd MMMM yyyy, HH:mm}</p>
+                    <p><strong>Prezzo concordato:</strong> €{payload.FinalPrice:F2}</p>
+                    <p>Accedi alla tua dashboard per maggiori dettagli.</p>";
+
+                await _emailService.SendEmailAsync(
+                    workshop.Email,
+                    "Nuova prenotazione su TicDrive",
+                    emailBody
+                );
+            }
+
             return Ok(new { result.Message, result.BookingId });
         }
-
     }
 }
