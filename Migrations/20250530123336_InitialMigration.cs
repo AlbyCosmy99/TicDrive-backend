@@ -580,12 +580,14 @@ namespace TicDrive.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    DateTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    BookingDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    AppointmentDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     CustomerId = table.Column<string>(type: "text", nullable: false),
                     WorkshopId = table.Column<string>(type: "text", nullable: false),
                     ServiceId = table.Column<int>(type: "integer", nullable: false),
                     CustomerCarId = table.Column<int>(type: "integer", nullable: false),
-                    FinalPrice = table.Column<decimal>(type: "numeric", nullable: false)
+                    FinalPrice = table.Column<decimal>(type: "numeric", nullable: false),
+                    Status = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {

@@ -30,6 +30,12 @@ namespace TicDrive.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime>("AppointmentDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("BookingDate")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<int>("CustomerCarId")
                         .HasColumnType("integer");
 
@@ -37,14 +43,15 @@ namespace TicDrive.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("DateTime")
-                        .HasColumnType("timestamp with time zone");
-
                     b.Property<decimal>("FinalPrice")
                         .HasColumnType("numeric");
 
                     b.Property<int>("ServiceId")
                         .HasColumnType("integer");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("WorkshopId")
                         .IsRequired()
