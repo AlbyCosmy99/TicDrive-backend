@@ -15,5 +15,6 @@ namespace TicDrive.Dto.CarDto.CustomerCarDto
         public int? Mileage { get; set; }
         public string? CarName { get; set; }
         public int? CV { get; set; }
+        public string? LogoUrl { get; set; }
     }
 }

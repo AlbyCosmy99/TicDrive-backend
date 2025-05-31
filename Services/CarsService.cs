@@ -140,7 +140,8 @@ namespace TicDrive.Services
                     Mileage = cccvm.cccv.ccc.customerCar.Km,
                     CarName = cccvm.cccv.ccc.customerCar.Name,
                     CV = cccvm.cccv.ccc.car.CV,
-                    CustomerId = cccvm.cccv.ccc.customerCar.CustomerId
+                    CustomerId = cccvm.cccv.ccc.customerCar.CustomerId,
+                    LogoUrl = make.LogoUrl
                 })
                 .ToList();
         }
