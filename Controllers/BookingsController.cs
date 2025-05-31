@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using TicDrive.Context;
 using TicDrive.Enums;
 using TicDrive.Services;
+using System.Globalization;
 
 namespace TicDrive.Controllers
 {
@@ -70,10 +71,17 @@ namespace TicDrive.Controllers
 
             if (customer?.EmailConfirmed == true && !string.IsNullOrEmpty(customer.Email))
             {
+                var italianCulture = new CultureInfo("it-IT");
+                TextInfo textInfo = italianCulture.TextInfo;
+
+                var formattedDate = textInfo.ToTitleCase(
+                    payload.AppointmentDate.ToString("dddd dd MMMM yyyy - HH:mm", italianCulture)
+                );
+
                 var emailBody = $@"
                     <p>Ciao {customer.Name},</p>
                     <p>Hai prenotato con successo il servizio <strong>{service?.Title}</strong> presso l'officina <strong>{workshop?.Name}</strong>.</p>
-                    <p><strong>Data appuntamento:</strong> {payload.AppointmentDate:dddd dd MMMM yyyy, HH:mm}</p>
+                    <p><strong>Data appuntamento:</strong> {formattedDate}</p>
                     <p><strong>Prezzo:</strong> €{payload.FinalPrice:F2}</p>
                     <p>Grazie per aver scelto TicDrive!</p>";
 
@@ -84,21 +92,24 @@ namespace TicDrive.Controllers
                 );
             }
 
-            if (workshop?.EmailConfirmed == true && !string.IsNullOrEmpty(workshop.Email))
-            {
-                var emailBody = $@"
-                    <p>Ciao {workshop.Name},</p>
-                    <p>Hai ricevuto una nuova prenotazione per il servizio <strong>{service?.Title}</strong> da parte del cliente <strong>{customer?.Name}</strong>.</p>
-                    <p><strong>Data appuntamento:</strong> {payload.AppointmentDate:dddd dd MMMM yyyy, HH:mm}</p>
-                    <p><strong>Prezzo concordato:</strong> €{payload.FinalPrice:F2}</p>
-                    <p>Accedi alla tua dashboard per maggiori dettagli.</p>";
+            //if (workshop?.EmailConfirmed == true && !string.IsNullOrEmpty(workshop.Email))
+            //{
+            //    var italianCulture = new CultureInfo("it-IT");
+            //    var formattedDate = payload.AppointmentDate.ToString("dddd dd MMMM yyyy - HH:mm", italianCulture);
 
-                await _emailService.SendEmailAsync(
-                    workshop.Email,
-                    "Nuova prenotazione su TicDrive",
-                    emailBody
-                );
-            }
+            //    var emailBody = $@"
+            //    <p>Ciao {workshop.Name},</p>
+            //    <p>Hai ricevuto una nuova prenotazione per il servizio <strong>{service?.Title}</strong> da parte del cliente <strong>{customer?.Name}</strong>.</p>
+            //    <p><strong>Data appuntamento:</strong> {formattedDate}</p>
+            //    <p><strong>Prezzo concordato:</strong> €{payload.FinalPrice:F2}</p>
+            //    <p>Accedi alla tua dashboard per maggiori dettagli.</p>";
+
+            //    await _emailService.SendEmailAsync(
+            //        workshop.Email,
+            //        "Nuova prenotazione su TicDrive",
+            //        emailBody
+            //    );
+            //}
 
             return Ok(new { result.Message, result.BookingId });
         }
