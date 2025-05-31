@@ -67,7 +67,8 @@ namespace TicDrive.Controllers
 
             var customer = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
             var workshop = await _context.Users.FirstOrDefaultAsync(u => u.Id == payload.WorkshopId);
-            var service = await _context.ServicesTranslations.FirstOrDefaultAsync(s => s.ServiceId == payload.ServiceId);
+            var workshopDetails = await _context.WorkshopsDetails.FirstOrDefaultAsync(workshop => workshop.WorkshopId == payload.WorkshopId);
+            var service = await _context.ServicesTranslations.FirstOrDefaultAsync(s => s.ServiceId == payload.ServiceId && s.LanguageId == 2);
 
             if (customer?.EmailConfirmed == true && !string.IsNullOrEmpty(customer.Email))
             {
@@ -80,7 +81,7 @@ namespace TicDrive.Controllers
 
                 var emailBody = $@"
                     <p>Ciao {customer.Name},</p>
-                    <p>Hai prenotato con successo il servizio <strong>{service?.Title}</strong> presso l'officina <strong>{workshop?.Name}</strong>.</p>
+                    <p>Hai prenotato con successo il servizio <strong>{service?.Title}</strong> presso l'officina <strong>{workshopDetails?.WorkshopName}</strong>.</p>
                     <p><strong>Data appuntamento:</strong> {formattedDate}</p>
                     <p><strong>Prezzo:</strong> €{payload.FinalPrice:F2}</p>
                     <p>Grazie per aver scelto TicDrive!</p>";
