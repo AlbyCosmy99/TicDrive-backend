@@ -10,7 +10,7 @@ namespace TicDrive.Models
 
         [Required]
         [RegularExpression(@"^[A-Z]{2}[0-9]{3}[A-Z]{2}$", ErrorMessage = "Licence plate must be in the format XX999XX.")]
-        public string? LicencePlate { get; set; }
+        public string LicencePlate { get; set; }
 
         [Required]
         public int CarModelVersionId { get; set; }
