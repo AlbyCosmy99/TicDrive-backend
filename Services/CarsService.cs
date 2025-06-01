@@ -14,62 +14,46 @@ namespace TicDrive.Services
         Task<(bool, int)> PostCustomerCar(AddCarQuery query, string customerId);
         Task UpdateCustomerCar(AddCarQuery query, string customerId);
         List<FullCustomerCarDto> GetCustomerCars(string customerId);
-        Task DeleteCustomerCar(int carId);
+        Task<bool> DeleteCustomerCar(int carId);
     }
+
     public class CarsService : ICarsService
     {
         private readonly TicDriveDbContext _dbContext;
+
         public CarsService(TicDriveDbContext dbContext)
         {
             _dbContext = dbContext;
         }
-        public List<CarMake> GetMakes() {
-            return [.. _dbContext.CarMakes];
-        }
 
-        public List<CarModel> GetCarModelsByMakeId(int makeId)
-        {
-            return [.. _dbContext.CarModels.Where(model => model.CarMakeId == makeId)];
-        }
+        public List<CarMake> GetMakes() => _dbContext.CarMakes.ToList();
 
-        public List<CarModelVersion> GetModelVersions(int modelId)
-        {
-            return [.. _dbContext.CarModelVersions.Where(version => version.CarModelId == modelId)];
-        }
+        public List<CarModel> GetCarModelsByMakeId(int makeId) =>
+            _dbContext.CarModels.Where(model => model.CarMakeId == makeId).ToList();
+
+        public List<CarModelVersion> GetModelVersions(int modelId) =>
+            _dbContext.CarModelVersions.Where(version => version.CarModelId == modelId).ToList();
 
         public async Task<(bool, int)> PostCustomerCar(AddCarQuery query, string customerId)
         {
-            var car = _dbContext.Cars.Where(car => car.LicencePlate == query.Plate).FirstOrDefault();
+            using var transaction = await _dbContext.Database.BeginTransactionAsync();
 
-            if(car == null)
+            var car = await _dbContext.Cars.FirstOrDefaultAsync(c => c.LicencePlate == query.Plate);
+
+            if (car == null)
             {
-                var carMake = _dbContext.CarMakes.Where(car => car.Name == query.Make).FirstOrDefault();
+                var carMake = await _dbContext.CarMakes.FirstOrDefaultAsync(m => m.Name == query.Make)
+                    ?? throw new Exception("Car make not found.");
 
-                if (carMake == null)
+                var carModel = await _dbContext.CarModels.FirstOrDefaultAsync(m => m.Name == query.Model && m.CarMakeId == carMake.Id)
+                    ?? throw new Exception("Car model not found.");
+
+                var carVersion = await _dbContext.CarModelVersions.FirstOrDefaultAsync(cv => cv.Year == query.Year && cv.CarModelId == carModel.Id)
+                    ?? throw new Exception("Car version not found.");
+
+                car = new Car
                 {
-                    throw new Exception("Car make is null.");
-                }
-
-                var carModel = _dbContext.CarModels.Where(car => car.CarMakeId == carMake.Id && car.Name == query.Model).FirstOrDefault();
-
-                if (carModel == null)
-                {
-                    throw new Exception("Car model is null.");
-                }
-
-
-                var carVersion = _dbContext.CarModelVersions
-                    .Where(carVersion => carVersion.Year == query.Year && carVersion.CarModel == carModel)
-                    .FirstOrDefault();
-
-                if (carVersion == null)
-                {
-                    throw new Exception("Car version is null.");
-                }
-
-                var newCar = new Car
-                {
-                    LicencePlate = query.Plate,
+                    LicencePlate = query.Plate!,
                     CarModelVersionId = carVersion.Id,
                     FuelType = query.FuelType,
                     TransmissionType = query.TransmissionType,
@@ -77,77 +61,35 @@ namespace TicDrive.Services
                     CV = query.CV
                 };
 
-                _dbContext.Cars.Add(newCar);
+                _dbContext.Cars.Add(car);
                 await _dbContext.SaveChangesAsync();
-
-                car = _dbContext.Cars.Where(car => car.LicencePlate == query.Plate).FirstOrDefault();
             }
 
-            if(car == null)
+            var customerCar = await _dbContext.CustomerCars.FirstOrDefaultAsync(c => c.CustomerId == customerId && c.CarId == car.Id);
+            if (customerCar != null)
             {
-                throw new Exception("Error while registering the car.");
-            }
-
-            var customerCar = _dbContext.CustomerCars.Where(c => c.CustomerId == customerId && c.CarId == car.Id).FirstOrDefault();
-
-            if(customerCar != null)
-            {
-                return (false, customerCar.Id); //car already registered for this user
+                return (false, customerCar.Id); // already registered
             }
 
             var newCustomerCar = new CustomerCar
             {
                 CarId = car.Id,
                 CustomerId = customerId,
-                Name = query.Name != null ? query.Name : "My Car",
+                Name = query.Name ?? "My Car",
                 Km = query.Mileage
             };
 
             _dbContext.CustomerCars.Add(newCustomerCar);
             await _dbContext.SaveChangesAsync();
 
+            await transaction.CommitAsync();
             return (true, newCustomerCar.Id);
-        }
-
-        public List<FullCustomerCarDto> GetCustomerCars(string customerId)
-        {
-            return _dbContext.CustomerCars
-                .Where(customerCar => customerCar.CustomerId == customerId)
-                .Join(_dbContext.Cars,
-                customerCar => customerCar.CarId,
-                car => car.Id,
-                (customerCar, car) => new { customerCar, car })
-                .Join(_dbContext.CarModelVersions,
-                ccc => ccc.car.CarModelVersionId,
-                modelVersion => modelVersion.Id,
-                (ccc, modelVersion) => new { ccc, modelVersion })
-                .Join(_dbContext.CarModels,
-                cccv => cccv.modelVersion.CarModelId,
-                model => model.Id,
-                (cccv, model) => new { cccv, model})
-                .Join(_dbContext.CarMakes,
-                cccvm => cccvm.model.CarMakeId,
-                make => make.Id,
-                (cccvm, make) => new FullCustomerCarDto
-                {
-                    Id = cccvm.cccv.ccc.customerCar.Id,
-                    Make = make.Name,
-                    Model = cccvm.model.Name,
-                    PlateNumber = cccvm.cccv.ccc.car.LicencePlate!,
-                    Year = cccvm.cccv.modelVersion.Year,
-                    EngineDisplacement = cccvm.cccv.ccc.car.EngineDisplacement,
-                    FuelType = cccvm.cccv.ccc.car.FuelType,
-                    Mileage = cccvm.cccv.ccc.customerCar.Km,
-                    CarName = cccvm.cccv.ccc.customerCar.Name,
-                    CV = cccvm.cccv.ccc.car.CV,
-                    CustomerId = cccvm.cccv.ccc.customerCar.CustomerId,
-                    LogoUrl = make.LogoUrl
-                })
-                .ToList();
         }
 
         public async Task UpdateCustomerCar(AddCarQuery query, string customerId)
         {
+            using var transaction = await _dbContext.Database.BeginTransactionAsync();
+
             var customerCar = await _dbContext.CustomerCars
                 .FirstOrDefaultAsync(cc => cc.CustomerId == customerId && cc.CarId == query.Id)
                 ?? throw new Exception("Car not found.");
@@ -158,8 +100,7 @@ namespace TicDrive.Services
             if (!string.IsNullOrWhiteSpace(query.Name))
                 customerCar.Name = query.Name;
 
-            var car = await _dbContext.Cars
-                .FirstOrDefaultAsync(c => c.Id == customerCar.CarId)
+            var car = await _dbContext.Cars.FirstOrDefaultAsync(c => c.Id == customerCar.CarId)
                 ?? throw new Exception("Associated car not found.");
 
             if (!string.IsNullOrWhiteSpace(query.Plate))
@@ -176,37 +117,67 @@ namespace TicDrive.Services
 
             if (!string.IsNullOrWhiteSpace(query.Make) && !string.IsNullOrWhiteSpace(query.Model) && query.Year != null)
             {
-                var carMake = await _dbContext.CarMakes
-                    .FirstOrDefaultAsync(m => m.Name == query.Make)
+                var carMake = await _dbContext.CarMakes.FirstOrDefaultAsync(m => m.Name == query.Make)
                     ?? throw new Exception("Car make not found.");
 
-                var carModel = await _dbContext.CarModels
-                    .FirstOrDefaultAsync(m => m.Name == query.Model && m.CarMakeId == carMake.Id)
+                var carModel = await _dbContext.CarModels.FirstOrDefaultAsync(m => m.Name == query.Model && m.CarMakeId == carMake.Id)
                     ?? throw new Exception("Car model not found.");
 
-                var carVersion = await _dbContext.CarModelVersions
-                  .FirstOrDefaultAsync(car => car.CarModelId == carModel.Id && car.Year == query.Year)
-                  ?? throw new Exception("Car model not found.");
+                var carVersion = await _dbContext.CarModelVersions.FirstOrDefaultAsync(cv => cv.CarModelId == carModel.Id && cv.Year == query.Year)
+                    ?? throw new Exception("Car version not found.");
 
                 car.CarModelVersionId = carVersion.Id;
             }
 
             await _dbContext.SaveChangesAsync();
+            await transaction.CommitAsync();
         }
 
-        public async Task DeleteCustomerCar(int carId)
+        public List<FullCustomerCarDto> GetCustomerCars(string customerId)
         {
-            var car = await _dbContext.CustomerCars
-                .FirstOrDefaultAsync(c => c.Id == carId);
+            return _dbContext.CustomerCars
+                .Where(customerCar => customerCar.CustomerId == customerId)
+                .Join(_dbContext.Cars,
+                    cc => cc.CarId,
+                    c => c.Id,
+                    (cc, c) => new { cc, c })
+                .Join(_dbContext.CarModelVersions,
+                    temp => temp.c.CarModelVersionId,
+                    mv => mv.Id,
+                    (temp, mv) => new { temp, mv })
+                .Join(_dbContext.CarModels,
+                    temp2 => temp2.mv.CarModelId,
+                    cm => cm.Id,
+                    (temp2, cm) => new { temp2, cm })
+                .Join(_dbContext.CarMakes,
+                    temp3 => temp3.cm.CarMakeId,
+                    mk => mk.Id,
+                    (temp3, mk) => new FullCustomerCarDto
+                    {
+                        Id = temp3.temp2.temp.cc.Id,
+                        Make = mk.Name,
+                        Model = temp3.cm.Name,
+                        PlateNumber = temp3.temp2.temp.c.LicencePlate!,
+                        Year = temp3.temp2.mv.Year,
+                        EngineDisplacement = temp3.temp2.temp.c.EngineDisplacement,
+                        FuelType = temp3.temp2.temp.c.FuelType,
+                        Mileage = temp3.temp2.temp.cc.Km,
+                        CarName = temp3.temp2.temp.cc.Name,
+                        CV = temp3.temp2.temp.c.CV,
+                        CustomerId = temp3.temp2.temp.cc.CustomerId,
+                        LogoUrl = mk.LogoUrl
+                    })
+                .ToList();
+        }
 
-            if (car == null)
-            {
-                throw new InvalidOperationException($"Car with ID {carId} not found.");
-            }
+        public async Task<bool> DeleteCustomerCar(int carId)
+        {
+            var car = await _dbContext.CustomerCars.FirstOrDefaultAsync(c => c.Id == carId);
+            if (car == null) return false;
 
             _dbContext.CustomerCars.Remove(car);
             await _dbContext.SaveChangesAsync();
+            return true;
         }
-
     }
 }
