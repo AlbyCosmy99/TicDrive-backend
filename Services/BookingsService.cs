@@ -95,7 +95,8 @@ namespace TicDrive.Services
                 .Include(q => q.Service)
                 .Include(q => q.CustomerCar);
 
-            var imagesDict = new Dictionary<string, List<FullUserImageDto>>();
+            var customersImagesDict = new Dictionary<string, List<FullUserImageDto>>();
+            var workshopsImagesDict = new Dictionary<string, List<FullUserImageDto>>();
 
             if (userType == UserType.Workshop)
             {
@@ -108,7 +109,22 @@ namespace TicDrive.Services
                 foreach (var customerId in uniqueCustomers)
                 {
                     var images = await _imagesService.GetUserImagesAsync(customerId, 1);
-                    imagesDict[customerId] = _mapper.Map<List<FullUserImageDto>>(images);
+                    customersImagesDict[customerId] = _mapper.Map<List<FullUserImageDto>>(images);
+                }
+            }
+
+            if (userType == UserType.Customer)
+            {
+                var uniqueWorkshops = await query
+                    .Where(booking => booking.CustomerId == userId)
+                    .Select(booking => booking.WorkshopId)
+                    .Distinct()
+                    .ToListAsync();
+
+                foreach (var workshopId in uniqueWorkshops)
+                {
+                    var images = await _imagesService.GetUserImagesAsync(workshopId, 1);
+                    workshopsImagesDict[workshopId] = _mapper.Map<List<FullUserImageDto>>(images);
                 }
             }
 
@@ -147,14 +163,19 @@ namespace TicDrive.Services
                     CustomerId = j.qwCarmvModelMake.qwCarmvModel.qwCarmv.qwCar.qw.q.CustomerId,
                     CustomerName = j.qwCarmvModelMake.qwCarmvModel.qwCarmv.qwCar.qw.q.Customer.Name,
                     CustomerImage = userType == UserType.Workshop &&
-                                    imagesDict.ContainsKey(j.qwCarmvModelMake.qwCarmvModel.qwCarmv.qwCar.qw.q.CustomerId) &&
-                                    imagesDict[j.qwCarmvModelMake.qwCarmvModel.qwCarmv.qwCar.qw.q.CustomerId].Count > 0
-                                    ? imagesDict[j.qwCarmvModelMake.qwCarmvModel.qwCarmv.qwCar.qw.q.CustomerId][0]
+                                    customersImagesDict.ContainsKey(j.qwCarmvModelMake.qwCarmvModel.qwCarmv.qwCar.qw.q.CustomerId) &&
+                                    customersImagesDict[j.qwCarmvModelMake.qwCarmvModel.qwCarmv.qwCar.qw.q.CustomerId].Count > 0
+                                    ? customersImagesDict[j.qwCarmvModelMake.qwCarmvModel.qwCarmv.qwCar.qw.q.CustomerId][0].Url
                                     : null,
 
                     WorkshopId = j.qwCarmvModelMake.qwCarmvModel.qwCarmv.qwCar.qw.q.WorkshopId,
                     WorkshopAddress = j.qwCarmvModelMake.qwCarmvModel.qwCarmv.qwCar.qw.q.Workshop.Address,
                     WorkshopName = j.qwCarmvModelMake.qwCarmvModel.qwCarmv.qwCar.qw.workshopDetails.WorkshopName,
+                    WorkshopImage = userType == UserType.Customer &&
+                                    workshopsImagesDict.ContainsKey(j.qwCarmvModelMake.qwCarmvModel.qwCarmv.qwCar.qw.q.WorkshopId) &&
+                                    workshopsImagesDict[j.qwCarmvModelMake.qwCarmvModel.qwCarmv.qwCar.qw.q.WorkshopId].Count > 0
+                                    ? workshopsImagesDict[j.qwCarmvModelMake.qwCarmvModel.qwCarmv.qwCar.qw.q.WorkshopId][0].Url
+                                    : null,
 
                     FinalPrice = j.qwCarmvModelMake.qwCarmvModel.qwCarmv.qwCar.qw.q.FinalPrice,
                     Status = j.qwCarmvModelMake.qwCarmvModel.qwCarmv.qwCar.qw.q.Status,

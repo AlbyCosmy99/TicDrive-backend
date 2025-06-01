@@ -1,4 +1,5 @@
-﻿using TicDrive.Dto.UserImageDto;
+﻿using System.Text.Json.Serialization;
+using TicDrive.Dto.UserImageDto;
 
 namespace TicDrive.Dto.BookingDto
 {
@@ -10,13 +11,15 @@ namespace TicDrive.Dto.BookingDto
 
         public required string CustomerId { get; set; }
         public string? CustomerName { get; set; }
-        public FullUserImageDto? CustomerImage { get; set; }
+        public string? CustomerImage { get; set; }
 
         public required string WorkshopId { get; set; }
         public string? WorkshopName { get; set; }
         public string? WorkshopAddress { get; set; }
+        public string? WorkshopImage { get; set; }
 
         public decimal FinalPrice { get; set; }
+        [JsonConverter(typeof(JsonStringEnumConverter))]
         public BookingType Status { get; set; }
 
         public int ServiceId { get; set; }
