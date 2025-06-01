@@ -117,12 +117,7 @@ namespace TicDrive.Controllers
             {
                 var car = await _carsService.PostCustomerCar(query, userId);
 
-                if (car.Item1 == true)
-                {
-                    return Created();
-                }
-
-                return Ok(new {customerCarId = car.Item2}); //car already registered for this user
+                return Ok(new { customerCarId = car.Item2 });
             }
             catch (Exception ex)
             {
