@@ -165,7 +165,7 @@ namespace TicDrive.Services
                     CustomerImage = userType == UserType.Workshop &&
                                     customersImagesDict.ContainsKey(j.qwCarmvModelMake.qwCarmvModel.qwCarmv.qwCar.qw.q.CustomerId) &&
                                     customersImagesDict[j.qwCarmvModelMake.qwCarmvModel.qwCarmv.qwCar.qw.q.CustomerId].Count > 0
-                                    ? customersImagesDict[j.qwCarmvModelMake.qwCarmvModel.qwCarmv.qwCar.qw.q.CustomerId][0].Url
+                                    ? customersImagesDict[j.qwCarmvModelMake.qwCarmvModel.qwCarmv.qwCar.qw.q.CustomerId][0]
                                     : null,
 
                     WorkshopId = j.qwCarmvModelMake.qwCarmvModel.qwCarmv.qwCar.qw.q.WorkshopId,
@@ -174,7 +174,7 @@ namespace TicDrive.Services
                     WorkshopImage = userType == UserType.Customer &&
                                     workshopsImagesDict.ContainsKey(j.qwCarmvModelMake.qwCarmvModel.qwCarmv.qwCar.qw.q.WorkshopId) &&
                                     workshopsImagesDict[j.qwCarmvModelMake.qwCarmvModel.qwCarmv.qwCar.qw.q.WorkshopId].Count > 0
-                                    ? workshopsImagesDict[j.qwCarmvModelMake.qwCarmvModel.qwCarmv.qwCar.qw.q.WorkshopId][0].Url
+                                    ? workshopsImagesDict[j.qwCarmvModelMake.qwCarmvModel.qwCarmv.qwCar.qw.q.WorkshopId][0]
                                     : null,
 
                     FinalPrice = j.qwCarmvModelMake.qwCarmvModel.qwCarmv.qwCar.qw.q.FinalPrice,
