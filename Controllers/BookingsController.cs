@@ -5,6 +5,7 @@ using TicDrive.Context;
 using TicDrive.Enums;
 using TicDrive.Services;
 using System.Globalization;
+using System.Threading.Tasks;
 
 namespace TicDrive.Controllers
 {
@@ -113,6 +114,20 @@ namespace TicDrive.Controllers
             //}
 
             return Ok(new { result.Message, result.BookingId });
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> GetBookings()
+        {
+            var userClaims = _authService.GetUserClaims(this);
+            var userId = _authService.GetUserId(userClaims);
+            var userType = _authService.GetUserType(userClaims);
+
+            if (userId == null || userType == null)
+                return Unauthorized("Non sei autorizzato richiedere le prenotazioni.");
+            var bookings = await _bookingsService.GetBookingsAsync(userId, (UserType)userType);
+            return Ok(bookings);
         }
     }
 }
