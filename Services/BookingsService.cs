@@ -186,6 +186,8 @@ namespace TicDrive.Services
                     CustomerCarId = j.qwCarmvModelMake.qwCarmvModel.qwCarmv.qwCar.qw.q.CustomerCarId,
                     CustomerCarName = j.qwCarmvModelMake.qwCarmvModel.qwCarmv.qwCar.qw.q.CustomerCar.Name,
                     CustomerCarPlate = j.qwCarmvModelMake.qwCarmvModel.qwCarmv.qwCar.car.LicencePlate,
+                    CustomerCarMake = j.qwCarmvModelMake.make.Name,
+                    CustomerCarModel = j.qwCarmvModelMake.qwCarmvModel.model.Name,
                     CustomerCarYear = j.qwCarmvModelMake.qwCarmvModel.qwCarmv.carModelVersion.Year,
                     CustomerCarLogoUrl = j.qwCarmvModelMake.make.LogoUrl
                 })

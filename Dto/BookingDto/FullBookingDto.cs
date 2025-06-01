@@ -28,6 +28,8 @@ namespace TicDrive.Dto.BookingDto
         public int CustomerCarId { get; set; }
         public string? CustomerCarName { get; set; }
         public string? CustomerCarPlate { get; set; }
+        public required string CustomerCarMake { get; set; }
+        public required string CustomerCarModel { get; set; }
         public int CustomerCarYear { get; set; }
         public string? CustomerCarLogoUrl { get; set; }
     }
