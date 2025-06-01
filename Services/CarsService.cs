@@ -11,7 +11,7 @@ namespace TicDrive.Services
         List<CarMake> GetMakes();
         List<CarModel> GetCarModelsByMakeId(int makeId);
         List<CarModelVersion> GetModelVersions(int modelId);
-        Task<bool> PostCustomerCar(AddCarQuery query, string customerId);
+        Task<(bool, int)> PostCustomerCar(AddCarQuery query, string customerId);
         Task UpdateCustomerCar(AddCarQuery query, string customerId);
         List<FullCustomerCarDto> GetCustomerCars(string customerId);
         Task DeleteCustomerCar(int carId);
@@ -37,7 +37,7 @@ namespace TicDrive.Services
             return [.. _dbContext.CarModelVersions.Where(version => version.CarModelId == modelId)];
         }
 
-        public async Task<bool> PostCustomerCar(AddCarQuery query, string customerId)
+        public async Task<(bool, int)> PostCustomerCar(AddCarQuery query, string customerId)
         {
             var car = _dbContext.Cars.Where(car => car.LicencePlate == query.Plate).FirstOrDefault();
 
@@ -92,7 +92,7 @@ namespace TicDrive.Services
 
             if(customerCar != null)
             {
-                return false; //car already registered for this user
+                return (false, customerCar.Id); //car already registered for this user
             }
 
             var newCustomerCar = new CustomerCar
@@ -106,7 +106,7 @@ namespace TicDrive.Services
             _dbContext.CustomerCars.Add(newCustomerCar);
             await _dbContext.SaveChangesAsync();
 
-            return true;
+            return (true, newCustomerCar.Id);
         }
 
         public List<FullCustomerCarDto> GetCustomerCars(string customerId)
