@@ -6,8 +6,8 @@ namespace TicDrive.Dto.BookingDto
     public class FullBookingDto
     {
         public int Id { get; set; }
-        public DateTime BookingDate { get; set; }
-        public DateTime AppointmentDate { get; set; }
+        public required string BookingDate { get; set; }
+        public required string AppointmentDate { get; set; }
 
         public required string CustomerId { get; set; }
         public string? CustomerName { get; set; }
