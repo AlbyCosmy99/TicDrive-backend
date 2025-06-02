@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using TicDrive.Dto.BookingDto;
 using TicDrive.Dto.UserImageDto;
 using AutoMapper;
+using System.Globalization;
 
 namespace TicDrive.Services
 {
@@ -157,8 +158,10 @@ namespace TicDrive.Services
                 .Select(j => new FullBookingDto
                 {
                     Id = j.qwCarmvModelMake.qwCarmvModel.qwCarmv.qwCar.qw.q.Id,
-                    BookingDate = j.qwCarmvModelMake.qwCarmvModel.qwCarmv.qwCar.qw.q.BookingDate,
-                    AppointmentDate = j.qwCarmvModelMake.qwCarmvModel.qwCarmv.qwCar.qw.q.AppointmentDate,
+                    BookingDate = j.qwCarmvModelMake.qwCarmvModel.qwCarmv.qwCar.qw.q.BookingDate
+                        .ToString("dddd dd MMMM yyyy - HH:mm", new CultureInfo("it-IT")),
+                    AppointmentDate = j.qwCarmvModelMake.qwCarmvModel.qwCarmv.qwCar.qw.q.AppointmentDate
+                        .ToString("dddd dd MMMM yyyy - HH:mm", new CultureInfo("it-IT")),
 
                     CustomerId = j.qwCarmvModelMake.qwCarmvModel.qwCarmv.qwCar.qw.q.CustomerId,
                     CustomerName = j.qwCarmvModelMake.qwCarmvModel.qwCarmv.qwCar.qw.q.Customer.Name,
