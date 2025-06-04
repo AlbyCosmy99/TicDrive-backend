@@ -154,7 +154,7 @@ namespace TicDrive.Services
                     .Where(translation => translation.LanguageId == (languageCode == "en" ? 1 : 2)),
                 qwCarmvModelMake => qwCarmvModelMake.qwCarmvModel.qwCarmv.qwCar.qw.q.ServiceId,
                 translation => translation.ServiceId,
-                (qwCarmvModelMake, carTranslations) => new { qwCarmvModelMake, carTranslations })    
+                (qwCarmvModelMake, carTranslations) => new { qwCarmvModelMake, carTranslations })
                 .Select(j => new FullBookingDto
                 {
                     Id = j.qwCarmvModelMake.qwCarmvModel.qwCarmv.qwCar.qw.q.Id,
@@ -193,10 +193,22 @@ namespace TicDrive.Services
                     CustomerCarModel = j.qwCarmvModelMake.qwCarmvModel.model.Name,
                     CustomerCarYear = j.qwCarmvModelMake.qwCarmvModel.qwCarmv.carModelVersion.Year,
                     CustomerCarLogoUrl = j.qwCarmvModelMake.make.LogoUrl
-                })
-                .ToList();
+                });
 
-            return result;
+            if (userType == UserType.Workshop)
+            {
+                result = result
+                    .Where(r => r.WorkshopId == userId);
+            }
+
+            if (userType == UserType.Customer)
+            {
+                result = result
+                    .Where(r => r.CustomerId == userId);
+            }
+
+            return result
+                .ToList();
         }
     }
 }
