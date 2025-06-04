@@ -31,7 +31,7 @@ namespace TicDrive.Services
             if (!string.IsNullOrEmpty(workshopId))
             {
                 var offeredServiceIds = _dbContext.OfferedServices
-                    .Where(os => os.Workshop.Id == workshopId)
+                    .Where(os => os.Workshop.Id == workshopId && os.Active)
                     .Select(os => os.Service.Id)
                     .ToList();
 
