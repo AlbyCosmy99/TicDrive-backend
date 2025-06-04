@@ -48,10 +48,10 @@ namespace TicDrive.Controllers
         }
 
         [HttpGet("workshop/notAvailableDays")]
-        public IActionResult GetWorkshopNotAvailableDays([FromQuery] GetWorkshopNotAvailableDaysQuery query)
+        public async Task<IActionResult> GetWorkshopNotAvailableDays([FromQuery] GetWorkshopNotAvailableDaysQuery query)
         {
-
-            return Ok(_dateTimeService.GetWorkshopNotAvailableDays(query.WorkshopId));
+            var notAvailableDays = await _dateTimeService.GetWorkshopNotAvailableDaysAsync(query.WorkshopId);
+            return Ok(notAvailableDays);
         }
 
         public class GetWorkshopWorkingHoursQuery
@@ -63,20 +63,21 @@ namespace TicDrive.Controllers
         [HttpGet("workshop/workingHours")]
         public IActionResult GetWorkshopWorkingHours([FromQuery] GetWorkshopWorkingHoursQuery query)
         {
-            if(query == null|| query.WorkshopId == null)
+            if (query == null || query.WorkshopId == null)
             {
                 return BadRequest("The workshop id are necessary.");
             }
-            
+
             try
             {
                 var results = _dateTimeService.GetWorkshopWorkingHours(query.WorkshopId, query.Day);
-                if(query.Day != null)
+                if (query.Day != null)
                 {
                     return Ok(results[0]);
                 }
                 return Ok(results);
-            } catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 return NotFound(ex.Message);
             }
