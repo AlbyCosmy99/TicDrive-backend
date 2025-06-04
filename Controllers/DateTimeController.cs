@@ -48,10 +48,10 @@ namespace TicDrive.Controllers
         }
 
         [HttpGet("workshop/notAvailableDays")]
-        public IActionResult GetWorkshopNotAvailableDays([FromQuery] GetWorkshopNotAvailableDaysQuery query)
+        public async Task<IActionResult> GetWorkshopNotAvailableDays([FromQuery] GetWorkshopNotAvailableDaysQuery query)
         {
-
-            return Ok(_dateTimeService.GetWorkshopNotAvailableDays(query.WorkshopId));
+            var notAvailableDays = await _dateTimeService.GetWorkshopNotAvailableDaysAsync(query.WorkshopId);
+            return Ok(notAvailableDays);
         }
 
         public class GetWorkshopWorkingHoursQuery
