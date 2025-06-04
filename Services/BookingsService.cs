@@ -11,7 +11,7 @@ namespace TicDrive.Services
 {
     public interface IBookingsService
     {
-        Task<(bool Success, string Message, int? BookingId)> BookAServiceAsync(
+        Task<(bool Success, string Message, Booking booking)> BookAServiceAsync(
             string customerId,
             UserType userType,
             string workshopId,
@@ -37,7 +37,21 @@ namespace TicDrive.Services
             _mapper = mapper;
         }
 
-        public async Task<(bool Success, string Message, int? BookingId)> BookAServiceAsync(
+        private async Task<string> GenerateUniquePinCodeAsync()
+        {
+            var random = new Random();
+            string pinCode;
+
+            do
+            {
+                pinCode = random.Next(0, 1000000).ToString("D6");
+            }
+            while (await _context.Bookings.AnyAsync(b => b.PinCode == pinCode));
+
+            return pinCode;
+        }
+
+        public async Task<(bool Success, string Message, Booking booking)> BookAServiceAsync(
             string customerId,
             UserType userType,
             string workshopId,
@@ -70,6 +84,8 @@ namespace TicDrive.Services
             if (!serviceOffered)
                 return (false, "Selected workshop does not offer the chosen service", null);
 
+            var pinCode = await GenerateUniquePinCodeAsync();
+
             var booking = new Booking
             {
                 CustomerId = customerId,
@@ -79,13 +95,14 @@ namespace TicDrive.Services
                 AppointmentDate = appointmentDate,
                 BookingDate = DateTime.UtcNow,
                 FinalPrice = finalPrice,
-                Status = BookingType.Waiting
+                Status = BookingType.Waiting,
+                PinCode = pinCode
             };
 
             _context.Bookings.Add(booking);
             await _context.SaveChangesAsync();
 
-            return (true, "Booking created", booking.Id);
+            return (true, "Booking created", booking);
         }
 
         public async Task<List<FullBookingDto>> GetBookingsAsync(string userId, UserType userType, string languageCode = "it")
@@ -138,23 +155,23 @@ namespace TicDrive.Services
                     qw => qw.q.CustomerCar.CarId,
                     car => car.Id,
                     (qw, car) => new { qw, car })
-                 .Join(_context.CarModelVersions,
+                .Join(_context.CarModelVersions,
                     qwCar => qwCar.car.CarModelVersionId,
                     carModelVersion => carModelVersion.Id,
                     (qwCar, carModelVersion) => new { qwCar, carModelVersion })
-                 .Join(_context.CarModels,
+                .Join(_context.CarModels,
                     qwCarmv => qwCarmv.carModelVersion.CarModelId,
                     model => model.Id,
                     (qwCarmv, model) => new { qwCarmv, model })
-                 .Join(_context.CarMakes,
-                      qwCarmvModel => qwCarmvModel.model.CarMakeId,
-                      make => make.Id,
-                      (qwCarmvModel, make) => new { qwCarmvModel, make })
+                .Join(_context.CarMakes,
+                    qwCarmvModel => qwCarmvModel.model.CarMakeId,
+                    make => make.Id,
+                    (qwCarmvModel, make) => new { qwCarmvModel, make })
                 .Join(_context.ServicesTranslations
                     .Where(translation => translation.LanguageId == (languageCode == "en" ? 1 : 2)),
-                qwCarmvModelMake => qwCarmvModelMake.qwCarmvModel.qwCarmv.qwCar.qw.q.ServiceId,
-                translation => translation.ServiceId,
-                (qwCarmvModelMake, carTranslations) => new { qwCarmvModelMake, carTranslations })
+                    qwCarmvModelMake => qwCarmvModelMake.qwCarmvModel.qwCarmv.qwCar.qw.q.ServiceId,
+                    translation => translation.ServiceId,
+                    (qwCarmvModelMake, carTranslations) => new { qwCarmvModelMake, carTranslations })
                 .Select(j => new FullBookingDto
                 {
                     Id = j.qwCarmvModelMake.qwCarmvModel.qwCarmv.qwCar.qw.q.Id,
@@ -192,23 +209,21 @@ namespace TicDrive.Services
                     CustomerCarMake = j.qwCarmvModelMake.make.Name,
                     CustomerCarModel = j.qwCarmvModelMake.qwCarmvModel.model.Name,
                     CustomerCarYear = j.qwCarmvModelMake.qwCarmvModel.qwCarmv.carModelVersion.Year,
-                    CustomerCarLogoUrl = j.qwCarmvModelMake.make.LogoUrl
+                    CustomerCarLogoUrl = j.qwCarmvModelMake.make.LogoUrl,
+                    PinCode = j.qwCarmvModelMake.qwCarmvModel.qwCarmv.qwCar.qw.q.PinCode
                 });
 
             if (userType == UserType.Workshop)
             {
-                result = result
-                    .Where(r => r.WorkshopId == userId);
+                result = result.Where(r => r.WorkshopId == userId);
             }
 
             if (userType == UserType.Customer)
             {
-                result = result
-                    .Where(r => r.CustomerId == userId);
+                result = result.Where(r => r.CustomerId == userId);
             }
 
-            return result
-                .ToList();
+            return await result.ToListAsync();
         }
     }
 }

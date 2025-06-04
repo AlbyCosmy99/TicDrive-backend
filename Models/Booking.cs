@@ -43,6 +43,6 @@ namespace TicDrive.Models
         public CustomerCar CustomerCar { get; set; }
         public decimal FinalPrice { get; set; }
         public BookingType Status { get; set; }
-        public int PinCode { get; set; }
+        public string PinCode { get; set; }
     }
 }
