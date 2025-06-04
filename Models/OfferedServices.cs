@@ -22,8 +22,9 @@ namespace TicDrive.Models
                 }
             }
         }
-        public decimal? Price { get; set; } = 0; //TODO: to make it required once the workshops can add prices on their own
-        public char? Currency { get; set; } = '€';
+        public decimal Price { get; set; } = 0;
+        public char Currency { get; set; } = '€';
         public decimal? Discount { get; set; } = 0;
+        public bool Active { get; set; } = true;
     } 
 }
