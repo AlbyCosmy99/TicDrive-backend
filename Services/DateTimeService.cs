@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using TicDrive.Context;
 using TicDrive.Dto.DateTimeDto;
 using TicDrive.Models.DateTime;
@@ -20,7 +21,7 @@ namespace TicDrive.Services
             _dbContext = dbContext;
         }
 
-        public WorkshopNotAvailableDaysDto GetWorkshopNotAvailableDays(string workshopId)
+        public async Task<WorkshopNotAvailableDaysDto> GetWorkshopNotAvailableDays(string workshopId)
         {
             var workingDays = _dbContext.WorkshopsSchedules
                 .Where(workshopSchedule => workshopSchedule.WorkshopId == workshopId)
@@ -48,16 +49,34 @@ namespace TicDrive.Services
                 })
                 .ToList();
 
+            var maxDailyVehicles = await _dbContext.WorkshopsDetails
+                .Where(details => details.WorkshopId == workshopId)
+                .Select(details => details.MaxDailyVehicles)
+                .FirstOrDefaultAsync();
+
+            var workshopFullDays = _dbContext.Bookings
+                .Where(booking => booking.WorkshopId == workshopId)
+                .GroupBy(booking => booking.AppointmentDate.Date)
+                .Where(group => group.Count() >= maxDailyVehicles)
+                .Select(group => group.Key)
+                .ToList();
+
             var notWorkingDates = _dbContext.WorkshopsNonWorkingDays
                 .Where(wnwd => wnwd.WorkshopId == workshopId)
                 .Select(wnwd => wnwd.Date)
-                .ToList();  
+                .ToList();
+
+            var unavailableDates = workshopFullDays
+                .Union(notWorkingDates)
+                .Distinct()
+                .OrderBy(date => date)
+                .ToList();
 
             return new WorkshopNotAvailableDaysDto
             {
                 WorkshopId = workshopId,
                 Days = nonWorkingDays,
-                Dates = notWorkingDates
+                Dates = unavailableDates
             };
         }
 
