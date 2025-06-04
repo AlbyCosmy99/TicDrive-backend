@@ -96,25 +96,25 @@ namespace TicDrive.Controllers
                 );
             }
 
-            if (workshop?.EmailConfirmed == true && !string.IsNullOrEmpty(workshop.Email))
-            {
-                var italianCulture = new CultureInfo("it-IT");
-                var formattedDate = payload.AppointmentDate.ToString("dddd dd MMMM yyyy - HH:mm", italianCulture);
+            //if (workshop?.EmailConfirmed == true && !string.IsNullOrEmpty(workshop.Email))
+            //{
+            //    var italianCulture = new CultureInfo("it-IT");
+            //    var formattedDate = payload.AppointmentDate.ToString("dddd dd MMMM yyyy - HH:mm", italianCulture);
 
-                var emailBody = $@"
-                <p>Ciao {workshop.Name},</p>
-                <p>Hai ricevuto una nuova prenotazione per il servizio <strong>{service?.Title}</strong> da parte del cliente <strong>{customer?.Name}</strong>.</p>
-                <p><strong>Data appuntamento:</strong> {formattedDate}</p>
-                <p><strong>Prezzo concordato:</strong> €{payload.FinalPrice:F2}</p>
-                <p><strong>Codice PIN:</strong> {result.booking?.PinCode} <em>(Il cliente deve presentarlo in officina per identificare la prenotazione)</em></p>
-                <p>Accedi alla tua dashboard su <strong>ticdrive.it</strong> per maggiori dettagli.</p>";
+            //    var emailBody = $@"
+            //    <p>Ciao {workshop.Name},</p>
+            //    <p>Hai ricevuto una nuova prenotazione per il servizio <strong>{service?.Title}</strong> da parte del cliente <strong>{customer?.Name}</strong>.</p>
+            //    <p><strong>Data appuntamento:</strong> {formattedDate}</p>
+            //    <p><strong>Prezzo concordato:</strong> €{payload.FinalPrice:F2}</p>
+            //    <p><strong>Codice PIN:</strong> {result.booking?.PinCode} <em>(Il cliente deve presentarlo in officina per identificare la prenotazione)</em></p>
+            //    <p>Accedi alla tua dashboard su <strong>ticdrive.it</strong> per maggiori dettagli.</p>";
 
-                await _emailService.SendEmailAsync(
-                    workshop.Email,
-                    "Nuova prenotazione su TicDrive",
-                    emailBody
-                );
-            }
+            //    await _emailService.SendEmailAsync(
+            //        workshop.Email,
+            //        "Nuova prenotazione su TicDrive",
+            //        emailBody
+            //    );
+            //}
 
             return Ok(new { result.Message, bookingId = result.booking.Id, bookingPinCode = result.booking.PinCode });
         }
