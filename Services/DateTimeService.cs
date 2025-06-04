@@ -9,7 +9,7 @@ namespace TicDrive.Services
 {
     public interface IDateTimeService
     {
-        WorkshopNotAvailableDaysDto GetWorkshopNotAvailableDays(string workshopId);
+        Task<WorkshopNotAvailableDaysDto> GetWorkshopNotAvailableDaysAsync(string workshopId);
         List<WorkshopWorkingHoursDto> GetWorkshopWorkingHours(string workshopId, string day);
     }
     public class DateTimeService : IDateTimeService
@@ -21,7 +21,7 @@ namespace TicDrive.Services
             _dbContext = dbContext;
         }
 
-        public async Task<WorkshopNotAvailableDaysDto> GetWorkshopNotAvailableDays(string workshopId)
+        public async Task<WorkshopNotAvailableDaysDto> GetWorkshopNotAvailableDaysAsync(string workshopId)
         {
             var workingDays = _dbContext.WorkshopsSchedules
                 .Where(workshopSchedule => workshopSchedule.WorkshopId == workshopId)
