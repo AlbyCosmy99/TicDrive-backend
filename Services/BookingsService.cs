@@ -193,10 +193,22 @@ namespace TicDrive.Services
                     CustomerCarModel = j.qwCarmvModelMake.qwCarmvModel.model.Name,
                     CustomerCarYear = j.qwCarmvModelMake.qwCarmvModel.qwCarmv.carModelVersion.Year,
                     CustomerCarLogoUrl = j.qwCarmvModelMake.make.LogoUrl
-                })
-                .ToList();
+                });
 
-            return result;
+            if (userType == UserType.Workshop)
+            {
+                result = result
+                    .Where(r => r.WorkshopId == userId);
+            }
+
+            if (userType == UserType.Customer)
+            {
+                result = result
+                    .Where(r => r.CustomerId == userId);
+            }
+
+            return result
+                .ToList();
         }
     }
 }
