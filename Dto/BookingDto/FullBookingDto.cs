@@ -32,5 +32,6 @@ namespace TicDrive.Dto.BookingDto
         public required string CustomerCarModel { get; set; }
         public int CustomerCarYear { get; set; }
         public string? CustomerCarLogoUrl { get; set; }
+        public required string PinCode { get; set; }
     }
 }
