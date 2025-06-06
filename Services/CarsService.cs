@@ -91,7 +91,7 @@ namespace TicDrive.Services
             using var transaction = await _dbContext.Database.BeginTransactionAsync();
 
             var customerCar = await _dbContext.CustomerCars
-                .FirstOrDefaultAsync(cc => cc.CustomerId == customerId && cc.CarId == query.Id)
+                .FirstOrDefaultAsync(cc => cc.CustomerId == customerId && cc.CarId == query.Id && !cc.Removed)
                 ?? throw new Exception("Car not found.");
 
             if (query.Mileage != null)
@@ -136,7 +136,7 @@ namespace TicDrive.Services
         public List<FullCustomerCarDto> GetCustomerCars(string customerId)
         {
             return _dbContext.CustomerCars
-                .Where(customerCar => customerCar.CustomerId == customerId)
+                .Where(customerCar => customerCar.CustomerId == customerId && !customerCar.Removed)
                 .Join(_dbContext.Cars,
                     cc => cc.CarId,
                     c => c.Id,
@@ -175,7 +175,7 @@ namespace TicDrive.Services
             var car = await _dbContext.CustomerCars.FirstOrDefaultAsync(c => c.Id == carId);
             if (car == null) return false;
 
-            _dbContext.CustomerCars.Remove(car);
+            car.Removed = true;
             await _dbContext.SaveChangesAsync();
             return true;
         }

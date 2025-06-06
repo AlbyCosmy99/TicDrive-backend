@@ -1,9 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using TicDrive.AbstractClasses;
 
 namespace TicDrive.Models
 {
-    public class CustomerCar
+    public class CustomerCar : SoftDeletableEntity
     {
         [Key]
         public int Id { get; set; }
