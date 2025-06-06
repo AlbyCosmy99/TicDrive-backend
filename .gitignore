@@ -50,3 +50,5 @@ Thumbs.db          # Windows system files
 !appsettings.json
 !appsettings.Development.json
 !appsettings.Production.json
+
+*.metadata.v9.bin
