@@ -69,25 +69,55 @@ namespace TicDrive.Controllers
 
             var customer = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
             var workshop = await _context.Users.FirstOrDefaultAsync(u => u.Id == payload.WorkshopId);
-            var workshopDetails = await _context.WorkshopsDetails.FirstOrDefaultAsync(workshop => workshop.WorkshopId == payload.WorkshopId);
+            var workshopDetails = await _context.WorkshopsDetails.FirstOrDefaultAsync(w => w.WorkshopId == payload.WorkshopId);
             var service = await _context.ServicesTranslations.FirstOrDefaultAsync(s => s.ServiceId == payload.ServiceId && s.LanguageId == 2);
 
+            var carInfo = await _context.CustomerCars
+                .Where(cc => cc.Id == payload.CustomerCarId)
+                .Join(_context.Cars,
+                    cc => cc.CarId,
+                    car => car.Id,
+                    (cc, car) => new { cc, car })
+                .Join(_context.CarModelVersions,
+                    ccCar => ccCar.car.CarModelVersionId,
+                    version => version.Id,
+                    (ccCar, version) => new { ccCar.cc, ccCar.car, version })
+                .Join(_context.CarModels,
+                    full => full.version.CarModelId,
+                    model => model.Id,
+                    (full, model) => new { full.cc, full.car, full.version, model })
+                .Join(_context.CarMakes,
+                    full => full.model.CarMakeId,
+                    make => make.Id,
+                    (full, make) => new
+                    {
+                        Make = make.Name,
+                        Model = full.model.Name,
+                        full.version.Year,
+                        Plate = full.car.LicencePlate
+                    })
+                .Select(car => $"{car.Make} {car.Model} - {car.Year} - {car.Plate}")
+                .FirstOrDefaultAsync();
+
+
+
+            var italianCulture = new CultureInfo("it-IT");
+            var formattedDate = italianCulture.TextInfo.ToTitleCase(
+                payload.AppointmentDate.ToString("dddd dd MMMM yyyy - HH:mm", italianCulture)
+            );
+
+            // EMAIL AL CLIENTE
             if (customer?.EmailConfirmed == true && !string.IsNullOrEmpty(customer.Email))
             {
-                var italianCulture = new CultureInfo("it-IT");
-                TextInfo textInfo = italianCulture.TextInfo;
-
-                var formattedDate = textInfo.ToTitleCase(
-                    payload.AppointmentDate.ToString("dddd dd MMMM yyyy - HH:mm", italianCulture)
-                );
-
                 var emailBody = $@"
-                    <p>Ciao {customer.Name},</p>
-                    <p>Hai prenotato con successo il servizio <strong>{service?.Title}</strong> presso l'officina <strong>{workshopDetails?.WorkshopName}</strong>.</p>
-                    <p><strong>Data appuntamento:</strong> {formattedDate}</p>
-                    <p><strong>Prezzo:</strong> €{payload.FinalPrice:F2}</p>
-                    <p><strong>Codice PIN:</strong> {result.booking?.PinCode} <em>(Da presentare in officina)</em></p>
-                    <p>Grazie per aver scelto TicDrive!</p>";
+                <p>Ciao {customer.Name},</p>
+                <p>Hai prenotato con successo il servizio <strong>{service?.Title}</strong> presso l'officina <strong>{workshopDetails?.WorkshopName}</strong>.</p>
+                <p><strong>Numero officina:</strong> {workshop.PhoneNumber}</p>
+                <p><strong>Auto:</strong> {carInfo}</p>
+                <p><strong>Data appuntamento:</strong> {formattedDate}</p>
+                <p><strong>Prezzo:</strong> €{payload.FinalPrice:F2}</p>
+                <p><strong>Codice PIN:</strong> {result.booking?.PinCode} <em>(Da presentare in officina)</em></p>
+                <p>Grazie per aver scelto TicDrive!</p>";
 
                 await _emailService.SendEmailAsync(
                     customer.Email,
@@ -96,14 +126,14 @@ namespace TicDrive.Controllers
                 );
             }
 
+            //// EMAIL ALL'OFFICINA
             //if (workshop?.EmailConfirmed == true && !string.IsNullOrEmpty(workshop.Email))
             //{
-            //    var italianCulture = new CultureInfo("it-IT");
-            //    var formattedDate = payload.AppointmentDate.ToString("dddd dd MMMM yyyy - HH:mm", italianCulture);
-
             //    var emailBody = $@"
             //    <p>Ciao {workshop.Name},</p>
             //    <p>Hai ricevuto una nuova prenotazione per il servizio <strong>{service?.Title}</strong> da parte del cliente <strong>{customer?.Name}</strong>.</p>
+            //    <p><strong>Contatto cliente:</strong> {customer?.PhoneNumber}</p>
+            //    <p><strong>Auto:</strong> {carInfo}</p>
             //    <p><strong>Data appuntamento:</strong> {formattedDate}</p>
             //    <p><strong>Prezzo concordato:</strong> €{payload.FinalPrice:F2}</p>
             //    <p><strong>Codice PIN:</strong> {result.booking?.PinCode} <em>(Il cliente deve presentarlo in officina per identificare la prenotazione)</em></p>
@@ -116,8 +146,9 @@ namespace TicDrive.Controllers
             //    );
             //}
 
-            return Ok(new { result.Message, bookingId = result.booking.Id, bookingPinCode = result.booking.PinCode});
+            return Ok(new { result.Message, bookingId = result.booking.Id, bookingPinCode = result.booking.PinCode });
         }
+
 
         [HttpGet]
         [Authorize]
