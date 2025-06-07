@@ -342,7 +342,7 @@ namespace TicDrive.Controllers
             var user = await _userManager.FindByEmailAsync(payload.Email);
             if (user == null)
             {
-                return Unauthorized("Invalid email or password.");
+                return Unauthorized("Credenziali non corrette.");
             }
 
             if (user.UserType != payload.UserType)
@@ -356,7 +356,7 @@ namespace TicDrive.Controllers
             if (!result.Succeeded)
             {
                 await _loginLogger.LogAsync(user.Id, false, "Invalid password", HttpContext);
-                return Unauthorized("Invalid email or password.");
+                return Unauthorized("Credenziali non corrette.");
             }
             await _loginLogger.LogAsync(user.Id, true, null, HttpContext);
 
