@@ -62,7 +62,7 @@ namespace TicDrive.Services
                 else
                 {
                     servicesQuery = _dbContext.Services
-                        .Where(s => offeredServiceIds.Contains(s.Id));
+                        .Where(s => offeredServiceIds.Contains(s.Id) && s.FatherId == fatherId);
                 }
             }
 
