@@ -26,7 +26,9 @@ namespace TicDrive.Services
             int? fatherId = null,
             bool getAncestors = true)
         {
-            var servicesQuery = _dbContext.Services.AsQueryable();
+            var servicesQuery = _dbContext.Services
+                .Where(service => service.FatherId == fatherId)
+                .AsQueryable();
 
             if (!string.IsNullOrEmpty(workshopId))
             {
@@ -61,10 +63,6 @@ namespace TicDrive.Services
                     servicesQuery = _dbContext.Services
                         .Where(s => offeredServiceIds.Contains(s.Id));
                 }
-            }
-            else
-            {
-                servicesQuery = servicesQuery.Where(service => service.FatherId == fatherId);
             }
 
             var query = servicesQuery
