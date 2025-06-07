@@ -18,17 +18,20 @@ namespace TicDrive.Controllers
         private readonly IBookingsService _bookingsService;
         private readonly IEmailService _emailService;
         private readonly TicDriveDbContext _context;
+        private readonly IServicesService _servicesService;
 
         public BookingsController(
             IAuthService authService,
             IBookingsService bookingsService,
             IEmailService emailService,
-            TicDriveDbContext context)
+            TicDriveDbContext context,
+            IServicesService servicesService)
         {
             _authService = authService;
             _bookingsService = bookingsService;
             _emailService = emailService;
             _context = context;
+            _servicesService = servicesService;
         }
 
         public class BookServiceBody
@@ -111,7 +114,7 @@ namespace TicDrive.Controllers
             {
                 var emailBody = $@"
                 <p>Ciao {customer.Name},</p>
-                <p>Hai prenotato con successo il servizio <strong>{service?.Title}</strong> presso l'officina <strong>{workshopDetails?.WorkshopName}</strong>.</p>
+                <p>Hai prenotato con successo il servizio <strong>{_servicesService.GetFullServiceName(service.Id)}</strong> presso l'officina <strong>{workshopDetails?.WorkshopName}</strong>.</p>
                 <p><strong>Numero officina:</strong> {workshop.PhoneNumber}</p>
                 <p><strong>Auto:</strong> {carInfo}</p>
                 <p><strong>Data appuntamento:</strong> {formattedDate}</p>
@@ -131,7 +134,7 @@ namespace TicDrive.Controllers
             //{
             //    var emailBody = $@"
             //    <p>Ciao {workshop.Name},</p>
-            //    <p>Hai ricevuto una nuova prenotazione per il servizio <strong>{service?.Title}</strong> da parte del cliente <strong>{customer?.Name}</strong>.</p>
+            //    <p>Hai ricevuto una nuova prenotazione per il servizio <strong>{_servicesService.GetFullServiceName(service.Id)}</strong> da parte del cliente <strong>{customer?.Name}</strong>.</p>
             //    <p><strong>Contatto cliente:</strong> {customer?.PhoneNumber}</p>
             //    <p><strong>Auto:</strong> {carInfo}</p>
             //    <p><strong>Data appuntamento:</strong> {formattedDate}</p>
