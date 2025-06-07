@@ -29,12 +29,14 @@ namespace TicDrive.Services
         private readonly TicDriveDbContext _context;
         private readonly IImagesService _imagesService;
         private readonly IMapper _mapper;
+        private readonly IServicesService _servicesService;
 
-        public BookingsService(TicDriveDbContext context, IImagesService imagesService, IMapper mapper)
+        public BookingsService(TicDriveDbContext context, IImagesService imagesService, IMapper mapper, IServicesService servicesService)
         {
             _context = context;
             _imagesService = imagesService;
             _mapper = mapper;
+            _servicesService = servicesService;
         }
 
         private async Task<string> GenerateUniquePinCodeAsync()
@@ -146,84 +148,92 @@ namespace TicDrive.Services
                 }
             }
 
-            var result = query
+            var rawBookings = await query
                 .Join(_context.WorkshopsDetails,
-                    q => q.WorkshopId,
-                    workshopDetails => workshopDetails.WorkshopId,
-                    (q, workshopDetails) => new { q, workshopDetails })
+                    b => b.WorkshopId,
+                    wd => wd.WorkshopId,
+                    (b, wd) => new { b, wd })
                 .Join(_context.Cars,
-                    qw => qw.q.CustomerCar.CarId,
-                    car => car.Id,
-                    (qw, car) => new { qw, car })
+                    bw => bw.b.CustomerCar.CarId,
+                    c => c.Id,
+                    (bw, c) => new { bw, c })
                 .Join(_context.CarModelVersions,
-                    qwCar => qwCar.car.CarModelVersionId,
-                    carModelVersion => carModelVersion.Id,
-                    (qwCar, carModelVersion) => new { qwCar, carModelVersion })
+                    bwc => bwc.c.CarModelVersionId,
+                    cmv => cmv.Id,
+                    (bwc, cmv) => new { bwc, cmv })
                 .Join(_context.CarModels,
-                    qwCarmv => qwCarmv.carModelVersion.CarModelId,
-                    model => model.Id,
-                    (qwCarmv, model) => new { qwCarmv, model })
+                    bwccmv => bwccmv.cmv.CarModelId,
+                    cm => cm.Id,
+                    (bwccmv, cm) => new { bwccmv, cm })
                 .Join(_context.CarMakes,
-                    qwCarmvModel => qwCarmvModel.model.CarMakeId,
+                    full => full.cm.CarMakeId,
                     make => make.Id,
-                    (qwCarmvModel, make) => new { qwCarmvModel, make })
-                .Join(_context.ServicesTranslations
-                    .Where(translation => translation.LanguageId == (languageCode == "en" ? 1 : 2)),
-                    qwCarmvModelMake => qwCarmvModelMake.qwCarmvModel.qwCarmv.qwCar.qw.q.ServiceId,
-                    translation => translation.ServiceId,
-                    (qwCarmvModelMake, carTranslations) => new { qwCarmvModelMake, carTranslations })
-                .Select(j => new FullBookingDto
+                    (full, make) => new
+                    {
+                        Booking = full.bwccmv.bwc.bw.b,
+                        Customer = full.bwccmv.bwc.bw.b.Customer,
+                        Workshop = full.bwccmv.bwc.bw.b.Workshop,
+                        WorkshopDetails = full.bwccmv.bwc.bw.wd,
+                        Car = full.bwccmv.bwc.c,
+                        CarModelVersion = full.bwccmv.cmv,
+                        CarModel = full.cm,
+                        CarMake = make
+                    })
+                .ToListAsync();
+
+            var result = new List<FullBookingDto>();
+
+            foreach (var item in rawBookings)
+            {
+                if (userType == UserType.Workshop && item.Booking.WorkshopId != userId)
+                    continue;
+
+                if (userType == UserType.Customer && item.Booking.CustomerId != userId)
+                    continue;
+
+                var serviceName = await  _servicesService.GetFullServiceName(item.Booking.ServiceId, languageCode);
+
+                result.Add(new FullBookingDto
                 {
-                    Id = j.qwCarmvModelMake.qwCarmvModel.qwCarmv.qwCar.qw.q.Id,
-                    BookingDate = j.qwCarmvModelMake.qwCarmvModel.qwCarmv.qwCar.qw.q.BookingDate
-                        .ToString("dddd dd MMMM yyyy - HH:mm", new CultureInfo("it-IT")),
-                    AppointmentDate = j.qwCarmvModelMake.qwCarmvModel.qwCarmv.qwCar.qw.q.AppointmentDate
-                        .ToString("dddd dd MMMM yyyy - HH:mm", new CultureInfo("it-IT")),
+                    Id = item.Booking.Id,
+                    BookingDate = item.Booking.BookingDate.ToString("dddd dd MMMM yyyy - HH:mm", new CultureInfo("it-IT")),
+                    AppointmentDate = item.Booking.AppointmentDate.ToString("dddd dd MMMM yyyy - HH:mm", new CultureInfo("it-IT")),
 
-                    CustomerId = j.qwCarmvModelMake.qwCarmvModel.qwCarmv.qwCar.qw.q.CustomerId,
-                    CustomerName = j.qwCarmvModelMake.qwCarmvModel.qwCarmv.qwCar.qw.q.Customer.Name,
+                    CustomerId = item.Booking.CustomerId,
+                    CustomerName = item.Customer.Name,
                     CustomerImage = userType == UserType.Workshop &&
-                                    customersImagesDict.ContainsKey(j.qwCarmvModelMake.qwCarmvModel.qwCarmv.qwCar.qw.q.CustomerId) &&
-                                    customersImagesDict[j.qwCarmvModelMake.qwCarmvModel.qwCarmv.qwCar.qw.q.CustomerId].Count > 0
-                                    ? customersImagesDict[j.qwCarmvModelMake.qwCarmvModel.qwCarmv.qwCar.qw.q.CustomerId][0]
+                                    customersImagesDict.ContainsKey(item.Booking.CustomerId) &&
+                                    customersImagesDict[item.Booking.CustomerId].Count > 0
+                                    ? customersImagesDict[item.Booking.CustomerId][0]
                                     : null,
 
-                    WorkshopId = j.qwCarmvModelMake.qwCarmvModel.qwCarmv.qwCar.qw.q.WorkshopId,
-                    WorkshopAddress = j.qwCarmvModelMake.qwCarmvModel.qwCarmv.qwCar.qw.q.Workshop.Address,
-                    WorkshopName = j.qwCarmvModelMake.qwCarmvModel.qwCarmv.qwCar.qw.workshopDetails.WorkshopName,
+                    WorkshopId = item.Booking.WorkshopId,
+                    WorkshopAddress = item.Workshop.Address,
+                    WorkshopName = item.WorkshopDetails.WorkshopName,
                     WorkshopImage = userType == UserType.Customer &&
-                                    workshopsImagesDict.ContainsKey(j.qwCarmvModelMake.qwCarmvModel.qwCarmv.qwCar.qw.q.WorkshopId) &&
-                                    workshopsImagesDict[j.qwCarmvModelMake.qwCarmvModel.qwCarmv.qwCar.qw.q.WorkshopId].Count > 0
-                                    ? workshopsImagesDict[j.qwCarmvModelMake.qwCarmvModel.qwCarmv.qwCar.qw.q.WorkshopId][0]
+                                    workshopsImagesDict.ContainsKey(item.Booking.WorkshopId) &&
+                                    workshopsImagesDict[item.Booking.WorkshopId].Count > 0
+                                    ? workshopsImagesDict[item.Booking.WorkshopId][0]
                                     : null,
 
-                    FinalPrice = j.qwCarmvModelMake.qwCarmvModel.qwCarmv.qwCar.qw.q.FinalPrice,
-                    Status = j.qwCarmvModelMake.qwCarmvModel.qwCarmv.qwCar.qw.q.Status,
+                    FinalPrice = item.Booking.FinalPrice,
+                    Status = item.Booking.Status,
 
-                    ServiceId = j.qwCarmvModelMake.qwCarmvModel.qwCarmv.qwCar.qw.q.ServiceId,
-                    ServiceName = j.carTranslations.Title,
+                    ServiceId = item.Booking.ServiceId,
+                    ServiceName = serviceName,
 
-                    CustomerCarId = j.qwCarmvModelMake.qwCarmvModel.qwCarmv.qwCar.qw.q.CustomerCarId,
-                    CustomerCarName = j.qwCarmvModelMake.qwCarmvModel.qwCarmv.qwCar.qw.q.CustomerCar.Name,
-                    CustomerCarPlate = j.qwCarmvModelMake.qwCarmvModel.qwCarmv.qwCar.car.LicencePlate,
-                    CustomerCarMake = j.qwCarmvModelMake.make.Name,
-                    CustomerCarModel = j.qwCarmvModelMake.qwCarmvModel.model.Name,
-                    CustomerCarYear = j.qwCarmvModelMake.qwCarmvModel.qwCarmv.carModelVersion.Year,
-                    CustomerCarLogoUrl = j.qwCarmvModelMake.make.LogoUrl,
-                    PinCode = j.qwCarmvModelMake.qwCarmvModel.qwCarmv.qwCar.qw.q.PinCode
+                    CustomerCarId = item.Booking.CustomerCarId,
+                    CustomerCarName = item.Booking.CustomerCar.Name,
+                    CustomerCarPlate = item.Car.LicencePlate,
+                    CustomerCarMake = item.CarMake.Name,
+                    CustomerCarModel = item.CarModel.Name,
+                    CustomerCarYear = item.CarModelVersion.Year,
+                    CustomerCarLogoUrl = item.CarMake.LogoUrl,
+                    PinCode = item.Booking.PinCode
                 });
-
-            if (userType == UserType.Workshop)
-            {
-                result = result.Where(r => r.WorkshopId == userId);
             }
 
-            if (userType == UserType.Customer)
-            {
-                result = result.Where(r => r.CustomerId == userId);
-            }
-
-            return await result.ToListAsync();
+            return result;
         }
     }
 }
