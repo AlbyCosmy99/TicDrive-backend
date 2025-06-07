@@ -537,8 +537,15 @@ namespace TicDrive.Controllers
             user.ResetPasswordToken = token;
             await _userManager.UpdateAsync(user);
 
-            var emailBody = $"Your password reset code is: <b>{resetCode}</b>. This code is valid for 10 minutes.";
-            await _emailService.SendEmailAsync(user.Email, "Password Reset Code", emailBody);
+            var emailBody = $@"
+            <html>
+            <body style='font-family: Arial, sans-serif; color: #333;'>
+                <p>Il tuo codice per reimpostare la password è:</p>
+                <p style='font-size: 20px; font-weight: bold; color: #007b5e;'>{resetCode}</p>
+                <p>Questo codice è valido per 10 minuti.</p>
+            </body>
+            </html>";
+            await _emailService.SendEmailAsync(user.Email, "Codice di reimpostazione password", emailBody);
 
             return Ok(new { Message = "If an account with that email exists, you will receive instructions to reset your password." });
         }
