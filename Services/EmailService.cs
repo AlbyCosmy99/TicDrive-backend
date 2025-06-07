@@ -36,7 +36,15 @@ namespace TicDrive.Services
             message.To.Add(new MailboxAddress(to, to));
             message.Subject = subject;
 
-            message.Body = new TextPart("html") { Text = body };
+            var builder = new BodyBuilder();
+
+            var logoPath = Path.Combine(Directory.GetCurrentDirectory(), "assets", "images", "logo.jpeg");
+            var logoImage = builder.LinkedResources.Add(logoPath);
+            logoImage.ContentId = "logo"; 
+
+            builder.HtmlBody = body.Replace("{LOGO}", "<img src=\"cid:logo\" alt=\"TicDrive\" style=\"width:120px;margin:0 auto;display:block;\" />");
+
+            message.Body = builder.ToMessageBody();
 
             using var client = new SmtpClient();
             await client.ConnectAsync("smtp.office365.com", 587, MailKit.Security.SecureSocketOptions.StartTls);
@@ -44,6 +52,7 @@ namespace TicDrive.Services
             await client.SendAsync(message);
             await client.DisconnectAsync(true);
         }
+
         public bool IsEmailConfirmed(string? email)
         {
             return _dbContext.Users.FirstOrDefault(u => u.Email == email)?.EmailConfirmed ?? false;
