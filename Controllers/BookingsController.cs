@@ -112,15 +112,17 @@ namespace TicDrive.Controllers
             // EMAIL AL CLIENTE
             if (customer?.EmailConfirmed == true && !string.IsNullOrEmpty(customer.Email))
             {
+                var serviceName = await _servicesService.GetFullServiceName(service.Id, "it");
+
                 var emailBody = $@"
-                <p>Ciao {customer.Name},</p>
-                <p>Hai prenotato con successo il servizio <strong>{_servicesService.GetFullServiceName(service.Id)}</strong> presso l'officina <strong>{workshopDetails?.WorkshopName}</strong>.</p>
-                <p><strong>Numero officina:</strong> {workshop.PhoneNumber}</p>
-                <p><strong>Auto:</strong> {carInfo}</p>
-                <p><strong>Data appuntamento:</strong> {formattedDate}</p>
-                <p><strong>Prezzo:</strong> €{payload.FinalPrice:F2}</p>
-                <p><strong>Codice PIN:</strong> {result.booking?.PinCode} <em>(Da presentare in officina)</em></p>
-                <p>Grazie per aver scelto TicDrive!</p>";
+                    <p>Ciao {customer.Name},</p>
+                    <p>Hai prenotato con successo il servizio <strong>{serviceName}</strong> presso l'officina <strong>{workshopDetails?.WorkshopName}</strong>.</p>
+                    <p><strong>Telefono officina:</strong> {workshop.PhoneNumber}</p>
+                    <p><strong>Auto:</strong> {carInfo}</p>
+                    <p><strong>Data appuntamento:</strong> {formattedDate}</p>
+                    <p><strong>Prezzo:</strong> €{payload.FinalPrice:F2}</p>
+                    <p><strong>Codice PIN:</strong> {result.booking?.PinCode} <em>(Da presentare in officina)</em></p>
+                    <p>Grazie per aver scelto TicDrive!</p>";
 
                 await _emailService.SendEmailAsync(
                     customer.Email,
@@ -132,15 +134,17 @@ namespace TicDrive.Controllers
             //// EMAIL ALL'OFFICINA
             //if (workshop?.EmailConfirmed == true && !string.IsNullOrEmpty(workshop.Email))
             //{
+            //    var serviceName = await _servicesService.GetFullServiceName(service.Id, "it");
+
             //    var emailBody = $@"
-            //    <p>Ciao {workshop.Name},</p>
-            //    <p>Hai ricevuto una nuova prenotazione per il servizio <strong>{_servicesService.GetFullServiceName(service.Id)}</strong> da parte del cliente <strong>{customer?.Name}</strong>.</p>
-            //    <p><strong>Contatto cliente:</strong> {customer?.PhoneNumber}</p>
-            //    <p><strong>Auto:</strong> {carInfo}</p>
-            //    <p><strong>Data appuntamento:</strong> {formattedDate}</p>
-            //    <p><strong>Prezzo concordato:</strong> €{payload.FinalPrice:F2}</p>
-            //    <p><strong>Codice PIN:</strong> {result.booking?.PinCode} <em>(Il cliente deve presentarlo in officina per identificare la prenotazione)</em></p>
-            //    <p>Accedi alla tua dashboard su <strong>ticdrive.it</strong> per maggiori dettagli.</p>";
+            //        <p>Ciao {workshop.Name},</p>
+            //        <p>Hai ricevuto una nuova prenotazione per il servizio <strong>{serviceName}</strong> da parte del cliente <strong>{customer?.Name}</strong>.</p>
+            //        <p><strong>Email cliente:</strong> {customer?.Email}</p>
+            //        <p><strong>Auto:</strong> {carInfo}</p>
+            //        <p><strong>Data appuntamento:</strong> {formattedDate}</p>
+            //        <p><strong>Prezzo concordato:</strong> €{payload.FinalPrice:F2}</p>
+            //        <p><strong>Codice PIN:</strong> {result.booking?.PinCode} <em>(Il cliente deve presentarlo in officina per identificare la prenotazione)</em></p>
+            //        <p>Accedi alla tua dashboard su <strong>ticdrive.it</strong> per maggiori dettagli.</p>";
 
             //    await _emailService.SendEmailAsync(
             //        workshop.Email,
