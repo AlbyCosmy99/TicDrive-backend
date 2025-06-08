@@ -7,6 +7,7 @@ using TicDrive.Services;
 using System.Globalization;
 using System.Threading.Tasks;
 using TicDrive.Models;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace TicDrive.Controllers
 {
@@ -187,13 +188,19 @@ namespace TicDrive.Controllers
         public class BookingStatusUpdateBody
         {
             public int BookingId { get; set; }
-            public BookingType NewStatus { get; set; }
-        }
+            public string NewStatus { get; set; }
 
+            public BookingType? GetParsedBookingType()
+            {
+                if (Enum.TryParse<BookingType>(NewStatus, true, out var parsed))
+                    return parsed;
+                return null;
+            }
+        }
 
         [HttpPost("update-status")]
         [Authorize]
-        public async Task<IActionResult> UpdateBookingStatus([FromBody] BookingStatusUpdateBody dto)
+        public async Task<IActionResult> UpdateBookingStatus([FromBody] BookingStatusUpdateBody body)
         {
             var userClaims = _authService.GetUserClaims(this);
             var userId = _authService.GetUserId(userClaims);
@@ -202,8 +209,11 @@ namespace TicDrive.Controllers
             if (userId == null || userType != UserType.Workshop)
                 return Unauthorized("Solo le officine possono aggiornare lo stato delle prenotazioni.");
 
-            var booking = await _context.Bookings.FirstOrDefaultAsync(b => b.Id == dto.BookingId);
+            var parsedBookingType = body.GetParsedBookingType();
+            if (parsedBookingType == null)
+                return BadRequest("Stato prenotazione non valido.");
 
+            var booking = await _context.Bookings.FirstOrDefaultAsync(b => b.Id == body.BookingId);
             if (booking == null)
                 return NotFound("Prenotazione non trovata.");
 
@@ -216,15 +226,16 @@ namespace TicDrive.Controllers
                 { BookingType.Accepted, new[] { BookingType.Completed } }
             };
 
-            if (!allowedTransitions.TryGetValue(booking.Status, out var validNextStates) || !validNextStates.Contains(dto.NewStatus))
+            if (!allowedTransitions.TryGetValue(booking.Status, out var validNextStates) || !validNextStates.Contains(parsedBookingType.Value))
             {
-                return BadRequest($"Transizione non valida da {booking.Status} a {dto.NewStatus}");
+                return BadRequest($"Transizione non valida da {booking.Status} a {parsedBookingType}");
             }
 
-            booking.Status = dto.NewStatus;
+            booking.Status = parsedBookingType.Value;
             await _context.SaveChangesAsync();
 
-            return Ok(new { message = $"Stato prenotazione aggiornato a {dto.NewStatus}" });
+            return Ok(new { message = $"Stato prenotazione aggiornato a {parsedBookingType}" });
         }
+
     }
 }
