@@ -156,19 +156,33 @@ namespace TicDrive.Controllers
             return Ok(new { result.Message, bookingId = result.booking.Id, bookingPinCode = result.booking.PinCode });
         }
 
+        public class BookingsQuery
+        {
+            public string? BookingType { get; set; }
+            public int Skip { get; set; } = 0;
+            public int Take { get; set; } = 10;
+
+            public BookingType? GetParsedBookingType()
+            {
+                if (Enum.TryParse<BookingType>(BookingType, true, out var parsed))
+                    return parsed;
+                return null;
+            }
+        }
 
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> GetBookings()
+        public async Task<IActionResult> GetBookings([FromQuery] BookingsQuery query)
         {
             var userClaims = _authService.GetUserClaims(this);
             var userId = _authService.GetUserId(userClaims);
             var userType = _authService.GetUserType(userClaims);
 
             if (userId == null || userType == null)
-                return Unauthorized("Non sei autorizzato richiedere le prenotazioni.");
-            var bookings = await _bookingsService.GetBookingsAsync(userId, (UserType)userType);
-            return Ok(bookings);
+                return Unauthorized("Non sei autorizzato ad accedere alle prenotazioni.");
+            var parsedBookingType = query.GetParsedBookingType();
+            var bookings = await _bookingsService.GetBookingsAsync(userId, (UserType)userType, parsedBookingType);
+            return Ok(new { bookings.Count, Bookings = bookings.Skip(query.Skip).Take(query.Take) });
         }
     }
 }
