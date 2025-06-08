@@ -21,7 +21,7 @@ namespace TicDrive.Services
             decimal finalPrice
         );
 
-        Task<List<FullBookingDto>> GetBookingsAsync(string userId, UserType userType, string languageCode = "it");
+        Task<List<FullBookingDto>> GetBookingsAsync(string userId, UserType userType, BookingType? bookingType, string languageCode = "it");
     }
 
     public class BookingsService : IBookingsService
@@ -107,9 +107,10 @@ namespace TicDrive.Services
             return (true, "Booking created", booking);
         }
 
-        public async Task<List<FullBookingDto>> GetBookingsAsync(string userId, UserType userType, string languageCode = "it")
+        public async Task<List<FullBookingDto>> GetBookingsAsync(string userId, UserType userType, BookingType? bookingType, string languageCode = "it")
         {
             var query = _context.Bookings
+                .Where(booking => bookingType == null || booking.Status == bookingType)
                 .Include(q => q.Customer)
                 .Include(q => q.Workshop)
                 .Include(q => q.Service)
