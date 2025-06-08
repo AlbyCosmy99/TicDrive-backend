@@ -184,5 +184,47 @@ namespace TicDrive.Controllers
             var bookings = await _bookingsService.GetBookingsAsync(userId, (UserType)userType, parsedBookingType);
             return Ok(new { bookings.Count, Bookings = bookings.Skip(query.Skip).Take(query.Take) });
         }
+        public class BookingStatusUpdateBody
+        {
+            public int BookingId { get; set; }
+            public BookingType NewStatus { get; set; }
+        }
+
+
+        [HttpPost("update-status")]
+        [Authorize]
+        public async Task<IActionResult> UpdateBookingStatus([FromBody] BookingStatusUpdateBody dto)
+        {
+            var userClaims = _authService.GetUserClaims(this);
+            var userId = _authService.GetUserId(userClaims);
+            var userType = _authService.GetUserType(userClaims);
+
+            if (userId == null || userType != UserType.Workshop)
+                return Unauthorized("Solo le officine possono aggiornare lo stato delle prenotazioni.");
+
+            var booking = await _context.Bookings.FirstOrDefaultAsync(b => b.Id == dto.BookingId);
+
+            if (booking == null)
+                return NotFound("Prenotazione non trovata.");
+
+            if (booking.WorkshopId != userId)
+                return Forbid("Non puoi modificare questa prenotazione.");
+
+            var allowedTransitions = new Dictionary<BookingType, BookingType[]>
+            {
+                { BookingType.Waiting, new[] { BookingType.Accepted, BookingType.Rejected } },
+                { BookingType.Accepted, new[] { BookingType.Completed } }
+            };
+
+            if (!allowedTransitions.TryGetValue(booking.Status, out var validNextStates) || !validNextStates.Contains(dto.NewStatus))
+            {
+                return BadRequest($"Transizione non valida da {booking.Status} a {dto.NewStatus}");
+            }
+
+            booking.Status = dto.NewStatus;
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = $"Stato prenotazione aggiornato a {dto.NewStatus}" });
+        }
     }
 }
