@@ -21,7 +21,7 @@ namespace TicDrive.Utils.Auth
                 FailureReason = failureReason,
                 IPAddress = httpContext.Connection.RemoteIpAddress?.ToString(),
                 UserAgent = httpContext.Request.Headers["User-Agent"].ToString(),
-                LoginTime = DateTime.UtcNow
+                LoginTime = System.DateTime.UtcNow
             };
 
             _context.LoginLogs.Add(log);
