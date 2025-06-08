@@ -2,6 +2,7 @@
 using TicDrive.Context;
 using TicDrive.Dto.ReviewDto;
 using TicDrive.Models;
+using TicDrive.Utils.DateTime;
 
 namespace TicDrive.Services
 {
@@ -17,13 +18,12 @@ namespace TicDrive.Services
 
         public async Task<List<FullReviewDto>> GetAllReviewsByWorkshopId(string workshopId, int skip, int take)
         {
-            var reviews = _context.Reviews
-                .Where(review => review.Workshop.Id == workshopId)
+            var reviews = await _context.Reviews
+                .Where(review => review.WorkshopId == workshopId)
                 .Include(review => review.Customer)
-                .Include(review => review.Workshop)
                 .Skip(skip)
                 .Take(take)
-                .ToList();
+                .ToListAsync();
 
             var fullReviewDtos = new List<FullReviewDto>();
 
@@ -37,16 +37,16 @@ namespace TicDrive.Services
                     Id = review.Id,
                     CustomerId = review.CustomerId!,
                     CustomerName = review.Customer.Name,
-                    CustomerImageUrl = image != null ? image.Filename : string.Empty,
+                    CustomerImageUrl = image,
                     WorkshopId = review.WorkshopId,
                     Text = review.Text,
-                    WhenPublished = review.WhenPublished,
+                    WhenPublished = DateTimeFormatter.FormatLocalDateInItalian(review.WhenPublished),
                     Stars = review.Stars
                 });
             }
 
             return fullReviewDtos;
         }
-
     }
+
 }

@@ -7,10 +7,10 @@ namespace TicDrive.Dto.ReviewDto
         public int Id { get; set; }
         public required string CustomerId { get; set; }
         public required string CustomerName { get; set; }
-        public string CustomerImageUrl { get; set; } = string.Empty;
+        public UserImage CustomerImageUrl { get; set; }
         public required string WorkshopId { get; set; }
         public required string Text { get; set; }
-        public DateTime WhenPublished { get; set; } = DateTime.Now;
+        public string WhenPublished { get; set; } = string.Empty;
 
         public required double Stars { get; set; }
     }
