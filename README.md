@@ -25,7 +25,7 @@ Workshops use the **web platform** to:
 
 - [.NET Core 8](https://learn.microsoft.com/en-us/aspnet/core/?view=aspnetcore-8.0) – RESTful API backend  
 - **Entity Framework Core** – ORM for database management  
-- **SQL Server** – relational database  
+- **PostgreSQL** – relational database hosted on [Railway](https://railway.com/)
 - [Azure App Service](https://azure.microsoft.com/en-us/services/app-service/) – hosting and deployment  
 - [Azure Blob Storage](https://azure.microsoft.com/en-us/services/storage/blobs/) – image storage and management  
 - **JWT Authentication** – secure user & workshop authentication  
@@ -51,7 +51,7 @@ Workshops use the **web platform** to:
 - 📅 Appointment booking system  
 - 💾 Image storage via Azure Blob  
 - 🔔 Email notifications & confirmations  
-- 🔒 Role-based authentication (user vs workshop)  
+- 🔒 Role-based authentication (user vs workshop)
 
 ---
 
