@@ -39,8 +39,8 @@ Workshops use the **web platform** to:
   Github source [code](https://github.com/AlbyCosmy99/ticdrive-app-react-native).
 
 - **Web Platform for Workshops** provides workshops with tools to manage services, bookings, and their visibility on the platform.<br>
-  Online site [here]().<br>
-  Github source [code]().
+  Online site [here](https://www.ticdrive.it/).<br>
+  Github source [code](https://github.com/AlbyCosmy99/ticdrive-workshops-website-nuxt).
 
 ---
 
