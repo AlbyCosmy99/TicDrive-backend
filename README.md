@@ -35,10 +35,15 @@ Workshops use the **web platform** to:
 ## 📱 Clients
 
 - **Mobile App**: [ticdrive-app-react-native](https://github.com/AlbyCosmy99/ticdrive-app-react-native)  
-  Used by end-users to search, compare, and book car services.  
+  Used by end-users to search, compare, and book car services.
+  [IOS](https://apps.apple.com/it/app/ticdrive/id6740627366?l=en-GB) and [Android](https://play.google.com/store/apps/details?id=com.ticdrive.app&pcampaignid=web_share) app.
+  Github [source code](https://github.com/AlbyCosmy99/ticdrive-app-react-native).
 
 - **Web Platform for Workshops**:  
-  Provides workshops with tools to manage services, bookings, and their visibility on the platform.  
+  Provides workshops with tools to manage services, bookings, and their visibility on the platform.
+
+  Online site [here]().
+  Github [source code]()
 
 ---
 
