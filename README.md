@@ -40,7 +40,7 @@ Workshops use the **web platform** to:
 
 - **Web Platform for Workshops** provides workshops with tools to manage services, bookings, and their visibility on the platform.<br>
   Online site [here]().<br>
-  Github source [code]()
+  Github source [code]().
 
 ---
 
