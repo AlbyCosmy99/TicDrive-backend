@@ -1,7 +1,7 @@
 # ⚙️ TicDrive Backend
 
 This backend is powering **TicDrive**, a platform designed to simplify car maintenance by connecting users with local workshops.  
-It serves both the **TicDrive mobile application (iOS & Android, built in React Native)** and the **TicDrive web portal for workshops (built in Nuxt)**.
+It serves both the **TicDrive mobile application (iOS & Android, built in React Native)** and the **TicDrive web portal for workshops (built with Nuxt)**.
 
 ---
 
