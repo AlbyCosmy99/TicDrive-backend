@@ -39,11 +39,12 @@ namespace TicDrive.Services
             message.Body = new TextPart("html") { Text = body };
 
             using var client = new SmtpClient();
-            await client.ConnectAsync("smtp.office365.com", 587, MailKit.Security.SecureSocketOptions.StartTls);
+            await client.ConnectAsync("smtp.gmail.com", 587, MailKit.Security.SecureSocketOptions.StartTls);
             await client.AuthenticateAsync(_senderEmail, _senderPassword);
             await client.SendAsync(message);
             await client.DisconnectAsync(true);
         }
+
         public bool IsEmailConfirmed(string? email)
         {
             return _dbContext.Users.FirstOrDefault(u => u.Email == email)?.EmailConfirmed ?? false;
